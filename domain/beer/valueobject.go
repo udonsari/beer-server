@@ -2,6 +2,7 @@ package beer
 
 type BeerQueryArgs struct {
 	ABVInterval *ABVInterval
+	Name        *string
 	Country     *string
 	BeerStyle   *string
 	Aroma       *string

@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/UdonSari/beer-server/domain/beer/repo/datasource"
 	"github.com/astaxie/beego/orm"
 	"github.com/davecgh/go-spew/spew"
 )
@@ -20,6 +21,23 @@ func New(o orm.Ormer) *beerRepo {
 
 func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	log.Printf("BeerRepo - GetBeers() - args %+v", spew.Sdump(args))
+
+	var dbBeer datasource.DBBeer
+	if args.Name != nil {
+		// TODO Query by contains
+		dbBeer.Name = *args.Name
+	}
+	if args.Country != nil {
+		dbBeer.Country = *args.Country
+	}
+	if args.BeerStyle != nil {
+		dbBeer.BeerStyle = *args.BeerStyle
+	}
+	if args.Aroma != nil {
+		dbBeer.Aroma = *args.Aroma
+	}
+
+	// r.o.Read()
 
 	// TODO Implement query based on args
 	return []beer.Beer{

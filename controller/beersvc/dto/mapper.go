@@ -33,6 +33,7 @@ func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.B
 		}
 	}
 
+	args.Name = req.Name
 	args.Country = req.Country
 	args.BeerStyle = req.BeerStyle
 	args.Aroma = req.Aroma
