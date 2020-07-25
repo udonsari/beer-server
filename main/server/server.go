@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-// TODO Use env
+// TODO Use env. maybe viper ?
 const port = 8081
 
 type Server interface {

@@ -2,6 +2,8 @@ package repo
 
 import "github.com/UdonSari/beer-server/domain/beer"
 
+// TODO Attach Real DB and use ORM
+
 type beerRepo struct {
 }
 
