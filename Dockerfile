@@ -9,12 +9,12 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 
+# Build
 COPY . .
-
 RUN go build -o /bin ./...
 
 FROM build AS runnable
 
-COPY --from=build /bin/* /in
+COPY --from=build /bin/* /bin/
 
 ENTRYPOINT ["/bin/main"]
