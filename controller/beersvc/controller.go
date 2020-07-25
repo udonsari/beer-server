@@ -11,6 +11,8 @@ import (
 	"github.com/labstack/echo"
 )
 
+// TODO Add Logger
+
 type Controller struct {
 	controller.Base
 	beerUseCase beer.UseCase
@@ -27,14 +29,14 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase) Controller {
 }
 
 func (controller *Controller) GetBeers(ctx echo.Context) error {
-	log.Printf("GetBeers() - Controller")
+	log.Printf("Controller - GetBeers() - Controller")
 
 	var req dto.GetBeersRequest
 	if err := controller.Bind(ctx, &req); err != nil {
-		log.Printf("GetBeers() - Failed to bind %+v", err)
+		log.Printf("Controller - GetBeers() - Failed to bind %+v", err)
 		return err
 	}
-	log.Printf("GetBeers() - Param %+v", spew.Sdump(req))
+	log.Printf("Controller - GetBeers() - Param %+v", spew.Sdump(req))
 
 	args, err := controller.mapper.MapGetBeersRequestToBeerQueryArgs(req)
 	if err != nil {

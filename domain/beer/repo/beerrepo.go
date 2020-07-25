@@ -1,10 +1,13 @@
 package repo
 
-import "github.com/UdonSari/beer-server/domain/beer"
+import (
+	"log"
 
-// TODO Attach Real DB and use ORM
-// Maybe ElasticSearch ?
+	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/davecgh/go-spew/spew"
+)
 
+// TODO Attach Real DB and use ORM. Maybe ElasticSearch ?
 type beerRepo struct {
 }
 
@@ -13,6 +16,8 @@ func New() *beerRepo {
 }
 
 func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
+	log.Printf("BeerRepo - GetBeers() - args %+v", spew.Sdump(args))
+
 	// TODO Implement query based on args
 	return []beer.Beer{
 		beer.Beer{

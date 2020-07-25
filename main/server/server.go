@@ -40,7 +40,7 @@ func (s *server) Start() {
 	}
 
 	if err := s._server.ListenAndServe(); err != http.ErrServerClosed {
-		log.Printf("server failed with err : %+v", err)
+		log.Printf("# server failed with err : %+v", err)
 	}
 }
 

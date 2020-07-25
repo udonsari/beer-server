@@ -16,7 +16,7 @@ type GetBeersResponse struct {
 
 type Beer struct {
 	Name      string  `json:"name"`
-	Brewery   string  `json:"brewary"`
+	Brewery   string  `json:"brewery"`
 	ABV       float64 `json:"abv"`
 	Country   string  `json:"country"`
 	BeerStyle string  `json:"beer_style"`
