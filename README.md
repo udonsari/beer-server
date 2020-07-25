@@ -6,5 +6,30 @@
 
 * API 예시
     * BeerList : `curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&country=korea&beer_style=ipa&aroma=grape'`
+        * response
+        ```
+        {
+            "result": {
+                "Beers": [
+                    {
+                        "name": "Wonder Pale Ale",
+                        "brewary": "CraftBros",
+                        "abv": 5.7,
+                        "country": "korea",
+                        "beer_style": "ipa",
+                        "aroma": "grape"
+                    },
+                    {
+                        "name": "Super Pale Ale",
+                        "brewary": "CraftBros",
+                        "abv": 6.3,
+                        "country": "korea",
+                        "beer_style": "ipa",
+                        "aroma": "orange"
+                    }
+                ]
+            }
+        }
+        ```
 
 * TODO
