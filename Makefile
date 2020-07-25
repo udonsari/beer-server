@@ -9,5 +9,8 @@ build:
 up:
 	docker-compose up
 
-# TODO Add Test
-# test:
+test-build:
+	docker-compose -f docker-compose.test.yml build
+
+test:
+	docker-compose -f docker-compose.test.yml run test
