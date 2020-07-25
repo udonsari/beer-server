@@ -7,6 +7,7 @@ import (
 	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc/dto"
 	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo"
 )
 
@@ -27,14 +28,20 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase) Controller {
 
 func (controller *Controller) GetBeers(ctx echo.Context) error {
 	log.Printf("GetBeers() - Controller")
+
 	var req dto.GetBeersRequest
 	if err := controller.Bind(ctx, &req); err != nil {
 		log.Printf("GetBeers() - Failed to bind %+v", err)
 		return err
 	}
-	log.Printf("GetBeers() - Param %+v", req)
+	log.Printf("GetBeers() - Param %+v", spew.Sdump(req))
 
-	beerList, err := controller.beerUseCase.GetBeers()
+	args, err := controller.mapper.MapGetBeersRequestToBeerQueryArgs(req)
+	if err != nil {
+		return err
+	}
+
+	beerList, err := controller.beerUseCase.GetBeers(*args)
 	if err != nil {
 		return err
 	}

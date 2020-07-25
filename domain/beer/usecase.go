@@ -1,8 +1,7 @@
 package beer
 
 type UseCase interface {
-	// TODO Add arguments
-	GetBeers() ([]Beer, error)
+	GetBeers(args BeerQueryArgs) ([]Beer, error)
 }
 
 type useCase struct {
@@ -15,6 +14,6 @@ func NewUseCase(beerRepo BeerRepo) UseCase {
 	}
 }
 
-func (u *useCase) GetBeers() ([]Beer, error) {
-	return u.beerRpeo.GetBeers()
+func (u *useCase) GetBeers(args BeerQueryArgs) ([]Beer, error) {
+	return u.beerRpeo.GetBeers(args)
 }
