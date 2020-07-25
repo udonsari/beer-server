@@ -4,15 +4,18 @@ import (
 	"log"
 
 	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/astaxie/beego/orm"
 	"github.com/davecgh/go-spew/spew"
 )
 
 // TODO Attach Real DB and use ORM. Maybe ElasticSearch ?
+// TODO Add Cache ?
 type beerRepo struct {
+	o orm.Ormer
 }
 
-func New() *beerRepo {
-	return &beerRepo{}
+func New(o orm.Ormer) *beerRepo {
+	return &beerRepo{o: o}
 }
 
 func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {

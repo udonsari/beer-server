@@ -8,6 +8,7 @@ import (
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/domain/beer"
 	"github.com/UdonSari/beer-server/domain/beer/repo"
+	"github.com/UdonSari/beer-server/domain/beer/repo/datasource"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -56,7 +57,9 @@ func (s *server) engine() *echo.Echo {
 }
 
 func (s *server) registerRoute(engine *echo.Echo) {
-	beerRepo := repo.New()
+	// TODO Add data source name from env
+	mySQLDataSource := datasource.NewMySQLDataSource("")
+	beerRepo := repo.New(mySQLDataSource)
 	beerUseCase := beer.NewUseCase(beerRepo)
 
 	beersvc.NewController(engine, beerUseCase)
