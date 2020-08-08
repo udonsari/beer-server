@@ -20,12 +20,12 @@ type Controller struct {
 }
 
 func NewController(engine *echo.Echo, beerUseCase beer.UseCase) Controller {
-	con := Controller{
+	controller := Controller{
 		beerUseCase: beerUseCase,
 		mapper:      dto.NewMapper(),
 	}
-	engine.GET("/api/beers", con.GetBeers)
-	return con
+	engine.GET("/api/beers", controller.GetBeers)
+	return controller
 }
 
 func (controller *Controller) GetBeers(ctx echo.Context) error {

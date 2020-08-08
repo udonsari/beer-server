@@ -5,16 +5,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc"
+	"github.com/UdonSari/beer-server/controller/usersvc"
 	"github.com/UdonSari/beer-server/domain/beer"
-	"github.com/UdonSari/beer-server/domain/beer/repo"
-	"github.com/UdonSari/beer-server/domain/beer/repo/datasource"
+	beerRepo "github.com/UdonSari/beer-server/domain/beer/repo"
+	"github.com/UdonSari/beer-server/domain/user"
+	userRepo "github.com/UdonSari/beer-server/domain/user/repo"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
-
-// TODO Use env. maybe viper ?
-const port = 8081
 
 type Server interface {
 	Init()
@@ -36,7 +36,7 @@ func (s *server) Start() {
 	log.Printf("# server up starts ...")
 
 	s._server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
+		Addr:    fmt.Sprintf(":%d", controller.PORT),
 		Handler: s._engine,
 	}
 
@@ -57,12 +57,13 @@ func (s *server) engine() *echo.Echo {
 }
 
 func (s *server) registerRoute(engine *echo.Echo) {
-	// TODO Add data source name from env
-	mySQLDataSource := datasource.NewMySQLDataSource("")
-	beerRepo := repo.New(mySQLDataSource)
+	beerRepo := beerRepo.New()
 	beerUseCase := beer.NewUseCase(beerRepo)
+	userRepo := userRepo.New()
+	userUseCase := user.NewUseCase(userRepo)
 
 	beersvc.NewController(engine, beerUseCase)
+	usersvc.NewController(engine, userUseCase)
 }
 
 func New() Server {
