@@ -20,7 +20,8 @@ const kakaoTokenURL = "https://kauth.kakao.com/oauth/token"
 const kakaoUserURL = "https://kapi.kakao.com/v2/user/me"
 
 // TODO Remove
-const appKey = "99db370b453955b495832f7f69294dcc"
+// TODO 카카오 인증서버 Mock 만들어서 안귀찮게 하기
+const appKey = "FILLIT"
 
 type Controller struct {
 	controller.Base
