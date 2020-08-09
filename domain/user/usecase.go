@@ -11,10 +11,6 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
-const PORT = 8081
-const STR_PORT = "8081"
-const HOST = "http://127.0.0.1:" + STR_PORT
-
 type UseCase interface {
 	GetUserByExternalID(externalID string) (*User, error)
 	GetUser(accessToken string) (*User, error)
@@ -24,11 +20,15 @@ type UseCase interface {
 type useCase struct {
 	userRepo UserRepo
 	mapper   mapper
+	port     string
+	host     string
 }
 
-func NewUseCase(userRepo UserRepo) UseCase {
+func NewUseCase(userRepo UserRepo, host string, port string) UseCase {
 	return &useCase{
 		userRepo: userRepo,
+		host:     host,
+		port:     port,
 	}
 }
 
@@ -41,9 +41,11 @@ func (u *useCase) createUser(user User) error {
 }
 
 func (u *useCase) GetToken(code string) (*Token, error) {
-	redirectBaseURL := HOST + "/api/kakao/token"
+	redirectBaseURL := u.host + "/api/token"
 
 	url := KakaoTokenURL + "?grant_type=authorization_code" + "&client_id=" + KakaoAppKey + "&redirect_uri=" + redirectBaseURL + "&code=" + code
+
+	log.Printf("UseCase - GetToken() - url : %+v", url)
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Printf("UseCase - GetToken() - Kakao token error %v", err)
@@ -86,7 +88,7 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 		log.Printf("UseCase - GetUser() - Kakao user read body error %v", err)
 		return nil, err
 	}
-	// 여기서 respBytes로 {"msg":"this access token does not exist","code":-401}가 와도 에러가 없는데 처리 필요
+	// TODO 여기서 respBytes로 {"msg":"this access token does not exist","code":-401}가 와도 에러가 없는데 처리 필요
 	var kakaoUser KakaoUser
 	err = json.Unmarshal(respBytes, &kakaoUser)
 	if err != nil {

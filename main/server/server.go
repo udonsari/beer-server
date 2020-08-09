@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/controller/usersvc"
@@ -14,6 +15,9 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
+
+// TODO Move to env
+const PORT = 8081
 
 type Server interface {
 	Init()
@@ -35,7 +39,7 @@ func (s *server) Start() {
 	log.Printf("# server up starts ...")
 
 	s._server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", user.PORT),
+		Addr:    fmt.Sprintf(":%d", PORT),
 		Handler: s._engine,
 	}
 
@@ -56,13 +60,16 @@ func (s *server) engine() *echo.Echo {
 }
 
 func (s *server) registerRoute(engine *echo.Echo) {
+	portStr := strconv.Itoa(PORT)
+	host := "http://127.0.0.1:" + portStr
+
 	beerRepo := beerRepo.New()
 	beerUseCase := beer.NewUseCase(beerRepo)
 	userRepo := userRepo.New()
-	userUseCase := user.NewUseCase(userRepo)
+	userUseCase := user.NewUseCase(userRepo, host, portStr)
 
 	beersvc.NewController(engine, beerUseCase, userUseCase)
-	usersvc.NewController(engine, userUseCase)
+	usersvc.NewController(engine, userUseCase, host)
 }
 
 func New() Server {

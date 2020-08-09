@@ -14,11 +14,13 @@ import (
 type Controller struct {
 	controller.Base
 	userUseCase user.UseCase
+	host        string
 }
 
-func NewController(engine *echo.Echo, userUseCase user.UseCase) Controller {
+func NewController(engine *echo.Echo, userUseCase user.UseCase, host string) Controller {
 	cont := Controller{
 		userUseCase: userUseCase,
+		host:        host,
 	}
 	// TODO REST API 컨벤션 처리
 	engine.GET("/api/kakao/signin", cont.SignInKakao)
@@ -30,7 +32,7 @@ func NewController(engine *echo.Echo, userUseCase user.UseCase) Controller {
 func (cont *Controller) SignInKakao(ctx echo.Context) error {
 	log.Printf("Controller - SignInKakao() - Controller")
 
-	redirectBaseURL := user.HOST + "/api/kakao/token"
+	redirectBaseURL := cont.host + "/api/token"
 	redirectURL := user.KakaoOauthURL + "?client_id=" + user.KakaoAppKey + "&redirect_uri=" + redirectBaseURL + "&response_type=code"
 
 	log.Printf("Controller - SignInKakao() - redirectURL : %v", redirectURL)
