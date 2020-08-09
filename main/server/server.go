@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/controller/usersvc"
 	"github.com/UdonSari/beer-server/domain/beer"
@@ -36,7 +35,7 @@ func (s *server) Start() {
 	log.Printf("# server up starts ...")
 
 	s._server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", controller.PORT),
+		Addr:    fmt.Sprintf(":%d", user.PORT),
 		Handler: s._engine,
 	}
 
@@ -62,7 +61,7 @@ func (s *server) registerRoute(engine *echo.Echo) {
 	userRepo := userRepo.New()
 	userUseCase := user.NewUseCase(userRepo)
 
-	beersvc.NewController(engine, beerUseCase)
+	beersvc.NewController(engine, beerUseCase, userUseCase)
 	usersvc.NewController(engine, userUseCase)
 }
 

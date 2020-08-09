@@ -1,28 +1,50 @@
 package dto
 
+import "github.com/UdonSari/beer-server/domain/beer"
+
 type GetBeersRequest struct {
 	// ABV : Alcohol by Volume
-	MinABV *float64 `query:"min_abv" validate:"required"`
-	MaxABV *float64 `query:"max_abv" validate:"required"`
+	MinABV *float64 `query:"min_abv"`
+	MaxABV *float64 `query:"max_abv"`
 
-	Name    *string `query:"name" validate:"required"`
-	Country *string `query:"country" validate:"required"`
+	Name *string `query:"name"`
 
-	// TODO Support multi query for below args
-	BeerStyle *string `query:"beer_style" validate:"required"`
-	Aroma     *string `query:"aroma" validate:"required"`
+	// Array Type Fields
+	Country   []string `query:"country"`
+	BeerStyle []string `query:"beer_style"`
+	Aroma     []string `query:"aroma"`
 }
 
 type GetBeersResponse struct {
 	Beers []Beer
 }
 
+type GetBeerRequest struct {
+	BeerID int64 `query:"beer_id"`
+}
+
+type GetBeerResponse struct {
+	Beer Beer `json:"beer"`
+}
+
+type AddRateRequest struct {
+	BeerID int64   `form:"beer_id"`
+	Ratio  float64 `form:"ratio"`
+}
+
+type AddCommentRequest struct {
+	BeerID  int64  `form:"beer_id"`
+	Content string `form:"content"`
+}
+
 type Beer struct {
-	// TODO 여기 beer id도 내려가야함. 그래서 details 호출 가능하게
-	Name      string  `json:"name"`
-	Brewery   string  `json:"brewery"`
-	ABV       float64 `json:"abv"`
-	Country   string  `json:"country"`
-	BeerStyle string  `json:"beer_style"`
-	Aroma     string  `json:"aroma"`
+	ID        int64          `json:"id"`
+	Name      string         `json:"name"`
+	Brewery   string         `json:"brewery"`
+	ABV       float64        `json:"abv"`
+	Country   string         `json:"country"`
+	BeerStyle string         `json:"beer_style"`
+	Aroma     []string       `json:"aroma"`
+	Comments  []beer.Comment `json:"comments"`
+	RateAvg   float64        `json:"rate_avg"`
 }

@@ -1,6 +1,10 @@
 package dto
 
-import "github.com/UdonSari/beer-server/domain/beer"
+import (
+	"math"
+
+	"github.com/UdonSari/beer-server/domain/beer"
+)
 
 type Mapper struct {
 }
@@ -9,14 +13,24 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer) Beer {
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates []beer.Rate) Beer {
+	rateAvg := float64(0)
+	for _, rate := range rates {
+		rateAvg += rate.Ratio
+	}
+	rateAvg /= float64(len(rates))
+	rateAvg = math.Floor(rateAvg*100) / 100
+
 	return Beer{
+		ID:        beer.ID,
 		Name:      beer.Name,
 		Brewery:   beer.Brewery,
 		ABV:       beer.ABV,
 		Country:   beer.Country,
 		BeerStyle: beer.BeerStyle,
 		Aroma:     beer.Aroma,
+		Comments:  comments,
+		RateAvg:   rateAvg,
 	}
 }
 
