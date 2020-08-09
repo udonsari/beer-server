@@ -47,3 +47,8 @@ func (u *useCase) AddComment(beerID int64, Content string, userID int64) error {
 func (u *useCase) GetComments(beerID int64) ([]Comment, error) {
 	return u.beerRepo.GetComments(beerID)
 }
+
+// TODO Implemnt. 이거 뭔가 이쁘게 만들어 보고 싶다
+func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
+	return nil, nil
+}

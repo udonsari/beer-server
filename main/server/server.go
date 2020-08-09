@@ -26,18 +26,20 @@ type Server interface {
 	Start()
 }
 
-type server struct {
-	_engine *echo.Echo
-	_server *http.Server
+type serverImpl struct {
+	_engine     *echo.Echo
+	_server     *http.Server
+	beerUseCase beer.UseCase
+	userUseCase user.UseCase
 }
 
-func (s *server) Init() {
+func (s *serverImpl) Init() {
 	log.Printf("# server initialization starts ...")
 	engine := s.engine()
 	s.registerRoute(engine)
 }
 
-func (s *server) Start() {
+func (s *serverImpl) Start() {
 	var ok bool
 	PORT_STR, ok = os.LookupEnv("PORT")
 	if !ok {
@@ -66,27 +68,35 @@ func (s *server) Start() {
 	}
 }
 
-func (s *server) engine() *echo.Echo {
+func (s *serverImpl) engine() *echo.Echo {
+	beerRepo := beerRepo.New()
+	s.beerUseCase = beer.NewUseCase(beerRepo)
+	userRepo := userRepo.New()
+	s.userUseCase = user.NewUseCase(userRepo, HOST, PORT_STR)
+
 	if s._engine != nil {
 		return s._engine
 	}
 	s._engine = echo.New()
 	s._engine.Use(middleware.Recover())
 	s._engine.Use(middleware.CORS())
+	s._engine.Use(
+		func(next echo.HandlerFunc) echo.HandlerFunc {
+			return func(ctx echo.Context) error {
+				cc := &CustomContext{ctx, s.userUseCase}
+				return next(cc)
+			}
+		},
+	)
 
 	return s._engine
 }
 
-func (s *server) registerRoute(engine *echo.Echo) {
-	beerRepo := beerRepo.New()
-	beerUseCase := beer.NewUseCase(beerRepo)
-	userRepo := userRepo.New()
-	userUseCase := user.NewUseCase(userRepo, HOST, PORT_STR)
-
-	beersvc.NewController(engine, beerUseCase, userUseCase)
-	usersvc.NewController(engine, userUseCase, HOST)
+func (s *serverImpl) registerRoute(engine *echo.Echo) {
+	beersvc.NewController(engine, s.beerUseCase, s.userUseCase)
+	usersvc.NewController(engine, s.userUseCase, HOST)
 }
 
 func New() Server {
-	return &server{}
+	return &serverImpl{}
 }

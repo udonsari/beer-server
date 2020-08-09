@@ -25,6 +25,7 @@ type GetBeerRequest struct {
 
 type GetBeerResponse struct {
 	Beer Beer `json:"beer"`
+	// TODO Beer Detail 요청시 Related (향, 스타일, 랜덤 ...) Beer 리스트 추가 필요. 깔끔하게 5개 정도만 하자. (ReducedBeer)
 }
 
 type AddRateRequest struct {
@@ -38,6 +39,7 @@ type AddCommentRequest struct {
 }
 
 type Beer struct {
+	// TODO 여러 Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Comments는 Pagination ?
 	ID        int64    `json:"id"`
 	Name      string   `json:"name"`
 	Brewery   string   `json:"brewery"`
@@ -45,8 +47,20 @@ type Beer struct {
 	Country   string   `json:"country"`
 	BeerStyle string   `json:"beer_style"`
 	Aroma     []string `json:"aroma"`
+	ImageURL  []string `json:"image_url"`
 
 	Comments  []beer.Comment `json:"comments"`
 	RateAvg   float64        `json:"rate_avg"`
 	RateOwner *beer.Rate     `json:"rate_owner,omitempty"`
 }
+
+// type ReducedBeer struct {
+// 	ID        int64    `json:"id"`
+// 	Name      string   `json:"name"`
+// 	Brewery   string   `json:"brewery"`
+// 	ABV       float64  `json:"abv"`
+// 	Country   string   `json:"country"`
+// 	BeerStyle string   `json:"beer_style"`
+// 	Aroma     []string `json:"aroma"`
+// 	RateAvg   float64  `json:"rate_avg"`
+// }

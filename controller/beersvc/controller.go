@@ -1,6 +1,7 @@
 package beersvc
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -37,15 +38,10 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
 	log.Printf("Controller - GetBeers() - Controller")
-	var user *user.User
-	accessTokens := ctx.Request().Header["Authorization"]
-	if len(accessTokens) >= 1 {
-		var err error
-		user, err = cont.userUseCase.GetUser(accessTokens[0])
-		if err != nil {
-			log.Printf("Controller - GetBeers() - User Error %+v", err)
-			return err
-		}
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.User()
+	if err != nil {
+		return err
 	}
 	log.Printf("Controller - GetBeers() - User %+v", spew.Sdump(user))
 
@@ -97,15 +93,10 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 
 func (cont *Controller) GetBeer(ctx echo.Context) error {
 	log.Printf("Controller - GetBeer() - Controller")
-	var user *user.User
-	accessTokens := ctx.Request().Header["Authorization"]
-	if len(accessTokens) >= 1 {
-		var err error
-		user, err = cont.userUseCase.GetUser(accessTokens[0])
-		if err != nil {
-			log.Printf("Controller - GetBeers() - User Error %+v", err)
-			return err
-		}
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.User()
+	if err != nil {
+		return err
 	}
 	log.Printf("Controller - GetBeer() - User %+v", spew.Sdump(user))
 
@@ -150,13 +141,12 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 
 func (cont *Controller) AddRate(ctx echo.Context) error {
 	log.Printf("Controller - AddRate() - Controller")
-	accessTokens := ctx.Request().Header["Authorization"]
-	if len(accessTokens) < 1 {
-		return ctx.NoContent(http.StatusUnauthorized)
-	}
-	user, err := cont.userUseCase.GetUser(accessTokens[0])
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.User()
 	if err != nil {
 		return err
+	} else if user == nil || user.ID == 0 {
+		return fmt.Errorf("user not found")
 	}
 
 	var req dto.AddRateRequest
@@ -175,13 +165,12 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 
 func (cont *Controller) AddComment(ctx echo.Context) error {
 	log.Printf("Controller - AddComment() - Controller")
-	accessTokens := ctx.Request().Header["Authorization"]
-	if len(accessTokens) < 1 {
-		return ctx.NoContent(http.StatusUnauthorized)
-	}
-	user, err := cont.userUseCase.GetUser(accessTokens[0])
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.User()
 	if err != nil {
 		return err
+	} else if user == nil || user.ID == 0 {
+		return fmt.Errorf("user not found")
 	}
 
 	var req dto.AddCommentRequest

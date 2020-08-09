@@ -56,12 +56,8 @@ func (cont *Controller) GetToken(ctx echo.Context) error {
 
 func (cont *Controller) GetUser(ctx echo.Context) error {
 	log.Printf("Controller - GetUser() - Controller")
-	accessTokens := ctx.Request().Header["Authorization"]
-	if len(accessTokens) < 1 {
-		return ctx.NoContent(http.StatusUnauthorized)
-	}
-
-	user, err := cont.userUseCase.GetUser(accessTokens[0])
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}

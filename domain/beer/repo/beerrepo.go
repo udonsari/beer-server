@@ -27,6 +27,7 @@ func (r *beerRepo) GetBeer(beerID int64) (*beer.Beer, error) {
 		Country:   "korea",
 		BeerStyle: "ipa",
 		Aroma:     []string{"grape", "apple"},
+		ImageURL:  []string{"www.test_image_url.com"},
 	}, nil
 }
 
@@ -43,6 +44,7 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 			Country:   "korea",
 			BeerStyle: "ipa",
 			Aroma:     []string{"grape", "apple"},
+			ImageURL:  []string{"www.test_image_url.com"},
 		},
 		beer.Beer{
 			ID:        int64(2),
@@ -52,6 +54,7 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 			Country:   "korea",
 			BeerStyle: "ipa",
 			Aroma:     []string{"orange", "apple"},
+			ImageURL:  []string{"www.test_image_url.com"},
 		},
 	}, nil
 }

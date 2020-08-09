@@ -29,6 +29,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates
 		Country:   beer.Country,
 		BeerStyle: beer.BeerStyle,
 		Aroma:     beer.Aroma,
+		ImageURL:  beer.ImageURL,
 		Comments:  comments,
 		RateAvg:   rateAvg,
 		RateOwner: rateOwner,
