@@ -9,4 +9,5 @@ services:
       - 8081:8081
     environment:
       - SERVER_ENV=local
+      - PORT=8081
     command: go test ./...

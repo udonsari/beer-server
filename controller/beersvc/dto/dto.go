@@ -47,4 +47,6 @@ type Beer struct {
 	Aroma     []string       `json:"aroma"`
 	Comments  []beer.Comment `json:"comments"`
 	RateAvg   float64        `json:"rate_avg"`
+
+	// TODO 지금 접속한 사람이 이 맥주에 대해 매긴 Rate도 내려주기
 }

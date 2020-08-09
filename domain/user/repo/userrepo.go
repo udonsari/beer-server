@@ -7,8 +7,8 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
-// TODO Attach Real DB and use ORM.
-// TODO Add Cache ?
+// TODO *** Attach Real DB and use ORM.
+// TODO *** Add Cache ?
 type userRepo struct {
 }
 

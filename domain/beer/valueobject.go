@@ -5,7 +5,7 @@ type BeerQueryArgs struct {
 	Name        *string
 
 	// Array Type Fields
-	// TODO 이 쿼리 기준들은 OR로 계산
+	// TODO ** 이 쿼리 기준들은 OR로 계산
 	Country   []string
 	BeerStyle []string
 	Aroma     []string

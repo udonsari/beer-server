@@ -2,6 +2,7 @@ package user
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -62,7 +63,11 @@ func (u *useCase) GetToken(code string) (*Token, error) {
 	err = json.Unmarshal(respBytes, &kakaoToken)
 	if err != nil {
 		return nil, err
+	} else if kakaoToken.AccessToken == "" {
+		// TODO * Make auth error definition
+		return nil, errors.New("failed to get access token from kakao")
 	}
+
 	log.Printf("UseCase - GetToken() - respBytes : %+v", string(respBytes))
 	log.Printf("UseCase - GetToken() - Token : %+v", kakaoToken)
 	resp.Body.Close()
@@ -88,12 +93,14 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 		log.Printf("UseCase - GetUser() - Kakao user read body error %v", err)
 		return nil, err
 	}
-	// TODO 여기서 respBytes로 {"msg":"this access token does not exist","code":-401}가 와도 에러가 없는데 처리 필요
+
 	var kakaoUser KakaoUser
 	err = json.Unmarshal(respBytes, &kakaoUser)
 	if err != nil {
 		log.Printf("UseCase - GetUser() - unmarshal error %v", err)
 		return nil, err
+	} else if kakaoUser.ID == 0 {
+		return nil, errors.New("failed to get user from kakao")
 	}
 
 	log.Printf("UseCase - GetUser() - respBytes : %+v", string(respBytes))
@@ -105,7 +112,7 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 		return nil, err
 	}
 
-	// TODO Go routine 처리 고민
+	// Goroutine 처리 고민했지만 user를 반환 해야하므로 동기 처리
 	if user == nil {
 		err = u.createUser(
 			u.mapper.MapKakaoUserToUser(kakaoUser),

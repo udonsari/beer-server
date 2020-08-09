@@ -22,7 +22,7 @@ func NewController(engine *echo.Echo, userUseCase user.UseCase, host string) Con
 		userUseCase: userUseCase,
 		host:        host,
 	}
-	// TODO REST API 컨벤션 처리
+	// TODO ** REST API 컨벤션 처리
 	engine.GET("/api/kakao/signin", cont.SignInKakao)
 	engine.GET("/api/token", cont.GetToken)
 	engine.GET("/api/user", cont.GetUser)
@@ -44,7 +44,7 @@ func (cont *Controller) SignInKakao(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetToken(ctx echo.Context) error {
-	// TODO Check Token Expiration
+	// TODO * Check Token Expiration
 	log.Printf("Controller - GetToken() - Controller Param %+v", spew.Sdump(ctx.Request()))
 
 	code := ctx.QueryParam("code")
@@ -56,7 +56,7 @@ func (cont *Controller) GetToken(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetUser(ctx echo.Context) error {
-	// TODO Token이 Header에서 오게 수정
+	// TODO *** Token이 Header에서 오게 수정
 	var req dto.GetUserRequest
 	if err := cont.Bind(ctx, &req); err != nil {
 		log.Printf("Controller - GetBeers() - Failed to bind %+v", err)

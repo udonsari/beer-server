@@ -9,8 +9,8 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
-// TODO Attach Real DB and use ORM. Maybe ElasticSearch ?
-// TODO Add Cache ?
+// TODO *** Attach Real DB and use ORM. Maybe ElasticSearch ?
+// TODO *** Add Cache ?
 type beerRepo struct {
 }
 
@@ -33,7 +33,7 @@ func (r *beerRepo) GetBeer(beerID int64) (*beer.Beer, error) {
 func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	log.Printf("BeerRepo - GetBeers() - args %+v", spew.Sdump(args))
 
-	// TODO Implement query based on args
+	// TODO *** Implement query based on args
 	return []beer.Beer{
 		beer.Beer{
 			ID:        int64(1),

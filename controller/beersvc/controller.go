@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-// TODO Add Logger
+// TODO * Add Logger
 
 type Controller struct {
 	controller.Base
@@ -76,7 +76,6 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	)
 }
 
-// TODO Implemnt
 func (cont *Controller) GetBeer(ctx echo.Context) error {
 	log.Printf("Controller - GetBeer() - Controller")
 
