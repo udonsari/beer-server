@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/UdonSari/beer-server/controller"
-	"github.com/UdonSari/beer-server/controller/usersvc/dto"
 	"github.com/UdonSari/beer-server/domain/user"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo"
@@ -56,13 +55,13 @@ func (cont *Controller) GetToken(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetUser(ctx echo.Context) error {
-	// TODO *** Token이 Header에서 오게 수정
-	var req dto.GetUserRequest
-	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - GetBeers() - Failed to bind %+v", err)
-		return err
+	log.Printf("Controller - GetUser() - Controller")
+	accessTokens := ctx.Request().Header["Authorization"]
+	if len(accessTokens) < 1 {
+		return ctx.NoContent(http.StatusUnauthorized)
 	}
-	user, err := cont.userUseCase.GetUser(req.AccessToken)
+
+	user, err := cont.userUseCase.GetUser(accessTokens[0])
 	if err != nil {
 		return err
 	}

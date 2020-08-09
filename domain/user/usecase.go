@@ -100,7 +100,8 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 		log.Printf("UseCase - GetUser() - unmarshal error %v", err)
 		return nil, err
 	} else if kakaoUser.ID == 0 {
-		return nil, errors.New("failed to get user from kakao")
+		// TODO 실제 유저 연동 없이 동작할 때는 주석 처리한다
+		// return nil, errors.New("failed to get user from kakao")
 	}
 
 	log.Printf("UseCase - GetUser() - respBytes : %+v", string(respBytes))

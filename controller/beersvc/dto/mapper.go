@@ -13,7 +13,7 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates []beer.Rate) Beer {
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates []beer.Rate, rateOwner *beer.Rate) Beer {
 	rateAvg := float64(0)
 	for _, rate := range rates {
 		rateAvg += rate.Ratio
@@ -31,6 +31,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates
 		Aroma:     beer.Aroma,
 		Comments:  comments,
 		RateAvg:   rateAvg,
+		RateOwner: rateOwner,
 	}
 }
 

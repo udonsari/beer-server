@@ -13,6 +13,7 @@ import (
 )
 
 // TODO * Add Logger
+// UseCase는 아무것도 안하고, Controller가 뭔가를 많이 하는 것 처럼 보이나, 사실 Response 만들기에 불과하므로 우선 OK
 
 type Controller struct {
 	controller.Base
@@ -36,6 +37,17 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
 	log.Printf("Controller - GetBeers() - Controller")
+	var user *user.User
+	accessTokens := ctx.Request().Header["Authorization"]
+	if len(accessTokens) >= 1 {
+		var err error
+		user, err = cont.userUseCase.GetUser(accessTokens[0])
+		if err != nil {
+			log.Printf("Controller - GetBeers() - User Error %+v", err)
+			return err
+		}
+	}
+	log.Printf("Controller - GetBeers() - User %+v", spew.Sdump(user))
 
 	var req dto.GetBeersRequest
 	if err := cont.Bind(ctx, &req); err != nil {
@@ -55,16 +67,23 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	}
 
 	var res dto.GetBeersResponse
-	for _, beer := range beerList {
-		comments, err := cont.beerUseCase.GetComments(beer.ID)
+	for _, br := range beerList {
+		var rateOwner *beer.Rate
+		comments, err := cont.beerUseCase.GetComments(br.ID)
 		if err != nil {
 			return err
 		}
-		rates, err := cont.beerUseCase.GetRates(beer.ID)
+		rates, err := cont.beerUseCase.GetRates(br.ID)
 		if err != nil {
 			return err
 		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(beer, comments, rates)
+		if user != nil {
+			rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+			if err != nil {
+				return err
+			}
+		}
+		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rates, rateOwner)
 		res.Beers = append(res.Beers, dtoBeer)
 	}
 
@@ -78,6 +97,17 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 
 func (cont *Controller) GetBeer(ctx echo.Context) error {
 	log.Printf("Controller - GetBeer() - Controller")
+	var user *user.User
+	accessTokens := ctx.Request().Header["Authorization"]
+	if len(accessTokens) >= 1 {
+		var err error
+		user, err = cont.userUseCase.GetUser(accessTokens[0])
+		if err != nil {
+			log.Printf("Controller - GetBeers() - User Error %+v", err)
+			return err
+		}
+	}
+	log.Printf("Controller - GetBeer() - User %+v", spew.Sdump(user))
 
 	var req dto.GetBeerRequest
 	if err := cont.Bind(ctx, &req); err != nil {
@@ -86,21 +116,28 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	}
 	log.Printf("Controller - GetBeer() - Param %+v", spew.Sdump(req))
 
-	beer, err := cont.beerUseCase.GetBeer(req.BeerID)
+	br, err := cont.beerUseCase.GetBeer(req.BeerID)
 	if err != nil {
 		return err
 	}
 
 	var res dto.GetBeerResponse
-	comments, err := cont.beerUseCase.GetComments(beer.ID)
+	var rateOwner *beer.Rate
+	comments, err := cont.beerUseCase.GetComments(br.ID)
 	if err != nil {
 		return err
 	}
-	rates, err := cont.beerUseCase.GetRates(beer.ID)
+	rates, err := cont.beerUseCase.GetRates(br.ID)
 	if err != nil {
 		return err
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*beer, comments, rates)
+	if user != nil {
+		rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+		if err != nil {
+			return err
+		}
+	}
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rates, rateOwner)
 	res.Beer = dtoBeer
 
 	return ctx.JSON(
@@ -117,7 +154,6 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 	if len(accessTokens) < 1 {
 		return ctx.NoContent(http.StatusUnauthorized)
 	}
-
 	user, err := cont.userUseCase.GetUser(accessTokens[0])
 	if err != nil {
 		return err
@@ -143,7 +179,6 @@ func (cont *Controller) AddComment(ctx echo.Context) error {
 	if len(accessTokens) < 1 {
 		return ctx.NoContent(http.StatusUnauthorized)
 	}
-
 	user, err := cont.userUseCase.GetUser(accessTokens[0])
 	if err != nil {
 		return err

@@ -72,6 +72,14 @@ func (r *beerRepo) GetRates(beerID int64) ([]beer.Rate, error) {
 	return rates, nil
 }
 
+func (r *beerRepo) GetRatesByBeerIDAndUserID(beerID int64, userID int64) (*beer.Rate, error) {
+	return &beer.Rate{
+		BeerID: beerID,
+		Ratio:  rand.Float64() * 5,
+		UserID: userID,
+	}, nil
+}
+
 func (r *beerRepo) AddComment(beerID int64, Content string, userID int64) error {
 	return nil
 }

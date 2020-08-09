@@ -38,15 +38,15 @@ type AddCommentRequest struct {
 }
 
 type Beer struct {
-	ID        int64          `json:"id"`
-	Name      string         `json:"name"`
-	Brewery   string         `json:"brewery"`
-	ABV       float64        `json:"abv"`
-	Country   string         `json:"country"`
-	BeerStyle string         `json:"beer_style"`
-	Aroma     []string       `json:"aroma"`
+	ID        int64    `json:"id"`
+	Name      string   `json:"name"`
+	Brewery   string   `json:"brewery"`
+	ABV       float64  `json:"abv"`
+	Country   string   `json:"country"`
+	BeerStyle string   `json:"beer_style"`
+	Aroma     []string `json:"aroma"`
+
 	Comments  []beer.Comment `json:"comments"`
 	RateAvg   float64        `json:"rate_avg"`
-
-	// TODO 지금 접속한 사람이 이 맥주에 대해 매긴 Rate도 내려주기
+	RateOwner *beer.Rate     `json:"rate_owner,omitempty"`
 }
