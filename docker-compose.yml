@@ -4,8 +4,44 @@ services:
   app:
     build:
       context: .
+      target: build
+    command: ./wait-for-it.sh mysqldb:3306 -- /bin/beer-server
+    working_dir: /src/beer-server
     ports:
       - 8081:8081
     environment:
       - SERVER_ENV=local
-    command: /bin/beer-server
+      - PORT=8081
+      - MYSQL_DATA_SOURCE_NAME=beerserver:beerserver@tcp(mysqldb:3306)/beerserver?parseTime=true
+      - BEER_CACHE_DURATION=10
+    networks:
+      beerserver-network:
+        aliases:
+          - beerserver
+    depends_on: 
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    command: mysqld
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=beerserver
+      - MYSQL_USER=beerserver
+      - MYSQL_PASSWORD=beerserver
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    networks:
+      beerserver-network:
+        aliases:
+          - mysqldb
+
+volumes:
+  mysql-data:
+
+networks:
+  beerserver-network:
+    external:
+      name: beerserver-network 
