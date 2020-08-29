@@ -2,7 +2,9 @@
 
 * Make Command
     * `make build` : 서버용 Docker Image를 빌드 합니다
-    * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다
+    * `make migrate` : 서버를 위한 MySQL Table을 Migration 합니다
+    * `make seed` : 서버를 위한 Beer Test Data를 넣습니다
+    * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
 
 * API 예시
     * BeerList : 
@@ -114,6 +116,7 @@
     * Error 정의 해서 사용
     * Test 구현
     * Logger 사용
+    * 문서화
     * 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
 
 ### 다음 PR은 DB 연결 및 확실한 내부 구현
