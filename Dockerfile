@@ -11,7 +11,9 @@ RUN go mod download
 
 # Build
 COPY . .
-RUN go build -o /bin ./...
+RUN go build -o /bin/beer-server ./main
+RUN go build -o /bin/migration/table ./migration/table
+RUN go build -o /bin/migration/seed ./migration/seed
 
 FROM build AS runnable
 

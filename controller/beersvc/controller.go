@@ -13,7 +13,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-// TODO * Add Logger
 // UseCase는 아무것도 안하고, Controller가 뭔가를 많이 하는 것 처럼 보이나, 사실 Response 만들기에 불과하므로 우선 OK
 
 type Controller struct {
@@ -63,7 +62,8 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	}
 
 	var res dto.GetBeersResponse
-	for _, br := range beerList {
+	for idx, br := range beerList {
+		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
 		var rateOwner *beer.Rate
 		comments, err := cont.beerUseCase.GetComments(br.ID)
 		if err != nil {
@@ -82,6 +82,8 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rates, rateOwner)
 		res.Beers = append(res.Beers, dtoBeer)
 	}
+
+	log.Printf("Controller - GetBeers() dto beer list %+v", res.Beers)
 
 	return ctx.JSON(
 		http.StatusOK,
@@ -129,7 +131,17 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 		}
 	}
 	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rates, rateOwner)
+
+	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
+	if err != nil {
+		return err
+	}
+	dtorRelatedBeers := cont.mapper.MapRelatedBeersToDTORelatedBeers(relatedBeers)
+
 	res.Beer = dtoBeer
+	res.RelatedBeers = dtorRelatedBeers
+
+	log.Printf("Controller - GetBeer() dto beer %+v", res)
 
 	return ctx.JSON(
 		http.StatusOK,
@@ -156,7 +168,13 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 	}
 	log.Printf("Controller - AddRate() - Param %+v", spew.Sdump(req))
 
-	err = cont.beerUseCase.AddRate(req.BeerID, req.Ratio, user.ID)
+	err = cont.beerUseCase.AddRate(
+		beer.Rate{
+			BeerID: req.BeerID,
+			Ratio:  req.Ratio,
+			UserID: user.ID,
+		},
+	)
 	if err != nil {
 		return err
 	}
@@ -180,7 +198,13 @@ func (cont *Controller) AddComment(ctx echo.Context) error {
 	}
 	log.Printf("Controller - AddComment() - Param %+v", spew.Sdump(req))
 
-	err = cont.beerUseCase.AddComment(req.BeerID, req.Content, user.ID)
+	err = cont.beerUseCase.AddComment(
+		beer.Comment{
+			BeerID:  req.BeerID,
+			Content: req.Content,
+			UserID:  user.ID,
+		},
+	)
 	if err != nil {
 		return err
 	}

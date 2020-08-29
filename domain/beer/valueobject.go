@@ -1,11 +1,14 @@
 package beer
 
+const (
+	relatedBeersMaxLen = 3
+)
+
 type BeerQueryArgs struct {
 	ABVInterval *ABVInterval
 	Name        *string
 
 	// Array Type Fields
-	// TODO ** 이 쿼리 기준들은 OR로 계산
 	Country   []string
 	BeerStyle []string
 	Aroma     []string
@@ -14,4 +17,10 @@ type BeerQueryArgs struct {
 type ABVInterval struct {
 	MinABV float64
 	MaxABV float64
+}
+
+type RelatedBeers struct {
+	AromaRelatedBeer    []Beer
+	StyleRelatedBeer    []Beer
+	RandomlyRelatedBeer []Beer
 }

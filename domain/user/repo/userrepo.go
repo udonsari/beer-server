@@ -1,36 +1,52 @@
 package repo
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/UdonSari/beer-server/domain/user"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
-// TODO *** Attach Real DB and use ORM.
-// TODO *** Add Cache ?
 type userRepo struct {
+	db *gorm.DB
+	mapper
 }
 
-func New() *userRepo {
-	return &userRepo{}
+func New(db *gorm.DB) *userRepo {
+	return &userRepo{
+		db: db,
+	}
 }
 
 func (r *userRepo) GetUserByExternalID(externalID string) (*user.User, error) {
 	log.Printf("UserRepo - GetUserByExternalID() - externalID %+v", externalID)
 
-	return &user.User{
-		ID:         1,
-		ExternalID: externalID,
-		Properties: user.Properties{
-			NickName:       "TEST_NICKNAME",
-			ProfileImage:   "TEST_PROFILE_IMAGE",
-			ThumbnailImage: "TEST_THUMBNAIL_IMAGE",
-		},
-	}, nil
+	query := DBUser{ExternalID: externalID}
+	var dbUser DBUser
+	if err := r.db.Where(&query).First(&dbUser).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get user. external id: %v", externalID))
+		}
+	}
+	user := r.mapper.mapDBUserToUser(dbUser)
+	return &user, nil
 }
 
 func (r *userRepo) CreateUser(user user.User) error {
-	log.Printf("UserRepo - GetUserByExternalID() - user %+v", spew.Sdump(user))
+	log.Printf("UserRepo - CreateUser() - user %+v", spew.Sdump(user))
+
+	dbUser := r.mapper.mapUserToDBUser(user)
+	res := r.db.Create(&dbUser)
+	if res.Error != nil {
+		return res.Error
+	}
 	return nil
 }

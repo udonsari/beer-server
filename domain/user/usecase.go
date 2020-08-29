@@ -12,6 +12,8 @@ import (
 	"github.com/davecgh/go-spew/spew"
 )
 
+// TODO Kakao repo를 파서 통신 내리기
+
 type UseCase interface {
 	GetUserByExternalID(externalID string) (*User, error)
 	GetUser(accessToken string) (*User, error)

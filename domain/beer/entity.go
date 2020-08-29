@@ -11,20 +11,15 @@ type Beer struct {
 	ImageURL  []string
 }
 
-type RelatedBeers struct {
-	AromaRelatedBeer    []Beer
-	StyleRelatedBeer    []Beer
-	RandomlyRelatedBeer []Beer
-}
-
-// TODO * Make dtoComment
 type Comment struct {
-	BeerID  int64  `json:"beer_id"`
-	Content string `json:"content"`
-	UserID  int64  `json:"user_id"`
+	ID      int64
+	BeerID  int64
+	Content string
+	UserID  int64
 }
 
 type Rate struct {
+	ID     int64
 	BeerID int64
 	Ratio  float64
 	UserID int64

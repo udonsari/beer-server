@@ -109,7 +109,11 @@
         * 우선순위 별로 별 달아놓음
     * 라이센스 추가
     * 전반적으로 Validation 다듬기
+        * 한 맥주에 두 번 댓글 금지
+        * DB 자체에 Name Unique 등
     * Error 정의 해서 사용
+    * Test 구현
+    * Logger 사용
     * 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
 
 ### 다음 PR은 DB 연결 및 확실한 내부 구현
