@@ -95,15 +95,199 @@
             }
         }
         ```
-    * BeerDetail (Related Beers (향이 비슷, 맛이 비슷, 랜덤) 포함, 평균 별점 필요)
-    * BeerComment Post (SignIn 필요, 별점도 같이 [float], 글자 제한, 사용자랑 연관)
-    * BeerComment List (개별 Beer ID를 인자로 옮)
-    * 우선은 Comment와 Rate을 따로 뺌
-
-    * SignUp == SignIn
-        * DB 실제 구성 필요
+    * BeerDetail
+        * command :`curl --location --request GET 'http://localhost:8081/api/beers?beer_id=5'`
+            * beer_id를 인자로 줍니다.
+        * Response Example
+        ```json
+        {
+            "result": {
+                "beer": {
+                    "id": 101,
+                    "name": "TEST_NAME_6026460253205598777",
+                    "brewery": "TEST_BREWAERY_596",
+                    "abv": 9.25,
+                    "country": "TEST_COUNTRY_10",
+                    "beer_style": "TEST_STYLE_13",
+                    "aroma": [
+                        "TEST_AROMA_8",
+                        "TEST_AROMA_2",
+                        "TEST_AROMA_8"
+                    ],
+                    "image_url": [
+                        "http:naver.com",
+                        "http:naver.com",
+                        "http:naver.com",
+                        "http:naver.com",
+                        "http:naver.com"
+                    ],
+                    "comments": null,
+                    "rate_avg": 0
+                },
+                "related_beers": {
+                    "aroma_related": [
+                        {
+                            "id": 175,
+                            "name": "TEST_NAME_966162726085428843",
+                            "brewery": "TEST_BREWAERY_211",
+                            "abv": 1.82,
+                            "country": "TEST_COUNTRY_16",
+                            "beer_style": "TEST_STYLE_9",
+                            "aroma": [
+                                "TEST_AROMA_2",
+                                "TEST_AROMA_4",
+                                "TEST_AROMA_5"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 125,
+                            "name": "TEST_NAME_8659007057868230986",
+                            "brewery": "TEST_BREWAERY_274",
+                            "abv": 0.38,
+                            "country": "TEST_COUNTRY_2",
+                            "beer_style": "TEST_STYLE_4",
+                            "aroma": [
+                                "TEST_AROMA_2",
+                                "TEST_AROMA_7",
+                                "TEST_AROMA_8"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 172,
+                            "name": "TEST_NAME_179496080759982046",
+                            "brewery": "TEST_BREWAERY_570",
+                            "abv": 5.34,
+                            "country": "TEST_COUNTRY_20",
+                            "beer_style": "TEST_STYLE_10",
+                            "aroma": [
+                                "TEST_AROMA_2",
+                                "TEST_AROMA_1",
+                                "TEST_AROMA_9"
+                            ],
+                            "rate_avg": 0
+                        }
+                    ],
+                    "style_related": [
+                        {
+                            "id": 197,
+                            "name": "TEST_NAME_4068733518307920492",
+                            "brewery": "TEST_BREWAERY_988",
+                            "abv": 4.25,
+                            "country": "TEST_COUNTRY_21",
+                            "beer_style": "TEST_STYLE_13",
+                            "aroma": [
+                                "TEST_AROMA_5",
+                                "TEST_AROMA_8",
+                                "TEST_AROMA_9"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 107,
+                            "name": "TEST_NAME_1891709482230556383",
+                            "brewery": "TEST_BREWAERY_289",
+                            "abv": 8.45,
+                            "country": "TEST_COUNTRY_21",
+                            "beer_style": "TEST_STYLE_13",
+                            "aroma": [
+                                "TEST_AROMA_1",
+                                "TEST_AROMA_9",
+                                "TEST_AROMA_2"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 160,
+                            "name": "TEST_NAME_2181965767827069027",
+                            "brewery": "TEST_BREWAERY_909",
+                            "abv": 5.72,
+                            "country": "TEST_COUNTRY_15",
+                            "beer_style": "TEST_STYLE_13",
+                            "aroma": [
+                                "TEST_AROMA_4",
+                                "TEST_AROMA_4",
+                                "TEST_AROMA_3"
+                            ],
+                            "rate_avg": 0
+                        }
+                    ],
+                    "randomly_related": [
+                        {
+                            "id": 142,
+                            "name": "TEST_NAME_4273616174478889151",
+                            "brewery": "TEST_BREWAERY_779",
+                            "abv": 0.16,
+                            "country": "TEST_COUNTRY_11",
+                            "beer_style": "TEST_STYLE_9",
+                            "aroma": [
+                                "TEST_AROMA_4",
+                                "TEST_AROMA_7",
+                                "TEST_AROMA_3"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 101,
+                            "name": "TEST_NAME_6026460253205598777",
+                            "brewery": "TEST_BREWAERY_596",
+                            "abv": 9.25,
+                            "country": "TEST_COUNTRY_10",
+                            "beer_style": "TEST_STYLE_13",
+                            "aroma": [
+                                "TEST_AROMA_8",
+                                "TEST_AROMA_2",
+                                "TEST_AROMA_8"
+                            ],
+                            "rate_avg": 0
+                        },
+                        {
+                            "id": 167,
+                            "name": "TEST_NAME_3861280272082108960",
+                            "brewery": "TEST_BREWAERY_104",
+                            "abv": 1.64,
+                            "country": "TEST_COUNTRY_20",
+                            "beer_style": "TEST_STYLE_15",
+                            "aroma": [
+                                "TEST_AROMA_6",
+                                "TEST_AROMA_7",
+                                "TEST_AROMA_7"
+                            ],
+                            "rate_avg": 0
+                        }
+                    ]
+                }
+            }
+        }        
+        ```
+    * SignIn (Kakao Only)
+        * command :`curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
+            * `api/token`로 Redirect되어 Access Token을 내려줍니다
+            * 해당 토큰을 Header에 `Authorization`라는 Key의 Value로 담아 보내면 이후, 자신의 사용자 정보나 자신이 맥주에 매긴 Rate 등을 확인할 수 있습니다.
+        * Response Example
+        ```json
+        {
+            "access_token": "ABC"
+        }
+        ```
     * UserDetail (계정 정보 뿌려주기, 추후 회원 탈퇴 만들기)
-        * DB 실제 구성 필요
+        * command :`curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
+            * SignIn을 통해 얻은 Access Token을 Header에 담아 API 호출해야합니다
+        * Response Example
+        ```json
+        {
+            "ID": 1,
+            "ExternalID": "0",
+            "NickName": "",
+            "ProfileImage": "",
+            "ThumbnailImage": ""
+        }        
+        ```
+    * TODO
+        * BeerComment Post (SignIn 필요, 별점도 같이 [float], 글자 제한, 사용자랑 연관)
+        * BeerComment List (개별 Beer ID를 인자로 옮)
+            * 우선은 Comment와 Rate을 따로 뺌
 
 * TODO
     * CI / CD
@@ -118,5 +302,3 @@
     * Logger 사용
     * 문서화
     * 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
-
-### 다음 PR은 DB 연결 및 확실한 내부 구현
