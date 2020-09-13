@@ -1,7 +1,5 @@
 package dto
 
-import "github.com/UdonSari/beer-server/domain/beer"
-
 type GetBeersRequest struct {
 	// ABV : Alcohol by Volume
 	MinABV *float64 `query:"min_abv"`
@@ -16,7 +14,7 @@ type GetBeersRequest struct {
 }
 
 type GetBeersResponse struct {
-	Beers []Beer
+	Beers []Beer `json:"beers"`
 }
 
 type GetBeerRequest struct {
@@ -49,9 +47,9 @@ type Beer struct {
 	Aroma     []string `json:"aroma"`
 	ImageURL  []string `json:"image_url"`
 
-	Comments  []Comment  `json:"comments"`
-	RateAvg   float64    `json:"rate_avg"`
-	RateOwner *beer.Rate `json:"rate_owner,omitempty"`
+	Comments  []Comment `json:"comments"`
+	RateAvg   float64   `json:"rate_avg"`
+	RateOwner *Rate     `json:"rate_owner,omitempty"`
 }
 
 type RelatedBeers struct {
@@ -75,4 +73,10 @@ type Comment struct {
 	BeerID  int64  `json:"beer_id"`
 	Content string `json:"content"`
 	UserID  int64  `json:"user_id"`
+}
+
+type Rate struct {
+	BeerID int64   `json:"beer_id"`
+	Ratio  float64 `json:"ratio"`
+	UserID int64   `json:"user_id"`
 }
