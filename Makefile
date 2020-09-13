@@ -9,14 +9,24 @@ build:
 up:
 	docker-compose up
 
-migrate:
-	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration/table'
+migrate-down:
+	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration migrate-down'
+
+migrate-up:
+	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration migrate-up'
 
 seed:
-	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration/seed'
+	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration seed'
 
 test-build:
 	docker-compose -f docker-compose.test.yml build
 
 test:
 	docker-compose -f docker-compose.test.yml run test
+
+# Unofficial
+refresh:
+	make build
+	make migrate-down
+	make migrate-up
+	make seed

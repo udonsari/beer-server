@@ -43,6 +43,19 @@ func (m mapper) mapRateToDBRate(rate beer.Rate) DBRate {
 	}
 }
 
+func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
+	return DBBeer{
+		Name:         beer.Name,
+		Brewery:      beer.Brewery,
+		ABV:          beer.ABV,
+		Country:      beer.Country,
+		BeerStyle:    beer.BeerStyle,
+		AromaList:    m.splitAndGetString(beer.Aroma),
+		ImageURLList: m.splitAndGetString(beer.ImageURL),
+		RateAvg:      beer.RateAvg,
+	}
+}
+
 func (m mapper) mapDBBeerToBeer(dbBeer DBBeer) beer.Beer {
 	return beer.Beer{
 		ID:        dbBeer.ID,
@@ -51,12 +64,21 @@ func (m mapper) mapDBBeerToBeer(dbBeer DBBeer) beer.Beer {
 		ABV:       dbBeer.ABV,
 		Country:   dbBeer.Country,
 		BeerStyle: dbBeer.BeerStyle,
-		Aroma:     m.splitAndGet(dbBeer.AromaList, maxAromaListLen),
-		ImageURL:  m.splitAndGet(dbBeer.ImageURLList, maxImageURLListLen),
+		Aroma:     m.splitAndGetArray(dbBeer.AromaList, maxAromaListLen),
+		ImageURL:  m.splitAndGetArray(dbBeer.ImageURLList, maxImageURLListLen),
+		RateAvg:   dbBeer.RateAvg,
 	}
 }
 
-func (m mapper) splitAndGet(str string, maxLen int) []string {
+func (m mapper) splitAndGetArray(str string, maxLen int) []string {
 	list := strings.Split(str, listSplitChar)
 	return list[0:util.Min(len(list), maxLen)]
+}
+
+func (m mapper) splitAndGetString(strList []string) string {
+	ret := ""
+	for _, v := range strList {
+		ret += v + listSplitChar
+	}
+	return ret
 }

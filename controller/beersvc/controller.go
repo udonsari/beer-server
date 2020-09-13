@@ -69,17 +69,13 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		if err != nil {
 			return err
 		}
-		rates, err := cont.beerUseCase.GetRates(br.ID)
-		if err != nil {
-			return err
-		}
 		if user != nil {
 			rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
 			if err != nil {
 				return err
 			}
 		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rates, rateOwner)
+		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rateOwner)
 		res.Beers = append(res.Beers, dtoBeer)
 	}
 
@@ -120,17 +116,13 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	rates, err := cont.beerUseCase.GetRates(br.ID)
-	if err != nil {
-		return err
-	}
 	if user != nil {
 		rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
 		if err != nil {
 			return err
 		}
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rates, rateOwner)
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rateOwner)
 
 	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
 	if err != nil {

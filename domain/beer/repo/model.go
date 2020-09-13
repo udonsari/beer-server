@@ -18,6 +18,8 @@ type DBBeer struct {
 
 	AromaList    string
 	ImageURLList string `gorm:"image_url_list"`
+
+	RateAvg float64
 }
 
 func (DBBeer) TableName() string {

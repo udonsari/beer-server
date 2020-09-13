@@ -1,7 +1,6 @@
 package beer
 
 import (
-	"log"
 	"math/rand"
 	"time"
 
@@ -9,6 +8,7 @@ import (
 )
 
 type UseCase interface {
+	Addbeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
 	GetBeer(beerID int64) (*Beer, error)
 	AddRate(rate Rate) error
@@ -24,9 +24,14 @@ type useCase struct {
 }
 
 func NewUseCase(beerRepo BeerRepo) UseCase {
+	rand.Seed(time.Now().UnixNano())
 	return &useCase{
 		beerRepo: beerRepo,
 	}
+}
+
+func (u *useCase) Addbeer(beer Beer) error {
+	return u.beerRepo.Addbeer(beer)
 }
 
 func (u *useCase) GetBeers(args BeerQueryArgs) ([]Beer, error) {
@@ -38,6 +43,26 @@ func (u *useCase) GetBeer(beerID int64) (*Beer, error) {
 }
 
 func (u *useCase) AddRate(rate Rate) error {
+	beer, err := u.GetBeer(rate.BeerID)
+	if err != nil {
+		return err
+	}
+	ratesLen, err := u.beerRepo.GetRatesCount(rate.BeerID)
+	if err != nil {
+		return err
+	}
+
+	var newRateAvg float64
+	if ratesLen == 0 {
+		newRateAvg = rate.Ratio
+	} else {
+		newRateAvg = (beer.RateAvg*float64(ratesLen) + rate.Ratio) / (float64(ratesLen) + 1.0)
+	}
+	err = u.beerRepo.UpdateBeerRateAvg(rate.BeerID, newRateAvg)
+	if err != nil {
+		return err
+	}
+
 	return u.beerRepo.AddRate(rate)
 }
 
@@ -73,7 +98,6 @@ func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
 		return nil, err
 	}
 	relatedBeers.AromaRelatedBeer = aromaRelatedBeers
-	log.Printf("[TEST] Aroma related beer %+v", aromaRelatedBeers)
 
 	var styleQueryArgs BeerQueryArgs
 	styleQueryArgs.BeerStyle = append(styleQueryArgs.BeerStyle, baseBeer.BeerStyle)
@@ -82,7 +106,6 @@ func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
 		return nil, err
 	}
 	relatedBeers.StyleRelatedBeer = styleRelatedBeers
-	log.Printf("[TEST] Style related beer %+v", styleRelatedBeers)
 
 	var randomlyQueryArgs BeerQueryArgs
 	randomlyRelatedBeers, err := u.getRelatedBeersWithQueryArgs(randomlyQueryArgs)
@@ -90,7 +113,6 @@ func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
 		return nil, err
 	}
 	relatedBeers.RandomlyRelatedBeer = randomlyRelatedBeers
-	log.Printf("[TEST] Random related beer %+v", randomlyRelatedBeers)
 
 	return &relatedBeers, nil
 }
@@ -100,8 +122,7 @@ func (u *useCase) getRelatedBeersWithQueryArgs(args BeerQueryArgs) ([]Beer, erro
 	if err != nil {
 		return nil, err
 	}
-	// TODO 이 부분 매번 해도 성능 괜찮은지 확인
-	rand.Seed(time.Now().UnixNano())
+
 	rand.Shuffle(len(relatedBeers), func(i, j int) {
 		relatedBeers[i], relatedBeers[j] = relatedBeers[j], relatedBeers[i]
 	})
