@@ -13,15 +13,7 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates []beer.Rate, rateOwner *beer.Rate) Beer {
-	rateAvg := float64(0)
-	if len(rates) > 0 {
-		for _, rate := range rates {
-			rateAvg += rate.Ratio
-		}
-		rateAvg /= float64(len(rates))
-		rateAvg = math.Floor(rateAvg*100) / 100
-	}
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rateOwner *beer.Rate) Beer {
 
 	var dtoComments []Comment
 	for _, comment := range comments {
@@ -40,15 +32,13 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rates
 		Aroma:     beer.Aroma,
 		ImageURL:  beer.ImageURL,
 		Comments:  dtoComments,
-		RateAvg:   rateAvg,
+		RateAvg:   beer.RateAvg,
 		RateOwner: rateOwner,
 	}
 }
 
 func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
 	beer.ABV = math.Floor(beer.ABV*100) / 100
-
-	// TODO 여기서 AverageRatio를 구하기 어려운 면이 있음
 
 	return ReducedBeer{
 		ID:        beer.ID,
@@ -58,6 +48,7 @@ func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
 		Country:   beer.Country,
 		BeerStyle: beer.BeerStyle,
 		Aroma:     beer.Aroma,
+		RateAvg:   beer.RateAvg,
 	}
 }
 

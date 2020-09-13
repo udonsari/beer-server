@@ -13,6 +13,7 @@ import (
 
 // TODO *** Attach ElasticSearch ? (Good for search)
 // TODO *** Add Cache (Beer not change much). Currently only added duration
+// Gorm 사용시 함수 인자로 구조체를 넣는것과, Key와 Value 넣는 것 구분해라. 동작이 이상한 경우 있음 (ex. Single Column 업데이트와 Batch Column 업데이트)
 type beerRepo struct {
 	db            *gorm.DB
 	cacheDuration int64
@@ -24,6 +25,13 @@ func New(db *gorm.DB, cacheDuration int64) *beerRepo {
 		db:            db,
 		cacheDuration: cacheDuration,
 	}
+}
+
+func (r *beerRepo) Addbeer(beer beer.Beer) error {
+	dbBeer := r.mapper.mapBeerToDBBeer(beer)
+	res := r.db.Create(&dbBeer)
+	return res.Error
+
 }
 
 func (r *beerRepo) GetBeer(beerID int64) (*beer.Beer, error) {
@@ -128,6 +136,11 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	return beers, nil
 }
 
+func (r *beerRepo) UpdateBeerRateAvg(beerID int64, rateAvg float64) error {
+	res := r.db.Model(&DBBeer{}).Where("id = ?", beerID).Update("rate_avg", rateAvg)
+	return res.Error
+}
+
 func (r *beerRepo) AddRate(rate beer.Rate) error {
 	dbRate := r.mapper.mapRateToDBRate(rate)
 	res := r.db.Create(&dbRate)
@@ -151,6 +164,12 @@ func (r *beerRepo) GetRates(beerID int64) ([]beer.Rate, error) {
 		rates = append(rates, r.mapper.mapDBRateToRate(dbRate))
 	}
 	return rates, nil
+}
+
+func (r *beerRepo) GetRatesCount(beerID int64) (int64, error) {
+	var count int64
+	res := r.db.Model(&DBRate{}).Where("beer_id = ?", beerID).Count(&count)
+	return count, res.Error
 }
 
 func (r *beerRepo) GetRatesByBeerIDAndUserID(beerID int64, userID int64) (*beer.Rate, error) {

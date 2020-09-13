@@ -21,7 +21,6 @@ func NewController(engine *echo.Echo, userUseCase user.UseCase, host string) Con
 		userUseCase: userUseCase,
 		host:        host,
 	}
-	// TODO ** REST API 컨벤션 처리
 	engine.GET("/api/kakao/signin", cont.SignInKakao)
 	engine.GET("/api/token", cont.GetToken)
 	engine.GET("/api/user", cont.GetUser)

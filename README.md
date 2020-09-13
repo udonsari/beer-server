@@ -2,9 +2,11 @@
 
 * Make Command
     * `make build` : 서버용 Docker Image를 빌드 합니다
-    * `make migrate` : 서버를 위한 MySQL Table을 Migration 합니다
+    * `make migrate-up` : 서버를 위한 MySQL Table을 Migration 합니다
+    * `make migrate-down` : 서버를 위한 MySQL Table을 지웁니다
     * `make seed` : 서버를 위한 Beer Test Data를 넣습니다
     * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
+    * `make test` : 코드 테스트를 실행 합니다
 
 * API 예시
     * BeerList : 
@@ -294,11 +296,13 @@
     * 코드 내부에 TODO 달아 놓은 것들
         * 우선순위 별로 별 달아놓음
     * 라이센스 추가
-    * 전반적으로 Validation 다듬기
-        * 한 맥주에 두 번 댓글 금지
-        * DB 자체에 Name Unique 등
+    * REST API Convention 적용
     * Error 정의 해서 사용
     * Test 구현
     * Logger 사용
     * 문서화
     * 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
+    * 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
+    * [중요] 전반적으로 Validation 다듬기
+        * 한 맥주에 두 번 댓글 금지
+        * DB 자체에 Name Unique 등
