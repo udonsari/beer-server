@@ -266,7 +266,8 @@
     * SignIn (Kakao Only)
         * command :`curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
             * `api/token`로 Redirect되어 Access Token을 내려줍니다
-            * 해당 토큰을 Header에 `Authorization`라는 Key의 Value로 담아 보내면 이후, 자신의 사용자 정보나 자신이 맥주에 매긴 Rate 등을 확인할 수 있습니다.
+            * 해당 토큰을 Header에 `Authorization`라는 Key의 Value로 담아 보내면 이후, 자신의 사용자 정보나 자신이 맥주에 매긴 Rate 등을 확인할 수 있습니다. Rate을 매기고, Comment를 달려면 마찬가지로 토큰을 설정해야합니다.
+            * 로그인 연동을 테스트할 시, [연동 참조]라고 검색해서, 설명을 따라 주세요
         * Response Example
         ```json
         {
@@ -301,8 +302,8 @@
     * Test 구현
     * Logger 사용
     * 문서화
-    * 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
     * 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
+    * [중요] 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
     * [중요] 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
         * DB 자체에 Name Unique 등

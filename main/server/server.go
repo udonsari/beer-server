@@ -34,12 +34,6 @@ type serverImpl struct {
 }
 
 func (s *serverImpl) Init() {
-	log.Printf("# server initialization starts ...")
-	engine := s.engine()
-	s.registerRoute(engine)
-}
-
-func (s *serverImpl) Start() {
 	var ok bool
 	PORT_STR, ok = os.LookupEnv("PORT")
 	if !ok {
@@ -56,6 +50,12 @@ func (s *serverImpl) Start() {
 	}
 	HOST = "http://127.0.0.1:" + PORT_STR
 
+	log.Printf("# server initialization starts ...")
+	engine := s.engine()
+	s.registerRoute(engine)
+}
+
+func (s *serverImpl) Start() {
 	s._server = &http.Server{
 		Addr:    fmt.Sprintf(":%d", PORT),
 		Handler: s._engine,
