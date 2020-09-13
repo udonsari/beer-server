@@ -146,7 +146,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 func (cont *Controller) AddRate(ctx echo.Context) error {
 	log.Printf("Controller - AddRate() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	} else if user == nil || user.ID == 0 {
@@ -176,7 +176,7 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 func (cont *Controller) AddComment(ctx echo.Context) error {
 	log.Printf("Controller - AddComment() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	} else if user == nil || user.ID == 0 {

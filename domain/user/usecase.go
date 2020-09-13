@@ -66,7 +66,6 @@ func (u *useCase) GetToken(code string) (*Token, error) {
 	if err != nil {
 		return nil, err
 	} else if kakaoToken.AccessToken == "" {
-		// TODO * Make auth error definition
 		return nil, errors.New("failed to get access token from kakao")
 	}
 

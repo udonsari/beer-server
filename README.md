@@ -297,13 +297,12 @@
     * 코드 내부에 TODO 달아 놓은 것들
         * 우선순위 별로 별 달아놓음
     * 라이센스 추가
-    * REST API Convention 적용
-    * Error 정의 해서 사용
+    * REST API Convention 적용 점검
     * Test 구현
     * Logger 사용
     * 문서화
     * 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
-    * [중요] 에러 메시지 안내려가고 Internal Error로만 내려가는 것 처리
+    * [중요] Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
     * [중요] 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
         * DB 자체에 Name Unique 등

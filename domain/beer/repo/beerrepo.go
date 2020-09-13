@@ -12,7 +12,7 @@ import (
 )
 
 // TODO *** Attach ElasticSearch ? (Good for search)
-// TODO *** Add Cache (Beer not change much). Currently only added duration
+// TODO *** Add Cache (Beer not change much). Currently only added duration (만약 BeerQueryArgs를 Key로 한다면 얼마나 메모리가 들어갈까 ?)
 // Gorm 사용시 함수 인자로 구조체를 넣는것과, Key와 Value 넣는 것 구분해라. 동작이 이상한 경우 있음 (ex. Single Column 업데이트와 Batch Column 업데이트)
 type beerRepo struct {
 	db            *gorm.DB

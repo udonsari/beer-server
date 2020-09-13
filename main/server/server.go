@@ -91,6 +91,15 @@ func (s *serverImpl) engine() *echo.Echo {
 		},
 	)
 
+	s._engine.HTTPErrorHandler = func(err error, c echo.Context) {
+		log.Printf(c.Path(), err.Error())
+		retErr := echo.HTTPError{
+			Code:    http.StatusInternalServerError, // Currently all error returns with 500
+			Message: err.Error(),
+		}
+		s._engine.DefaultHTTPErrorHandler(&retErr, c)
+	}
+
 	return s._engine
 }
 
