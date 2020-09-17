@@ -309,7 +309,6 @@
     * `중요` 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
         * DB 자체에 Name Unique 등
-    * Beer Thumbnail 하나 파기 (Model 부터 DTO, Mapper 전부)
     * 사용자별 작성한 Rate, Comment 내려주는 API 뚫기
     * Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
     * 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
