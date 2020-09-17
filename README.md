@@ -303,6 +303,8 @@
     * 문서화
     * 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
     * 소셜 로그인 연동 확장  (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기)
+    * Graceful Shutdown 처리 (서버, 외부 Dependency ...)
+    * 맥주 데이터 넣기
     * `중요` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
     * `중요` 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
