@@ -38,14 +38,15 @@ type AddCommentRequest struct {
 
 type Beer struct {
 	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Comments는 Pagination ?
-	ID        int64    `json:"id"`
-	Name      string   `json:"name"`
-	Brewery   string   `json:"brewery"`
-	ABV       float64  `json:"abv"`
-	Country   string   `json:"country"`
-	BeerStyle string   `json:"beer_style"`
-	Aroma     []string `json:"aroma"`
-	ImageURL  []string `json:"image_url"`
+	ID             int64    `json:"id"`
+	Name           string   `json:"name"`
+	Brewery        string   `json:"brewery"`
+	ABV            float64  `json:"abv"`
+	Country        string   `json:"country"`
+	BeerStyle      string   `json:"beer_style"`
+	Aroma          []string `json:"aroma"`
+	ImageURL       []string `json:"image_url"`
+	ThumbnailImage string   `json:"thumbnail_image"`
 
 	Comments  []Comment `json:"comments"`
 	RateAvg   float64   `json:"rate_avg"`
@@ -59,14 +60,15 @@ type RelatedBeers struct {
 }
 
 type ReducedBeer struct {
-	ID        int64    `json:"id"`
-	Name      string   `json:"name"`
-	Brewery   string   `json:"brewery"`
-	ABV       float64  `json:"abv"`
-	Country   string   `json:"country"`
-	BeerStyle string   `json:"beer_style"`
-	Aroma     []string `json:"aroma"`
-	RateAvg   float64  `json:"rate_avg"`
+	ID             int64    `json:"id"`
+	Name           string   `json:"name"`
+	Brewery        string   `json:"brewery"`
+	ABV            float64  `json:"abv"`
+	Country        string   `json:"country"`
+	BeerStyle      string   `json:"beer_style"`
+	Aroma          []string `json:"aroma"`
+	ThumbnailImage string   `json:"thumbnail_image"`
+	RateAvg        float64  `json:"rate_avg"`
 }
 
 type Comment struct {

@@ -92,14 +92,17 @@ func getRandomBeer() beer.Beer {
 		imageURL = append(imageURL, fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight))
 	}
 
+	thumbnailImage := fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight)
+
 	return beer.Beer{
-		Name:      name,
-		Brewery:   brewery,
-		ABV:       abv,
-		Country:   country,
-		BeerStyle: beerStyle,
-		Aroma:     aroma,
-		ImageURL:  imageURL,
+		Name:           name,
+		Brewery:        brewery,
+		ABV:            abv,
+		Country:        country,
+		BeerStyle:      beerStyle,
+		Aroma:          aroma,
+		ImageURL:       imageURL,
+		ThumbnailImage: thumbnailImage,
 	}
 }
 

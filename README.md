@@ -309,16 +309,9 @@
     * `중요` 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
         * DB 자체에 Name Unique 등
---- 
-목요일 10시 까지.
-* `Done` rate_owner snake case 만들기, beers 소문자 만들기 
-* `Done`Image 대충 내려주기 (Random Image API 있음) - 360 * 480
-* `Done` 별점 소수 2자리로 자르기
-* `Done` User 정보도, Result 같이 최상위 필드 일치 시키기
-* Beer Thumbnail 하나 파기 (Model 부터 DTO, Mapper 전부)
-* 사용자별 작성한 Rate, Comment 내려주는 API 뚫기
-* Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
-* 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
-* Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
-* 댓글 삭제 ?
-* 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
+    * 사용자별 작성한 Rate, Comment 내려주는 API 뚫기
+    * Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
+    * 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
+    * Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
+    * 댓글 삭제 ?
+    * 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
