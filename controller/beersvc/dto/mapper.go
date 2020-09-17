@@ -19,30 +19,32 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rateO
 	}
 
 	return Beer{
-		ID:        beer.ID,
-		Name:      beer.Name,
-		Brewery:   beer.Brewery,
-		ABV:       util.Floor(beer.ABV, 2),
-		Country:   beer.Country,
-		BeerStyle: beer.BeerStyle,
-		Aroma:     beer.Aroma,
-		ImageURL:  beer.ImageURL,
-		Comments:  dtoComments,
-		RateAvg:   util.Floor(beer.RateAvg, 2),
-		RateOwner: m.mapRateToDTORate(rateOwner),
+		ID:             beer.ID,
+		Name:           beer.Name,
+		Brewery:        beer.Brewery,
+		ABV:            util.Floor(beer.ABV, 2),
+		Country:        beer.Country,
+		BeerStyle:      beer.BeerStyle,
+		Aroma:          beer.Aroma,
+		ImageURL:       beer.ImageURL,
+		ThumbnailImage: beer.ThumbnailImage,
+		Comments:       dtoComments,
+		RateAvg:        util.Floor(beer.RateAvg, 2),
+		RateOwner:      m.mapRateToDTORate(rateOwner),
 	}
 }
 
 func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
 	return ReducedBeer{
-		ID:        beer.ID,
-		Name:      beer.Name,
-		Brewery:   beer.Brewery,
-		ABV:       util.Floor(beer.ABV, 2),
-		Country:   beer.Country,
-		BeerStyle: beer.BeerStyle,
-		Aroma:     beer.Aroma,
-		RateAvg:   util.Floor(beer.RateAvg, 2),
+		ID:             beer.ID,
+		Name:           beer.Name,
+		Brewery:        beer.Brewery,
+		ABV:            util.Floor(beer.ABV, 2),
+		Country:        beer.Country,
+		BeerStyle:      beer.BeerStyle,
+		Aroma:          beer.Aroma,
+		ThumbnailImage: beer.ThumbnailImage,
+		RateAvg:        util.Floor(beer.RateAvg, 2),
 	}
 }
 

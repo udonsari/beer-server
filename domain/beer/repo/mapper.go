@@ -45,28 +45,30 @@ func (m mapper) mapRateToDBRate(rate beer.Rate) DBRate {
 
 func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
 	return DBBeer{
-		Name:         beer.Name,
-		Brewery:      beer.Brewery,
-		ABV:          beer.ABV,
-		Country:      beer.Country,
-		BeerStyle:    beer.BeerStyle,
-		AromaList:    m.splitAndGetString(beer.Aroma),
-		ImageURLList: m.splitAndGetString(beer.ImageURL),
-		RateAvg:      beer.RateAvg,
+		Name:           beer.Name,
+		Brewery:        beer.Brewery,
+		ABV:            beer.ABV,
+		Country:        beer.Country,
+		BeerStyle:      beer.BeerStyle,
+		AromaList:      m.splitAndGetString(beer.Aroma),
+		ImageURLList:   m.splitAndGetString(beer.ImageURL),
+		ThumbnailImage: beer.ThumbnailImage,
+		RateAvg:        beer.RateAvg,
 	}
 }
 
 func (m mapper) mapDBBeerToBeer(dbBeer DBBeer) beer.Beer {
 	return beer.Beer{
-		ID:        dbBeer.ID,
-		Name:      dbBeer.Name,
-		Brewery:   dbBeer.Brewery,
-		ABV:       dbBeer.ABV,
-		Country:   dbBeer.Country,
-		BeerStyle: dbBeer.BeerStyle,
-		Aroma:     m.splitAndGetArray(dbBeer.AromaList, maxAromaListLen),
-		ImageURL:  m.splitAndGetArray(dbBeer.ImageURLList, maxImageURLListLen),
-		RateAvg:   dbBeer.RateAvg,
+		ID:             dbBeer.ID,
+		Name:           dbBeer.Name,
+		Brewery:        dbBeer.Brewery,
+		ABV:            dbBeer.ABV,
+		Country:        dbBeer.Country,
+		BeerStyle:      dbBeer.BeerStyle,
+		Aroma:          m.splitAndGetArray(dbBeer.AromaList, maxAromaListLen),
+		ImageURL:       m.splitAndGetArray(dbBeer.ImageURLList, maxImageURLListLen),
+		ThumbnailImage: dbBeer.ThumbnailImage,
+		RateAvg:        dbBeer.RateAvg,
 	}
 }
 

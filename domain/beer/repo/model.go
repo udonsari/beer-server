@@ -16,8 +16,9 @@ type DBBeer struct {
 	Country   string
 	BeerStyle string
 
-	AromaList    string
-	ImageURLList string `gorm:"image_url_list"`
+	AromaList      string
+	ImageURLList   string `gorm:"image_url_list"`
+	ThumbnailImage string
 
 	RateAvg float64
 }
