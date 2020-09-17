@@ -1,9 +1,8 @@
 package dto
 
 import (
-	"math"
-
 	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/UdonSari/beer-server/util"
 )
 
 type Mapper struct {
@@ -14,41 +13,36 @@ func NewMapper() Mapper {
 }
 
 func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rateOwner *beer.Rate) Beer {
-
 	var dtoComments []Comment
 	for _, comment := range comments {
 		dtoComments = append(dtoComments, m.mapCommentToDTOComment(comment))
 	}
 
-	beer.ABV = math.Floor(beer.ABV*100) / 100
-
 	return Beer{
 		ID:        beer.ID,
 		Name:      beer.Name,
 		Brewery:   beer.Brewery,
-		ABV:       beer.ABV,
+		ABV:       util.Floor(beer.ABV, 2),
 		Country:   beer.Country,
 		BeerStyle: beer.BeerStyle,
 		Aroma:     beer.Aroma,
 		ImageURL:  beer.ImageURL,
 		Comments:  dtoComments,
-		RateAvg:   beer.RateAvg,
-		RateOwner: rateOwner,
+		RateAvg:   util.Floor(beer.RateAvg, 2),
+		RateOwner: m.mapRateToDTORate(rateOwner),
 	}
 }
 
 func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
-	beer.ABV = math.Floor(beer.ABV*100) / 100
-
 	return ReducedBeer{
 		ID:        beer.ID,
 		Name:      beer.Name,
 		Brewery:   beer.Brewery,
-		ABV:       beer.ABV,
+		ABV:       util.Floor(beer.ABV, 2),
 		Country:   beer.Country,
 		BeerStyle: beer.BeerStyle,
 		Aroma:     beer.Aroma,
-		RateAvg:   beer.RateAvg,
+		RateAvg:   util.Floor(beer.RateAvg, 2),
 	}
 }
 
@@ -74,6 +68,17 @@ func (m *Mapper) mapCommentToDTOComment(comment beer.Comment) Comment {
 		BeerID:  comment.BeerID,
 		Content: comment.Content,
 		UserID:  comment.UserID,
+	}
+}
+
+func (m *Mapper) mapRateToDTORate(rate *beer.Rate) *Rate {
+	if rate == nil {
+		return nil
+	}
+	return &Rate{
+		BeerID: rate.BeerID,
+		Ratio:  util.Floor(rate.Ratio, 2),
+		UserID: rate.UserID,
 	}
 }
 

@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"strconv"
@@ -22,6 +23,9 @@ const (
 	beerStyleNumber   = 5
 	breweryNumber     = 100
 	aromaNumber       = 5
+
+	imageWidth  = 320
+	imageHeight = 480
 )
 
 type seedCommand struct {
@@ -85,7 +89,7 @@ func getRandomBeer() beer.Beer {
 
 	imageURL := []string{}
 	for i := 0; i < 5; i++ {
-		imageURL = append(imageURL, "http:naver.com")
+		imageURL = append(imageURL, fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight))
 	}
 
 	return beer.Beer{

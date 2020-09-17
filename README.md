@@ -1,5 +1,5 @@
 ## Beer Server
-
+---
 * Make Command
     * `make build` : 서버용 Docker Image를 빌드 합니다
     * `make migrate-up` : 서버를 위한 MySQL Table을 Migration 합니다
@@ -7,7 +7,7 @@
     * `make seed` : 서버를 위한 Beer Test Data를 넣습니다
     * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
     * `make test` : 코드 테스트를 실행 합니다
-
+---
 * API 예시
     * BeerList : 
         * command :`curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&country=korea&beer_style=ipa&aroma=grape&beer_style=stout'`
@@ -291,7 +291,7 @@
         * BeerComment Post (SignIn 필요, 별점도 같이 [float], 글자 제한, 사용자랑 연관)
         * BeerComment List (개별 Beer ID를 인자로 옮)
             * 우선은 Comment와 Rate을 따로 뺌
-
+---
 * TODO
     * CI / CD
     * 코드 내부에 TODO 달아 놓은 것들
@@ -302,7 +302,23 @@
     * Logger 사용
     * 문서화
     * 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
-    * [중요] Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
-    * [중요] 전반적으로 Validation 다듬기
+    * 소셜 로그인 연동 확장  (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기)
+    * Graceful Shutdown 처리 (서버, 외부 Dependency ...)
+    * 맥주 데이터 넣기
+    * `중요` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
+    * `중요` 전반적으로 Validation 다듬기
         * 한 맥주에 두 번 댓글 금지
         * DB 자체에 Name Unique 등
+--- 
+목요일 10시 까지.
+* `Done` rate_owner snake case 만들기, beers 소문자 만들기 
+* `Done`Image 대충 내려주기 (Random Image API 있음) - 360 * 480
+* `Done` 별점 소수 2자리로 자르기
+* `Done` User 정보도, Result 같이 최상위 필드 일치 시키기
+* Beer Thumbnail 하나 파기 (Model 부터 DTO, Mapper 전부)
+* 사용자별 작성한 Rate, Comment 내려주는 API 뚫기
+* Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
+* 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
+* Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
+* 댓글 삭제 ?
+* 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)

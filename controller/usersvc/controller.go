@@ -50,7 +50,12 @@ func (cont *Controller) GetToken(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusOK, token)
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": token,
+		},
+	)
 }
 
 func (cont *Controller) GetUser(ctx echo.Context) error {
@@ -60,5 +65,10 @@ func (cont *Controller) GetUser(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusOK, user)
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": user,
+		},
+	)
 }
