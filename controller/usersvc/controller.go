@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/UdonSari/beer-server/controller"
+	"github.com/UdonSari/beer-server/controller/usersvc/dto"
 	"github.com/UdonSari/beer-server/domain/user"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo"
@@ -13,6 +14,7 @@ import (
 type Controller struct {
 	controller.Base
 	userUseCase user.UseCase
+	mapper      dto.Mapper
 	host        string
 }
 
@@ -68,7 +70,7 @@ func (cont *Controller) GetUser(ctx echo.Context) error {
 	return ctx.JSON(
 		http.StatusOK,
 		map[string]interface{}{
-			"result": user,
+			"result": cont.mapper.MapUserToDTOUser(*user),
 		},
 	)
 }
