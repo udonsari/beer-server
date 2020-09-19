@@ -11,3 +11,7 @@ type Properties struct {
 	ProfileImage   string `json:"profile_image"`
 	ThumbnailImage string `json:"thumbnail_image"`
 }
+
+type UpdateNickNameRequest struct {
+	NickName string `form:"nick_name"`
+}

@@ -50,3 +50,8 @@ func (r *userRepo) CreateUser(user user.User) error {
 	}
 	return nil
 }
+
+func (r *userRepo) UpdateNickName(userID int64, nickName string) error {
+	res := r.db.Model(&DBUser{}).Where("id = ?", userID).Update("nick_name", nickName)
+	return res.Error
+}

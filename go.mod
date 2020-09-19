@@ -3,6 +3,7 @@ module github.com/UdonSari/beer-server
 go 1.14
 
 require (
+	github.com/Pallinder/go-randomdata v1.2.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.5.0

@@ -26,6 +26,7 @@ func NewController(engine *echo.Echo, userUseCase user.UseCase, host string) Con
 	engine.GET("/api/kakao/signin", cont.SignInKakao)
 	engine.GET("/api/token", cont.GetToken)
 	engine.GET("/api/user", cont.GetUser)
+	engine.POST("/api/user/update", cont.UpdateNickName)
 	return cont
 }
 
@@ -73,4 +74,26 @@ func (cont *Controller) GetUser(ctx echo.Context) error {
 			"result": cont.mapper.MapUserToDTOUser(*user),
 		},
 	)
+}
+
+func (cont *Controller) UpdateNickName(ctx echo.Context) error {
+	log.Printf("Controller - UpdateNickName() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	}
+
+	var req dto.UpdateNickNameRequest
+	if err := cont.Bind(ctx, &req); err != nil {
+		log.Printf("Controller - UpdateNickName() - Failed to bind %+v", err)
+		return err
+	}
+	log.Printf("Controller - UpdateNickName() - Body %+v", spew.Sdump(req))
+
+	err = cont.userUseCase.UpdateNickName(user.ID, req.NickName)
+	if err != nil {
+		return err
+	}
+	return ctx.NoContent(http.StatusOK)
 }
