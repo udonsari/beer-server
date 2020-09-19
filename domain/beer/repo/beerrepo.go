@@ -110,6 +110,7 @@ func (r *beerRepo) UpdateBeerRateAvg(beerID int64, rateAvg float64) error {
 func (r *beerRepo) AddReview(review beer.Review) error {
 	// Upsert Implementation
 	// Update를 시도하고 RowsAffected로 분기 치면 안된다 (0일 경우 Create, 1일 경우 그냥 Return). Row 구성을 하나도 바꾸지 않을 경우 RowsAffected로 == 0으로 되어버림. RowsMatched가 없네 ...
+	// 그렇다고 Update에서 isNotFound를 반환해주는 것도 아니라서 분기 치기 애매하다
 	preReview, err := r.GetReviewByBeerIDAndUserID(review.BeerID, review.UserID)
 	if err != nil {
 		return err

@@ -48,7 +48,7 @@ func (c *seedCommand) Command() *cli.Command {
 }
 
 func (c *seedCommand) main(ctx *cli.Context) error {
-	br := beerRepo.New(c.d.MysqlDB(), 100)
+	br := beerRepo.New(c.d.MysqlDB(false), 100)
 	bu := beer.NewUseCase(br)
 
 	for i := 0; i < beerNumber; i++ {

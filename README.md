@@ -8,11 +8,20 @@
     * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
     * `make test` : 코드 테스트를 실행 합니다
 ---
+* Stack
+    * Language : Golang
+    * DB : MySQL
+    * ORM : gORM 
+    * Etc : Docker, Makefile
+---
 * API 예시
-    * BeerList : 
-        * command :`curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&country=korea&beer_style=ipa&aroma=grape&beer_style=stout'`
+    * BeerList
+        * command : `curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&country=korea&beer_style=ipa&aroma=grape&beer_style=stout'`
             * aroma key, county, beer_style 등의 key를 중복 사용해서 해당 조건을 or로 걸 수 있습니다. 위 url에서는 beer_style이 중복 사용
-        * Response Example
+        <details>
+        <summary>Response Example</summary>
+        <p>
+
         ```json
         {
             "result": {
@@ -97,10 +106,15 @@
             }
         }
         ```
+        </p>
+        </details>
     * BeerDetail
-        * command :`curl --location --request GET 'http://localhost:8081/api/beers?beer_id=5'`
+        * command : `curl --location --request GET 'http://localhost:8081/api/beers?beer_id=5'`
             * beer_id를 인자로 줍니다.
-        * Response Example
+        <details>
+        <summary>Response Example</summary>
+        <p>
+
         ```json
         {
             "result": {
@@ -261,23 +275,33 @@
                     ]
                 }
             }
-        }        
+        }
         ```
+        </p>
+        </details>
     * SignIn (Kakao Only)
-        * command :`curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
+        * command : `curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
             * `api/token`로 Redirect되어 Access Token을 내려줍니다
             * 해당 토큰을 Header에 `Authorization`라는 Key의 Value로 담아 보내면 이후, 자신의 사용자 정보나 자신이 맥주에 매긴 Rate 등을 확인할 수 있습니다. Rate을 매기고, Comment를 달려면 마찬가지로 토큰을 설정해야합니다.
             * 로그인 연동을 테스트할 시, [연동 참조]라고 검색해서, 설명을 따라 주세요
-        * Response Example
+        <details>
+        <summary>Response Example</summary>
+        <p>
+
         ```json
         {
             "access_token": "ABC"
         }
         ```
+        </p>
+        </details>
     * UserDetail (계정 정보 뿌려주기, 추후 회원 탈퇴 만들기)
-        * command :`curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
+        * command : `curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
             * SignIn을 통해 얻은 Access Token을 Header에 담아 API 호출해야합니다
-        * Response Example
+        <details>
+        <summary>Response Example</summary>
+        <p>
+
         ```json
         {
             "ID": 1,
@@ -287,6 +311,8 @@
             "ThumbnailImage": ""
         }        
         ```
+        </p>
+        </details>
     * TODO
         * BeerComment Post (SignIn 필요, 별점도 같이 [float], 글자 제한, 사용자랑 연관)
         * BeerComment List (개별 Beer ID를 인자로 옮)
@@ -303,6 +329,7 @@
     * 문서화
     * Graceful Shutdown 처리 (서버, 외부 Dependency ...)
     * 리뷰 삭제 ? - 일단은 없다.
+    * 평균 별점 구간도 쿼리 할 수 있어야겠네
     * `Develop` 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
     * `Develop` 소셜 로그인 연동 확장 (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
     * `Develop` 켜뮤니티
@@ -315,14 +342,15 @@
     * `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
     * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 ---
-* `Done` User API 내려주는 것 Snake Case 적용
-* `Done` 카카오 Nickname이랑, 우리 Nickname 구분해야하는지 고민. (지금은 Kakao 닉네임 그대로 씀)
-    * `Done` 사용자가 처음에 로그인하면 임의의 난수 Nickname 내려주고 (가마우지1379) 이후에 그걸 변경할 수 있도록 API 뚫어서 사용할 수 있게함 (안겹치게 Valdiation 유의)
-* `Done` Comment, Rate Review로묶어서 처리 (유저당 맥주 마다 1번씩 처리하고, Upsert로 API)
-* `Done` Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
-    * `Done` 가장 기본적인 Sorting 기준도 있어야겠다. ex. ID 순
-* `Done` 사용자별 작성한 Review 내려주는 API 뚫기
-
-* 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
-* 평균 별점 구간도 쿼리 할 수 있어야겠네
-* Review 내려줄 때 Reduced Beer 정보, User NickName 내려주기 (기존 ID들은 같이)
+* On Going
+    * `Done` User API 내려주는 것 Snake Case 적용
+    * `Done` 카카오 Nickname이랑, 우리 Nickname 구분해야하는지 고민. (지금은 Kakao 닉네임 그대로 씀)
+        * `Done` 사용자가 처음에 로그인하면 임의의 난수 Nickname 내려주고 (가마우지1379) 이후에 그걸 변경할 수 있도록 API 뚫어서 사용할 수 있게함 (안겹치게 Valdiation 유의)
+    * `Done` Comment, Rate를 Review 로묶어서 처리 (유저당 맥주 마다 1번씩 처리하고, Upsert로 API)
+    * `Done` Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
+        * `Done` 가장 기본적인 Sorting 기준도 있어야겠다. ex. ID 순
+    * `Done` 사용자별 작성한 Review 내려주는 API 뚫기
+    * 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
+        * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
+    * Review 내려줄 때 Reduced Beer 정보, User NickName 내려주기 (기존 ID들은 같이)
+    * 문서 업데이트

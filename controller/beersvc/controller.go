@@ -206,5 +206,4 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 			"result": dtoReviews,
 		},
 	)
-
 }

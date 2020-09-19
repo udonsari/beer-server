@@ -30,7 +30,7 @@ func (c *migrationUpCommand) Command() *cli.Command {
 }
 
 func (c *migrationUpCommand) main(ctx *cli.Context) error {
-	result := c.d.MysqlDB().AutoMigrate(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{})
+	result := c.d.MysqlDB(true).AutoMigrate(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{})
 	if result.Error != nil {
 		log.Printf("failed migration up %+v", result.Error)
 	} else {
@@ -39,7 +39,7 @@ func (c *migrationUpCommand) main(ctx *cli.Context) error {
 
 	// TODO Model에서 `gorm:"uniqueIndex:beer_id_user_id,sort:desc"` 이 태그가 안먹는데, 더 알아보기
 	// User is allowed to add review only one time for same beer
-	result = c.d.MysqlDB().Model(&beerRepo.DBReview{}).AddUniqueIndex("beer_id_user_id", "beer_id", "user_id")
+	result = c.d.MysqlDB(true).Model(&beerRepo.DBReview{}).AddUniqueIndex("beer_id_user_id", "beer_id", "user_id")
 	if result.Error != nil {
 		log.Printf("failed adding unique index %+v", result.Error)
 	} else {
