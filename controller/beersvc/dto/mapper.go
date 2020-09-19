@@ -15,7 +15,7 @@ func NewMapper() Mapper {
 func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, reviews []beer.Review, reviewOwner *beer.Review) Beer {
 	var dtoReviews []Review
 	for _, review := range reviews {
-		dtoReview := m.mapReviewToDTOReview(&review)
+		dtoReview := m.MapReviewToDTOReview(&review)
 		if dtoReview != nil {
 			dtoReviews = append(dtoReviews, *dtoReview)
 		}
@@ -33,7 +33,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, reviews []beer.Review, reviewO
 		ThumbnailImage: beer.ThumbnailImage,
 		Reviews:        dtoReviews,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
-		ReviewOwner:    m.mapReviewToDTOReview(reviewOwner),
+		ReviewOwner:    m.MapReviewToDTOReview(reviewOwner),
 	}
 }
 
@@ -68,7 +68,7 @@ func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers
 	return &dtoRelatedBeers
 }
 
-func (m *Mapper) mapReviewToDTOReview(review *beer.Review) *Review {
+func (m *Mapper) MapReviewToDTOReview(review *beer.Review) *Review {
 	if review == nil {
 		return nil
 	}
@@ -97,5 +97,8 @@ func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.B
 	args.Country = req.Country
 	args.BeerStyle = req.BeerStyle
 	args.Aroma = req.Aroma
+
+	args.Cursor = req.Cursor
+	args.MaxCount = req.MaxCount
 	return &args, nil
 }

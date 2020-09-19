@@ -11,10 +11,17 @@ type GetBeersRequest struct {
 	Country   []string `query:"country"`
 	BeerStyle []string `query:"beer_style"`
 	Aroma     []string `query:"aroma"`
+
+	// Cursor Pagination
+	Cursor   *int64 `query:"cursor"`
+	MaxCount *int64 `query:"max_count"`
 }
 
 type GetBeersResponse struct {
 	Beers []Beer `json:"beers"`
+
+	// Cursor Pagination
+	Cursor *int64 `json:"next_cursor,omitempty"`
 }
 
 type GetBeerRequest struct {
@@ -30,6 +37,10 @@ type AddReviewRequest struct {
 	BeerID  int64   `form:"beer_id"`
 	Content string  `form:"content"`
 	Ratio   float64 `form:"ratio"`
+}
+
+type GetReviewResponse struct {
+	Reviews []Review `json:"reviews"`
 }
 
 type Beer struct {

@@ -53,84 +53,50 @@ func (r *beerRepo) GetBeer(beerID int64) (*beer.Beer, error) {
 func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	log.Printf("beerRepo - GetBeers args : %+v", spew.Sdump(args))
 
-	// TODO Optimize. Too Naiive Now
-	var dbBeers []DBBeer
-	if err := r.db.Find(&dbBeers).Error; err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, err
-		}
-	}
-	validFlag := make([]bool, len(dbBeers))
-	for idx := range validFlag {
-		validFlag[idx] = true
-	}
+	// TODO Need test really
 
-	log.Printf("beerRepo - GetBeers base beer len : %+v", len(dbBeers))
+	var dbBeers []DBBeer
+	baseQuery := r.db.Order("id asc")
 
 	if args.ABVInterval != nil {
-		for idx, dbBeer := range dbBeers {
-			if dbBeer.ABV > args.ABVInterval.MaxABV || dbBeer.ABV < args.ABVInterval.MinABV {
-				validFlag[idx] = false
-			}
-		}
+		baseQuery = baseQuery.Where("abv BETWEEN ? AND ? ", args.ABVInterval.MinABV, args.ABVInterval.MaxABV)
 	}
 
 	if args.Name != nil {
-		for idx, dbBeer := range dbBeers {
-			if !strings.Contains(dbBeer.Name, *args.Name) {
-				validFlag[idx] = false
-			}
-		}
+		baseQuery = baseQuery.Where("name LIKE ?", fmt.Sprintf("%%%s%%", *args.Name))
 	}
 
 	if args.Country != nil {
-		for idx, dbBeer := range dbBeers {
-			countryContains := false
-			for _, country := range args.Country {
-				if strings.Contains(dbBeer.Country, country) {
-					countryContains = true
-				}
-			}
-			if !countryContains {
-				validFlag[idx] = false
-			}
-		}
+		baseQuery = baseQuery.Where("country IN (?)", args.Country)
 	}
 
 	if args.BeerStyle != nil {
-		for idx, dbBeer := range dbBeers {
-			styleContains := false
-			for _, beerStyle := range args.BeerStyle {
-				if strings.Contains(dbBeer.BeerStyle, beerStyle) {
-					styleContains = true
-				}
-			}
-			if !styleContains {
-				validFlag[idx] = false
-			}
-		}
+		baseQuery = baseQuery.Where("beer_style IN (?)", args.BeerStyle)
 	}
 
 	if args.Aroma != nil {
-		// Beer의 Aroma도 n개, 쿼리의 Aroma도 n개. 우선 String Concate로 해놓으니까 그냥 String Contains 가능
-		for idx, dbBeer := range dbBeers {
-			aromaContains := false
-			for _, aroma := range args.Aroma {
-				if strings.Contains(dbBeer.AromaList, aroma) {
-					aromaContains = true
-				}
-			}
-			if !aromaContains {
-				validFlag[idx] = false
-			}
+		for _, aroma := range args.Aroma {
+			baseQuery = baseQuery.Where("aroma_list LIKE ?", fmt.Sprintf("%%%s%%", aroma))
+		}
+	}
+
+	// Cursor is just id value
+	if args.Cursor != nil {
+		baseQuery = baseQuery.Where("id > ?", *args.Cursor)
+	}
+	if args.MaxCount != nil {
+		baseQuery = baseQuery.Limit(*args.MaxCount)
+	}
+
+	if err := baseQuery.Find(&dbBeers).Error; err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, err
 		}
 	}
 
 	var beers []beer.Beer
 	for idx := range dbBeers {
-		if validFlag[idx] {
-			beers = append(beers, r.mapDBBeerToBeer(dbBeers[idx]))
-		}
+		beers = append(beers, r.mapDBBeerToBeer(dbBeers[idx]))
 	}
 	log.Printf("beerRepo - GetBeers return beer len : %+v", len(beers))
 	return beers, nil
@@ -142,13 +108,25 @@ func (r *beerRepo) UpdateBeerRateAvg(beerID int64, rateAvg float64) error {
 }
 
 func (r *beerRepo) AddReview(review beer.Review) error {
-	dbReview := r.mapper.mapReviewToDBReview(review)
-	res := r.db.Create(&dbReview)
-	// https://github.com/go-gorm/gorm/issues/2903
-	// Gorm V1에서는 Duplicate Error를 정의하지 않음
-	if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
-		return errors.New("already added review")
+	// Upsert Implementation
+	// Update를 시도하고 RowsAffected로 분기 치면 안된다 (0일 경우 Create, 1일 경우 그냥 Return). Row 구성을 하나도 바꾸지 않을 경우 RowsAffected로 == 0으로 되어버림. RowsMatched가 없네 ...
+	preReview, err := r.GetReviewByBeerIDAndUserID(review.BeerID, review.UserID)
+	if err != nil {
+		return err
 	}
+
+	if preReview == nil {
+		dbReview := r.mapper.mapReviewToDBReview(review)
+		res := r.db.Create(&dbReview)
+		// https://github.com/go-gorm/gorm/issues/2903
+		// Gorm V1에서는 Duplicate Error를 정의하지 않음
+		if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
+			return errors.New("already added review")
+		}
+		return res.Error
+
+	}
+	res := r.db.Model(&DBReview{}).Where("user_id = ? AND beer_id = ?", review.UserID, review.BeerID).Updates(review)
 	return res.Error
 }
 
@@ -190,4 +168,23 @@ func (r *beerRepo) GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*beer
 	}
 	review := r.mapper.mapDBReviewToReview(dbReview)
 	return &review, nil
+}
+
+func (r *beerRepo) GetReviewsByUserID(userID int64) ([]beer.Review, error) {
+	query := DBReview{UserID: userID}
+	var dbReviews []DBReview
+	if err := r.db.Where(&query).Find(&dbReviews).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get review. user id : %v", userID))
+		}
+	}
+
+	var reviews []beer.Review
+	for _, dbReview := range dbReviews {
+		reviews = append(reviews, r.mapper.mapDBReviewToReview(dbReview))
+	}
+	return reviews, nil
 }

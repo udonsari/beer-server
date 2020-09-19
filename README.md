@@ -319,9 +319,10 @@
 * `Done` 카카오 Nickname이랑, 우리 Nickname 구분해야하는지 고민. (지금은 Kakao 닉네임 그대로 씀)
     * `Done` 사용자가 처음에 로그인하면 임의의 난수 Nickname 내려주고 (가마우지1379) 이후에 그걸 변경할 수 있도록 API 뚫어서 사용할 수 있게함 (안겹치게 Valdiation 유의)
 * `Done` Comment, Rate Review로묶어서 처리 (유저당 맥주 마다 1번씩 처리하고, Upsert로 API)
+* `Done` Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
+    * `Done` 가장 기본적인 Sorting 기준도 있어야겠다. ex. ID 순
+* `Done` 사용자별 작성한 Review 내려주는 API 뚫기
 
 * 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, Rate 높은 순)
-* Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
-
-* Comment, Rate 내려줄 때 Reduced Beer 정보, User NickName 내려주기 (기존 ID들은 같이)
-* 사용자별 작성한 Comment, Rate 내려주는 API 뚫기
+* 평균 별점 구간도 쿼리 할 수 있어야겠네
+* Review 내려줄 때 Reduced Beer 정보, User NickName 내려주기 (기존 ID들은 같이)

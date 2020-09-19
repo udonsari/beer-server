@@ -7,6 +7,7 @@ type BeerRepo interface {
 	UpdateBeerRateAvg(beerID int64, rateAvg float64) error
 	AddReview(review Review) error
 	GetReviews(beerID int64) ([]Review, error)
+	GetReviewsByUserID(userID int64) ([]Review, error)
 	GetReviewCount(beerID int64) (int64, error)
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 }

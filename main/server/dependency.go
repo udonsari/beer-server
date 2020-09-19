@@ -33,6 +33,7 @@ func (d *Dependency) MysqlDB() *gorm.DB {
 	db.DB().SetMaxOpenConns(mysqlMaxConn)
 	db.DB().SetMaxIdleConns(mysqlMaxIdleConn)
 	db.DB().SetConnMaxLifetime(time.Hour)
+	db.LogMode(true)
 
 	gorm.NowFunc = func() time.Time {
 		return time.Now().UTC()

@@ -13,6 +13,7 @@ type UseCase interface {
 	GetBeer(beerID int64) (*Beer, error)
 	AddReview(review Review) error
 	GetReviews(beerID int64) ([]Review, error)
+	GetReviewsByUserID(userID int64) ([]Review, error)
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 	GetRelatedBeers(beerID int64) (*RelatedBeers, error)
 }
@@ -66,6 +67,10 @@ func (u *useCase) AddReview(review Review) error {
 
 func (u *useCase) GetReviews(beerID int64) ([]Review, error) {
 	return u.beerRepo.GetReviews(beerID)
+}
+
+func (u *useCase) GetReviewsByUserID(userID int64) ([]Review, error) {
+	return u.beerRepo.GetReviewsByUserID(userID)
 }
 
 func (u *useCase) GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error) {

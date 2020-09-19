@@ -31,6 +31,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	engine.GET("/api/beers", cont.GetBeers)
 	engine.GET("/api/beer", cont.GetBeer)
 	engine.POST("/api/review", cont.AddReview)
+	engine.GET("/api/review", cont.GetReview)
 	return cont
 }
 
@@ -76,6 +77,11 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		}
 		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, reviews, reviewOwner)
 		res.Beers = append(res.Beers, dtoBeer)
+	}
+
+	// TODO 지금 Cursor 설정이 Controller에도, Repo에도 분포되어 있는 느낌인데 괜찮을까 고찰
+	if len(beerList) != 0 {
+		res.Cursor = &(res.Beers[len(beerList)-1].ID)
 	}
 
 	log.Printf("Controller - GetBeers() dto beer list %+v", res.Beers)
@@ -171,4 +177,34 @@ func (cont *Controller) AddReview(ctx echo.Context) error {
 		return err
 	}
 	return ctx.NoContent(http.StatusOK)
+}
+
+func (cont *Controller) GetReview(ctx echo.Context) error {
+	log.Printf("Controller - GetReview() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	} else if user == nil || user.ID == 0 {
+		return fmt.Errorf("user not found")
+	}
+
+	reviews, err := cont.beerUseCase.GetReviewsByUserID(user.ID)
+	if err != nil {
+		return err
+	}
+
+	var dtoReviews []dto.Review
+	for _, review := range reviews {
+		dtoReview := cont.mapper.MapReviewToDTOReview(&review)
+		dtoReviews = append(dtoReviews, *dtoReview)
+	}
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": dtoReviews,
+		},
+	)
+
 }
