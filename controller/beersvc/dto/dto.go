@@ -26,18 +26,14 @@ type GetBeerResponse struct {
 	RelatedBeers *RelatedBeers `json:"related_beers,omitempty"`
 }
 
-type AddRateRequest struct {
-	BeerID int64   `form:"beer_id"`
-	Ratio  float64 `form:"ratio"`
-}
-
-type AddCommentRequest struct {
-	BeerID  int64  `form:"beer_id"`
-	Content string `form:"content"`
+type AddReviewRequest struct {
+	BeerID  int64   `form:"beer_id"`
+	Content string  `form:"content"`
+	Ratio   float64 `form:"ratio"`
 }
 
 type Beer struct {
-	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Comments는 Pagination ?
+	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Reviews는 Pagination ?
 	ID             int64    `json:"id"`
 	Name           string   `json:"name"`
 	Brewery        string   `json:"brewery"`
@@ -48,9 +44,9 @@ type Beer struct {
 	ImageURL       []string `json:"image_url"`
 	ThumbnailImage string   `json:"thumbnail_image"`
 
-	Comments  []Comment `json:"comments"`
-	RateAvg   float64   `json:"rate_avg"`
-	RateOwner *Rate     `json:"rate_owner,omitempty"`
+	Reviews     []Review `json:"reviews"`
+	RateAvg     float64  `json:"rate_avg"`
+	ReviewOwner *Review  `json:"review_owner,omitempty"`
 }
 
 type RelatedBeers struct {
@@ -71,14 +67,9 @@ type ReducedBeer struct {
 	RateAvg        float64  `json:"rate_avg"`
 }
 
-type Comment struct {
-	BeerID  int64  `json:"beer_id"`
-	Content string `json:"content"`
-	UserID  int64  `json:"user_id"`
-}
-
-type Rate struct {
-	BeerID int64   `json:"beer_id"`
-	Ratio  float64 `json:"ratio"`
-	UserID int64   `json:"user_id"`
+type Review struct {
+	BeerID  int64   `json:"beer_id"`
+	Content string  `json:"content"`
+	Ratio   float64 `json:"ratio"`
+	UserID  int64   `json:"user_id"`
 }

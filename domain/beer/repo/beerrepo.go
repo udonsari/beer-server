@@ -141,72 +141,53 @@ func (r *beerRepo) UpdateBeerRateAvg(beerID int64, rateAvg float64) error {
 	return res.Error
 }
 
-func (r *beerRepo) AddRate(rate beer.Rate) error {
-	dbRate := r.mapper.mapRateToDBRate(rate)
-	res := r.db.Create(&dbRate)
+func (r *beerRepo) AddReview(review beer.Review) error {
+	dbReview := r.mapper.mapReviewToDBReview(review)
+	res := r.db.Create(&dbReview)
+	// https://github.com/go-gorm/gorm/issues/2903
+	// Gorm V1에서는 Duplicate Error를 정의하지 않음
+	if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
+		return errors.New("already added review")
+	}
 	return res.Error
 }
 
-func (r *beerRepo) GetRates(beerID int64) ([]beer.Rate, error) {
-	query := DBRate{BeerID: beerID}
-	var dbRates []DBRate
-	if err := r.db.Where(&query).Find(&dbRates).Error; err != nil {
+func (r *beerRepo) GetReviews(beerID int64) ([]beer.Review, error) {
+	query := DBReview{BeerID: beerID}
+	var dbReviews []DBReview
+	if err := r.db.Where(&query).Find(&dbReviews).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			return nil, nil
 		default:
-			return nil, errors.Wrap(err, fmt.Sprintf("failed to get rate. beer id: %v", beerID))
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get review. beer id: %v", beerID))
 		}
 	}
 
-	var rates []beer.Rate
-	for _, dbRate := range dbRates {
-		rates = append(rates, r.mapper.mapDBRateToRate(dbRate))
+	var reviews []beer.Review
+	for _, dbReview := range dbReviews {
+		reviews = append(reviews, r.mapper.mapDBReviewToReview(dbReview))
 	}
-	return rates, nil
+	return reviews, nil
 }
 
-func (r *beerRepo) GetRatesCount(beerID int64) (int64, error) {
+func (r *beerRepo) GetReviewCount(beerID int64) (int64, error) {
 	var count int64
-	res := r.db.Model(&DBRate{}).Where("beer_id = ?", beerID).Count(&count)
+	res := r.db.Model(&DBReview{}).Where("beer_id = ?", beerID).Count(&count)
 	return count, res.Error
 }
 
-func (r *beerRepo) GetRatesByBeerIDAndUserID(beerID int64, userID int64) (*beer.Rate, error) {
-	query := DBRate{BeerID: beerID, UserID: userID}
-	var dbRate DBRate
-	if err := r.db.Where(&query).First(&dbRate).Error; err != nil {
+func (r *beerRepo) GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*beer.Review, error) {
+	query := DBReview{BeerID: beerID, UserID: userID}
+	var dbReview DBReview
+	if err := r.db.Where(&query).First(&dbReview).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			return nil, nil
 		default:
-			return nil, errors.Wrap(err, fmt.Sprintf("failed to get rate. beer id: %v, user id : %v", beerID, userID))
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get review. beer id: %v, user id : %v", beerID, userID))
 		}
 	}
-	rate := r.mapper.mapDBRateToRate(dbRate)
-	return &rate, nil
-}
-
-func (r *beerRepo) AddComment(comment beer.Comment) error {
-	dbComment := r.mapper.mapCommentToDBComment(comment)
-	res := r.db.Create(&dbComment)
-	return res.Error
-}
-
-func (r *beerRepo) GetComments(beerID int64) ([]beer.Comment, error) {
-	query := DBComment{BeerID: beerID}
-	var dbComments []DBComment
-	if err := r.db.Where(&query).Find(&dbComments).Error; err != nil {
-		switch err {
-		case gorm.ErrRecordNotFound:
-			return nil, nil
-		default:
-			return nil, errors.Wrap(err, fmt.Sprintf("failed to get comment. beer id: %v", beerID))
-		}
-	}
-	var comments []beer.Comment
-	for _, dbComment := range dbComments {
-		comments = append(comments, r.mapper.mapDBCommentToComment(dbComment))
-	}
-	return comments, nil
+	review := r.mapper.mapDBReviewToReview(dbReview)
+	return &review, nil
 }

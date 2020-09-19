@@ -11,11 +11,9 @@ type UseCase interface {
 	Addbeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
 	GetBeer(beerID int64) (*Beer, error)
-	AddRate(rate Rate) error
-	GetRates(beerID int64) ([]Rate, error)
-	GetRatesByBeerIDAndUserID(beerID int64, userID int64) (*Rate, error)
-	AddComment(comment Comment) error
-	GetComments(beerID int64) ([]Comment, error)
+	AddReview(review Review) error
+	GetReviews(beerID int64) ([]Review, error)
+	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 	GetRelatedBeers(beerID int64) (*RelatedBeers, error)
 }
 
@@ -42,44 +40,36 @@ func (u *useCase) GetBeer(beerID int64) (*Beer, error) {
 	return u.beerRepo.GetBeer(beerID)
 }
 
-func (u *useCase) AddRate(rate Rate) error {
-	beer, err := u.GetBeer(rate.BeerID)
+func (u *useCase) AddReview(review Review) error {
+	beer, err := u.GetBeer(review.BeerID)
 	if err != nil {
 		return err
 	}
-	ratesLen, err := u.beerRepo.GetRatesCount(rate.BeerID)
+	reviewsLen, err := u.beerRepo.GetReviewCount(review.BeerID)
 	if err != nil {
 		return err
 	}
 
 	var newRateAvg float64
-	if ratesLen == 0 {
-		newRateAvg = rate.Ratio
+	if reviewsLen == 0 {
+		newRateAvg = review.Ratio
 	} else {
-		newRateAvg = (beer.RateAvg*float64(ratesLen) + rate.Ratio) / (float64(ratesLen) + 1.0)
+		newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio) / (float64(reviewsLen) + 1.0)
 	}
-	err = u.beerRepo.UpdateBeerRateAvg(rate.BeerID, newRateAvg)
+	err = u.beerRepo.UpdateBeerRateAvg(review.BeerID, newRateAvg)
 	if err != nil {
 		return err
 	}
 
-	return u.beerRepo.AddRate(rate)
+	return u.beerRepo.AddReview(review)
 }
 
-func (u *useCase) GetRates(beerID int64) ([]Rate, error) {
-	return u.beerRepo.GetRates(beerID)
+func (u *useCase) GetReviews(beerID int64) ([]Review, error) {
+	return u.beerRepo.GetReviews(beerID)
 }
 
-func (u *useCase) GetRatesByBeerIDAndUserID(beerID int64, userID int64) (*Rate, error) {
-	return u.beerRepo.GetRatesByBeerIDAndUserID(beerID, userID)
-}
-
-func (u *useCase) AddComment(comment Comment) error {
-	return u.beerRepo.AddComment(comment)
-}
-
-func (u *useCase) GetComments(beerID int64) ([]Comment, error) {
-	return u.beerRepo.GetComments(beerID)
+func (u *useCase) GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error) {
+	return u.beerRepo.GetReviewByBeerIDAndUserID(beerID, userID)
 }
 
 func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {

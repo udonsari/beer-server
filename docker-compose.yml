@@ -31,7 +31,7 @@ services:
     environment:
       - MYSQL_DATABASE=beerserver
       - MYSQL_USER=beerserver
-      - MYSQL_PASSWORD=beerserver
+      - MYSQL_PASSWORD=1
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
     networks:
       beerserver-network:

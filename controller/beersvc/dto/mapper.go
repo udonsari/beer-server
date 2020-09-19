@@ -12,10 +12,13 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rateOwner *beer.Rate) Beer {
-	var dtoComments []Comment
-	for _, comment := range comments {
-		dtoComments = append(dtoComments, m.mapCommentToDTOComment(comment))
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, reviews []beer.Review, reviewOwner *beer.Review) Beer {
+	var dtoReviews []Review
+	for _, review := range reviews {
+		dtoReview := m.mapReviewToDTOReview(&review)
+		if dtoReview != nil {
+			dtoReviews = append(dtoReviews, *dtoReview)
+		}
 	}
 
 	return Beer{
@@ -28,9 +31,9 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, comments []beer.Comment, rateO
 		Aroma:          beer.Aroma,
 		ImageURL:       beer.ImageURL,
 		ThumbnailImage: beer.ThumbnailImage,
-		Comments:       dtoComments,
+		Reviews:        dtoReviews,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
-		RateOwner:      m.mapRateToDTORate(rateOwner),
+		ReviewOwner:    m.mapReviewToDTOReview(reviewOwner),
 	}
 }
 
@@ -65,22 +68,15 @@ func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers
 	return &dtoRelatedBeers
 }
 
-func (m *Mapper) mapCommentToDTOComment(comment beer.Comment) Comment {
-	return Comment{
-		BeerID:  comment.BeerID,
-		Content: comment.Content,
-		UserID:  comment.UserID,
-	}
-}
-
-func (m *Mapper) mapRateToDTORate(rate *beer.Rate) *Rate {
-	if rate == nil {
+func (m *Mapper) mapReviewToDTOReview(review *beer.Review) *Review {
+	if review == nil {
 		return nil
 	}
-	return &Rate{
-		BeerID: rate.BeerID,
-		Ratio:  util.Floor(rate.Ratio, 2),
-		UserID: rate.UserID,
+	return &Review{
+		BeerID:  review.BeerID,
+		Content: review.Content,
+		Ratio:   util.Floor(review.Ratio, 2),
+		UserID:  review.UserID,
 	}
 }
 

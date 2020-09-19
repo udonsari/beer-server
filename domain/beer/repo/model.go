@@ -27,24 +27,14 @@ func (DBBeer) TableName() string {
 	return "beer_info"
 }
 
-type DBComment struct {
+type DBReview struct {
 	ID      int64
 	BeerID  int64
+	Ratio   float64
 	Content string
 	UserID  int64
 }
 
-func (DBComment) TableName() string {
-	return "beer_comment"
-}
-
-type DBRate struct {
-	ID     int64
-	BeerID int64
-	Ratio  float64
-	UserID int64
-}
-
-func (DBRate) TableName() string {
-	return "beer_rate"
+func (DBReview) TableName() string {
+	return "beer_review"
 }

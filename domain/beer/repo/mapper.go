@@ -9,37 +9,22 @@ import (
 
 type mapper struct{}
 
-func (m mapper) mapDBCommentToComment(dbComment DBComment) beer.Comment {
-	return beer.Comment{
-		ID:      dbComment.ID,
-		BeerID:  dbComment.BeerID,
-		Content: dbComment.Content,
-		UserID:  dbComment.UserID,
+func (m mapper) mapDBReviewToReview(dbReview DBReview) beer.Review {
+	return beer.Review{
+		ID:      dbReview.ID,
+		BeerID:  dbReview.BeerID,
+		Content: dbReview.Content,
+		Ratio:   dbReview.Ratio,
+		UserID:  dbReview.UserID,
 	}
 }
 
-func (m mapper) mapCommentToDBComment(comment beer.Comment) DBComment {
-	return DBComment{
-		BeerID:  comment.BeerID,
-		Content: comment.Content,
-		UserID:  comment.UserID,
-	}
-}
-
-func (m mapper) mapDBRateToRate(dbRate DBRate) beer.Rate {
-	return beer.Rate{
-		ID:     dbRate.ID,
-		BeerID: dbRate.BeerID,
-		Ratio:  dbRate.Ratio,
-		UserID: dbRate.UserID,
-	}
-}
-
-func (m mapper) mapRateToDBRate(rate beer.Rate) DBRate {
-	return DBRate{
-		BeerID: rate.BeerID,
-		Ratio:  rate.Ratio,
-		UserID: rate.UserID,
+func (m mapper) mapReviewToDBReview(review beer.Review) DBReview {
+	return DBReview{
+		BeerID:  review.BeerID,
+		Content: review.Content,
+		Ratio:   review.Ratio,
+		UserID:  review.UserID,
 	}
 }
 

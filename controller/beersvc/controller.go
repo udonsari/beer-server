@@ -30,8 +30,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	}
 	engine.GET("/api/beers", cont.GetBeers)
 	engine.GET("/api/beer", cont.GetBeer)
-	engine.POST("/api/rate", cont.AddRate)
-	engine.POST("/api/comment", cont.AddComment)
+	engine.POST("/api/review", cont.AddReview)
 	return cont
 }
 
@@ -64,18 +63,18 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	var res dto.GetBeersResponse
 	for idx, br := range beerList {
 		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
-		var rateOwner *beer.Rate
-		comments, err := cont.beerUseCase.GetComments(br.ID)
+		var reviewOwner *beer.Review
+		reviews, err := cont.beerUseCase.GetReviews(br.ID)
 		if err != nil {
 			return err
 		}
 		if user != nil {
-			rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+			reviewOwner, err = cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
 			if err != nil {
 				return err
 			}
 		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rateOwner)
+		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, reviews, reviewOwner)
 		res.Beers = append(res.Beers, dtoBeer)
 	}
 
@@ -111,18 +110,18 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	}
 
 	var res dto.GetBeerResponse
-	var rateOwner *beer.Rate
-	comments, err := cont.beerUseCase.GetComments(br.ID)
+	var reviewOwner *beer.Review
+	reviews, err := cont.beerUseCase.GetReviews(br.ID)
 	if err != nil {
 		return err
 	}
 	if user != nil {
-		rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+		reviewOwner, err = cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
 		if err != nil {
 			return err
 		}
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rateOwner)
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, reviews, reviewOwner)
 
 	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
 	if err != nil {
@@ -143,8 +142,8 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	)
 }
 
-func (cont *Controller) AddRate(ctx echo.Context) error {
-	log.Printf("Controller - AddRate() - Controller")
+func (cont *Controller) AddReview(ctx echo.Context) error {
+	log.Printf("Controller - AddReview() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.UserMust()
 	if err != nil {
@@ -153,47 +152,18 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 		return fmt.Errorf("user not found")
 	}
 
-	var req dto.AddRateRequest
+	var req dto.AddReviewRequest
 	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - AddRate() - Failed to bind %+v", err)
+		log.Printf("Controller - AddReview() - Failed to bind %+v", err)
 		return err
 	}
-	log.Printf("Controller - AddRate() - Param %+v", spew.Sdump(req))
+	log.Printf("Controller - AddReview() - Param %+v", spew.Sdump(req))
 
-	err = cont.beerUseCase.AddRate(
-		beer.Rate{
-			BeerID: req.BeerID,
-			Ratio:  req.Ratio,
-			UserID: user.ID,
-		},
-	)
-	if err != nil {
-		return err
-	}
-	return ctx.NoContent(http.StatusOK)
-}
-
-func (cont *Controller) AddComment(ctx echo.Context) error {
-	log.Printf("Controller - AddComment() - Controller")
-	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.UserMust()
-	if err != nil {
-		return err
-	} else if user == nil || user.ID == 0 {
-		return fmt.Errorf("user not found")
-	}
-
-	var req dto.AddCommentRequest
-	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - AddComment() - Failed to bind %+v", err)
-		return err
-	}
-	log.Printf("Controller - AddComment() - Param %+v", spew.Sdump(req))
-
-	err = cont.beerUseCase.AddComment(
-		beer.Comment{
+	err = cont.beerUseCase.AddReview(
+		beer.Review{
 			BeerID:  req.BeerID,
 			Content: req.Content,
+			Ratio:   req.Ratio,
 			UserID:  user.ID,
 		},
 	)
