@@ -36,6 +36,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 }
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
+	// TODO GetBeers, GetBeer 중복 제거
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.User()
@@ -64,18 +65,39 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	var res dto.GetBeersResponse
 	for idx, br := range beerList {
 		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
-		var reviewOwner *beer.Review
+		var dtoReviewOwner *dto.Review
+		var dtoReviews []dto.Review
 		reviews, err := cont.beerUseCase.GetReviews(br.ID)
 		if err != nil {
 			return err
 		}
-		if user != nil {
-			reviewOwner, err = cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+		for _, review := range reviews {
+			reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
 			if err != nil {
 				return err
 			}
+			beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+			dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+			dtoReviews = append(dtoReviews, *dtoReview)
 		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, reviews, reviewOwner)
+
+		if user != nil {
+			reviewOwner, err := cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+			if err != nil {
+				return err
+			}
+			reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
+		}
+		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, dtoReviews, dtoReviewOwner)
 		res.Beers = append(res.Beers, dtoBeer)
 	}
 
@@ -116,18 +138,39 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	}
 
 	var res dto.GetBeerResponse
-	var reviewOwner *beer.Review
+	var dtoReviewOwner *dto.Review
+	var dtoReviews []dto.Review
 	reviews, err := cont.beerUseCase.GetReviews(br.ID)
 	if err != nil {
 		return err
 	}
-	if user != nil {
-		reviewOwner, err = cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+	for _, review := range reviews {
+		reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
 		if err != nil {
 			return err
 		}
+		beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+		dtoReviews = append(dtoReviews, *dtoReview)
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, reviews, reviewOwner)
+
+	if user != nil {
+		reviewOwner, err := cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+		if err != nil {
+			return err
+		}
+		reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+		dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
+	}
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, dtoReviews, dtoReviewOwner)
 
 	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
 	if err != nil {
@@ -196,7 +239,12 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 
 	var dtoReviews []dto.Review
 	for _, review := range reviews {
-		dtoReview := cont.mapper.MapReviewToDTOReview(&review)
+		beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(&review, user.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
 

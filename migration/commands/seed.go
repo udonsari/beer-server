@@ -9,6 +9,8 @@ import (
 
 	"github.com/UdonSari/beer-server/domain/beer"
 	beerRepo "github.com/UdonSari/beer-server/domain/beer/repo"
+	"github.com/UdonSari/beer-server/domain/user"
+	userRepo "github.com/UdonSari/beer-server/domain/user/repo"
 	"github.com/UdonSari/beer-server/main/server"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/urfave/cli/v2"
@@ -17,6 +19,7 @@ import (
 const (
 	reviewNumber    = 1000
 	beerNumber      = 100
+	userNumber      = 100
 	rateBase        = 3
 	abvLimit        = 10
 	countryNumber   = 10
@@ -49,7 +52,9 @@ func (c *seedCommand) Command() *cli.Command {
 
 func (c *seedCommand) main(ctx *cli.Context) error {
 	br := beerRepo.New(c.d.MysqlDB(false), 100)
+	ur := userRepo.New(c.d.MysqlDB(false))
 	bu := beer.NewUseCase(br)
+	uu := user.NewUseCase(ur, "", "")
 
 	for i := 0; i < beerNumber; i++ {
 		beer := getRandomBeer()
@@ -65,9 +70,21 @@ func (c *seedCommand) main(ctx *cli.Context) error {
 		if err := bu.AddReview(review); err != nil {
 			// Review가 duplicate으로 들어ㅏ가지 않을 수 있다. 해당 경우 무시.
 			log.Printf("failed to add %+v with err %+v", spew.Sdump(review), spew.Sdump(err))
+			i--
 			continue
 		}
+	}
 
+	for i := 0; i < userNumber; i++ {
+		user := getRandomUser()
+		log.Printf("trying to put %vth user %v", i, user)
+		if err := uu.CreateUser(user); err != nil {
+			// User duplicate으로 들어ㅏ가지 않을 수 있다. 해당 경우 무시.
+			log.Printf("failed to add %+v with err %+v", spew.Sdump(user), spew.Sdump(err))
+			i--
+			continue
+
+		}
 	}
 	return nil
 }
@@ -108,6 +125,17 @@ func getRandomReview() beer.Review {
 		BeerID:  rand.Int63n(beerNumber) + 1,
 		Content: "TEST_CONTENT_" + strconv.Itoa(rand.Int()),
 		Ratio:   rand.Float64()*rateBase + (5 - rateBase),
-		UserID:  rand.Int63n(beerNumber) + 1,
+		UserID:  rand.Int63n(userNumber) + 1,
+	}
+}
+
+func getRandomUser() user.User {
+	return user.User{
+		ExternalID: "TEST_EXTERNAL_ID_" + strconv.Itoa(rand.Int()),
+		Properties: user.Properties{
+			NickName:       "TEST_NICKNAME_" + strconv.Itoa(rand.Int()),
+			ProfileImage:   fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight),
+			ThumbnailImage: fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight),
+		},
 	}
 }

@@ -12,15 +12,8 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, reviews []beer.Review, reviewOwner *beer.Review) Beer {
-	var dtoReviews []Review
-	for _, review := range reviews {
-		dtoReview := m.MapReviewToDTOReview(&review)
-		if dtoReview != nil {
-			dtoReviews = append(dtoReviews, *dtoReview)
-		}
-	}
-
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReviewOwner *Review) Beer {
+	// TODO 이미 밖에서 DTO를 만들어서 다시 Map한다는게 이상
 	return Beer{
 		ID:             beer.ID,
 		Name:           beer.Name,
@@ -33,7 +26,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, reviews []beer.Review, reviewO
 		ThumbnailImage: beer.ThumbnailImage,
 		Reviews:        dtoReviews,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
-		ReviewOwner:    m.MapReviewToDTOReview(reviewOwner),
+		ReviewOwner:    dtoReviewOwner,
 	}
 }
 
@@ -68,15 +61,16 @@ func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers
 	return &dtoRelatedBeers
 }
 
-func (m *Mapper) MapReviewToDTOReview(review *beer.Review) *Review {
+func (m *Mapper) MapReviewToDTOReview(review *beer.Review, nickName string, beer ReducedBeer) *Review {
 	if review == nil {
 		return nil
 	}
 	return &Review{
-		BeerID:  review.BeerID,
-		Content: review.Content,
-		Ratio:   util.Floor(review.Ratio, 2),
-		UserID:  review.UserID,
+		ReducedBeer: beer,
+		Content:     review.Content,
+		Ratio:       util.Floor(review.Ratio, 2),
+		UserID:      review.UserID,
+		NickName:    nickName,
 	}
 }
 

@@ -79,8 +79,9 @@ type ReducedBeer struct {
 }
 
 type Review struct {
-	BeerID  int64   `json:"beer_id"`
-	Content string  `json:"content"`
-	Ratio   float64 `json:"ratio"`
-	UserID  int64   `json:"user_id"`
+	ReducedBeer ReducedBeer `json:"beer"`
+	Content     string      `json:"content"`
+	Ratio       float64     `json:"ratio"`
+	UserID      int64       `json:"user_id"`
+	NickName    string      `json:"nickname"`
 }

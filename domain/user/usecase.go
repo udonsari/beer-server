@@ -19,9 +19,11 @@ const (
 )
 
 type UseCase interface {
-	GetUserByExternalID(externalID string) (*User, error)
-	GetUser(accessToken string) (*User, error)
+	CreateUser(user User) error
 	GetToken(code string) (*Token, error)
+	GetUser(accessToken string) (*User, error)
+	GetUserByID(userID int64) (*User, error)
+	GetUserByExternalID(externalID string) (*User, error)
 	UpdateNickName(userID int64, nickName string) error
 }
 
@@ -40,11 +42,7 @@ func NewUseCase(userRepo UserRepo, host string, port string) UseCase {
 	}
 }
 
-func (u *useCase) GetUserByExternalID(externalID string) (*User, error) {
-	return u.userRepo.GetUserByExternalID(externalID)
-}
-
-func (u *useCase) createUser(user User) error {
+func (u *useCase) CreateUser(user User) error {
 	return u.userRepo.CreateUser(user)
 }
 
@@ -123,7 +121,7 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 	if user == nil {
 		// Unique 조건에서 걸릴수 있으니 Retry
 		for i := 0; i < createRetryCount; i++ {
-			err = u.createUser(
+			err = u.CreateUser(
 				u.mapper.MapKakaoUserToUser(kakaoUser),
 			)
 			if err != nil {
@@ -142,6 +140,14 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 	}
 
 	return user, nil
+}
+
+func (u *useCase) GetUserByID(userID int64) (*User, error) {
+	return u.userRepo.GetUserByID(userID)
+}
+
+func (u *useCase) GetUserByExternalID(externalID string) (*User, error) {
+	return u.userRepo.GetUserByExternalID(externalID)
 }
 
 func (u *useCase) UpdateNickName(userID int64, nickName string) error {

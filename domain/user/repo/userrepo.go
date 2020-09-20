@@ -40,6 +40,21 @@ func (r *userRepo) GetUserByExternalID(externalID string) (*user.User, error) {
 	return &user, nil
 }
 
+func (r *userRepo) GetUserByID(userID int64) (*user.User, error) {
+	query := DBUser{ID: userID}
+	var dbUser DBUser
+	if err := r.db.Where(&query).First(&dbUser).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get user. user id: %v", userID))
+		}
+	}
+	user := r.mapper.mapDBUserToUser(dbUser)
+	return &user, nil
+}
+
 func (r *userRepo) CreateUser(user user.User) error {
 	log.Printf("UserRepo - CreateUser() - user %+v", spew.Sdump(user))
 

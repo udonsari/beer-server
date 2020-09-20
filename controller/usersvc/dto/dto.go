@@ -13,5 +13,5 @@ type Properties struct {
 }
 
 type UpdateNickNameRequest struct {
-	NickName string `form:"nick_name"`
+	NickName string `form:"nickname"`
 }
