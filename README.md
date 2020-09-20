@@ -1067,15 +1067,6 @@
     * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 ---
 * On Going
-    * `Done` User API 내려주는 것 Snake Case 적용
-    * `Done` 카카오 Nickname이랑, 우리 Nickname 구분해야하는지 고민. (지금은 Kakao 닉네임 그대로 씀)
-        * `Done` 사용자가 처음에 로그인하면 임의의 난수 Nickname 내려주고 (가마우지1379) 이후에 그걸 변경할 수 있도록 API 뚫어서 사용할 수 있게함 (안겹치게 Valdiation 유의)
-    * `Done` Comment, Rate를 Review 로묶어서 처리 (유저당 맥주 마다 1번씩 처리하고, Upsert로 API)
-    * `Done` Pagination (다음 Page 호출하는 부분 처리, 애초에 Pagination 더 찾아보기)
-        * `Done` 가장 기본적인 Sorting 기준도 있어야겠다. ex. ID 순
-    * `Done` 사용자별 작성한 Review 내려주는 API 뚫기
-    * `Done` Review 내려줄 때 Reduced Beer 정보, User NickName 내려주기 (기존 ID들은 같이)
-    * `Done` 문서 업데이트
     * 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
         * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
     
