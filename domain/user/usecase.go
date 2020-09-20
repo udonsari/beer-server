@@ -14,10 +14,17 @@ import (
 
 // TODO Kakao repo를 파서 통신 내리기
 
+const (
+	createRetryCount = 10
+)
+
 type UseCase interface {
-	GetUserByExternalID(externalID string) (*User, error)
-	GetUser(accessToken string) (*User, error)
+	CreateUser(user User) error
 	GetToken(code string) (*Token, error)
+	GetUser(accessToken string) (*User, error)
+	GetUserByID(userID int64) (*User, error)
+	GetUserByExternalID(externalID string) (*User, error)
+	UpdateNickName(userID int64, nickName string) error
 }
 
 type useCase struct {
@@ -35,11 +42,7 @@ func NewUseCase(userRepo UserRepo, host string, port string) UseCase {
 	}
 }
 
-func (u *useCase) GetUserByExternalID(externalID string) (*User, error) {
-	return u.userRepo.GetUserByExternalID(externalID)
-}
-
-func (u *useCase) createUser(user User) error {
+func (u *useCase) CreateUser(user User) error {
 	return u.userRepo.CreateUser(user)
 }
 
@@ -116,9 +119,20 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 
 	// Goroutine 처리 고민했지만 user를 반환 해야하므로 동기 처리
 	if user == nil {
-		err = u.createUser(
-			u.mapper.MapKakaoUserToUser(kakaoUser),
-		)
+		// Unique 조건에서 걸릴수 있으니 Retry
+		for i := 0; i < createRetryCount; i++ {
+			err = u.CreateUser(
+				u.mapper.MapKakaoUserToUser(kakaoUser),
+			)
+			if err != nil {
+				continue
+			} else {
+				break
+			}
+		}
+		if err != nil {
+			return nil, fmt.Errorf("failed to create user with retry %+v", err)
+		}
 		user, err = u.GetUserByExternalID(strconv.FormatInt(kakaoUser.ID, 10))
 		if err != nil {
 			return nil, err
@@ -126,4 +140,16 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 	}
 
 	return user, nil
+}
+
+func (u *useCase) GetUserByID(userID int64) (*User, error) {
+	return u.userRepo.GetUserByID(userID)
+}
+
+func (u *useCase) GetUserByExternalID(externalID string) (*User, error) {
+	return u.userRepo.GetUserByExternalID(externalID)
+}
+
+func (u *useCase) UpdateNickName(userID int64, nickName string) error {
+	return u.userRepo.UpdateNickName(userID, nickName)
 }

@@ -13,16 +13,10 @@ type Beer struct {
 	RateAvg        float64
 }
 
-type Comment struct {
+type Review struct {
 	ID      int64
 	BeerID  int64
 	Content string
+	Ratio   float64
 	UserID  int64
-}
-
-type Rate struct {
-	ID     int64
-	BeerID int64
-	Ratio  float64
-	UserID int64
 }

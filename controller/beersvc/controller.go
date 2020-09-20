@@ -30,12 +30,13 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	}
 	engine.GET("/api/beers", cont.GetBeers)
 	engine.GET("/api/beer", cont.GetBeer)
-	engine.POST("/api/rate", cont.AddRate)
-	engine.POST("/api/comment", cont.AddComment)
+	engine.POST("/api/review", cont.AddReview)
+	engine.GET("/api/review", cont.GetReview)
 	return cont
 }
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
+	// TODO GetBeers, GetBeer 중복 제거
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.User()
@@ -64,19 +65,45 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	var res dto.GetBeersResponse
 	for idx, br := range beerList {
 		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
-		var rateOwner *beer.Rate
-		comments, err := cont.beerUseCase.GetComments(br.ID)
+		var dtoReviewOwner *dto.Review
+		var dtoReviews []dto.Review
+		reviews, err := cont.beerUseCase.GetReviews(br.ID)
 		if err != nil {
 			return err
 		}
-		if user != nil {
-			rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+		for _, review := range reviews {
+			reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
 			if err != nil {
 				return err
 			}
+			beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+			dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+			dtoReviews = append(dtoReviews, *dtoReview)
 		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, comments, rateOwner)
+
+		if user != nil {
+			reviewOwner, err := cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+			if err != nil {
+				return err
+			}
+			reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
+		}
+		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, dtoReviews, dtoReviewOwner)
 		res.Beers = append(res.Beers, dtoBeer)
+	}
+
+	// TODO 지금 Cursor 설정이 Controller에도, Repo에도 분포되어 있는 느낌인데 괜찮을까 고찰
+	if len(beerList) != 0 {
+		res.Cursor = &(res.Beers[len(beerList)-1].ID)
 	}
 
 	log.Printf("Controller - GetBeers() dto beer list %+v", res.Beers)
@@ -111,18 +138,39 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	}
 
 	var res dto.GetBeerResponse
-	var rateOwner *beer.Rate
-	comments, err := cont.beerUseCase.GetComments(br.ID)
+	var dtoReviewOwner *dto.Review
+	var dtoReviews []dto.Review
+	reviews, err := cont.beerUseCase.GetReviews(br.ID)
 	if err != nil {
 		return err
 	}
-	if user != nil {
-		rateOwner, err = cont.beerUseCase.GetRatesByBeerIDAndUserID(br.ID, user.ID)
+	for _, review := range reviews {
+		reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
 		if err != nil {
 			return err
 		}
+		beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+		dtoReviews = append(dtoReviews, *dtoReview)
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, comments, rateOwner)
+
+	if user != nil {
+		reviewOwner, err := cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
+		if err != nil {
+			return err
+		}
+		reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+		dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
+	}
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, dtoReviews, dtoReviewOwner)
 
 	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
 	if err != nil {
@@ -143,8 +191,8 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	)
 }
 
-func (cont *Controller) AddRate(ctx echo.Context) error {
-	log.Printf("Controller - AddRate() - Controller")
+func (cont *Controller) AddReview(ctx echo.Context) error {
+	log.Printf("Controller - AddReview() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.UserMust()
 	if err != nil {
@@ -153,18 +201,19 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 		return fmt.Errorf("user not found")
 	}
 
-	var req dto.AddRateRequest
+	var req dto.AddReviewRequest
 	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - AddRate() - Failed to bind %+v", err)
+		log.Printf("Controller - AddReview() - Failed to bind %+v", err)
 		return err
 	}
-	log.Printf("Controller - AddRate() - Param %+v", spew.Sdump(req))
+	log.Printf("Controller - AddReview() - Param %+v", spew.Sdump(req))
 
-	err = cont.beerUseCase.AddRate(
-		beer.Rate{
-			BeerID: req.BeerID,
-			Ratio:  req.Ratio,
-			UserID: user.ID,
+	err = cont.beerUseCase.AddReview(
+		beer.Review{
+			BeerID:  req.BeerID,
+			Content: req.Content,
+			Ratio:   req.Ratio,
+			UserID:  user.ID,
 		},
 	)
 	if err != nil {
@@ -173,8 +222,8 @@ func (cont *Controller) AddRate(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusOK)
 }
 
-func (cont *Controller) AddComment(ctx echo.Context) error {
-	log.Printf("Controller - AddComment() - Controller")
+func (cont *Controller) GetReview(ctx echo.Context) error {
+	log.Printf("Controller - GetReview() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.UserMust()
 	if err != nil {
@@ -183,22 +232,26 @@ func (cont *Controller) AddComment(ctx echo.Context) error {
 		return fmt.Errorf("user not found")
 	}
 
-	var req dto.AddCommentRequest
-	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - AddComment() - Failed to bind %+v", err)
-		return err
-	}
-	log.Printf("Controller - AddComment() - Param %+v", spew.Sdump(req))
-
-	err = cont.beerUseCase.AddComment(
-		beer.Comment{
-			BeerID:  req.BeerID,
-			Content: req.Content,
-			UserID:  user.ID,
-		},
-	)
+	reviews, err := cont.beerUseCase.GetReviewsByUserID(user.ID)
 	if err != nil {
 		return err
 	}
-	return ctx.NoContent(http.StatusOK)
+
+	var dtoReviews []dto.Review
+	for _, review := range reviews {
+		beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(&review, user.NickName, dtoReducedBeer)
+		dtoReviews = append(dtoReviews, *dtoReview)
+	}
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": dtoReviews,
+		},
+	)
 }

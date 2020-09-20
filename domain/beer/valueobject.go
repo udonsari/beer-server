@@ -12,6 +12,10 @@ type BeerQueryArgs struct {
 	Country   []string
 	BeerStyle []string
 	Aroma     []string
+
+	// Cursor Pagination
+	Cursor   *int64
+	MaxCount *int64
 }
 
 type ABVInterval struct {

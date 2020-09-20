@@ -71,9 +71,9 @@ func (s *serverImpl) Start() {
 func (s *serverImpl) engine() *echo.Echo {
 	d := NewDependency()
 
-	beerRepo := beerRepo.New(d.MysqlDB(), d.BeerCacheDuration())
+	beerRepo := beerRepo.New(d.MysqlDB(true), d.BeerCacheDuration())
 	s.beerUseCase = beer.NewUseCase(beerRepo)
-	userRepo := userRepo.New(d.MysqlDB())
+	userRepo := userRepo.New(d.MysqlDB(true))
 	s.userUseCase = user.NewUseCase(userRepo, HOST, PORT_STR)
 
 	if s._engine != nil {

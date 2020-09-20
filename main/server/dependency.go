@@ -23,7 +23,7 @@ func NewDependency() Dependency {
 	return Dependency{}
 }
 
-func (d *Dependency) MysqlDB() *gorm.DB {
+func (d *Dependency) MysqlDB(logMode bool) *gorm.DB {
 	connectionString := d.getEnvOrExit(envKeyMySQLDataSourceName)
 	db, err := gorm.Open("mysql", connectionString)
 	if err != nil {
@@ -33,6 +33,7 @@ func (d *Dependency) MysqlDB() *gorm.DB {
 	db.DB().SetMaxOpenConns(mysqlMaxConn)
 	db.DB().SetMaxIdleConns(mysqlMaxIdleConn)
 	db.DB().SetConnMaxLifetime(time.Hour)
+	db.LogMode(logMode)
 
 	gorm.NowFunc = func() time.Time {
 		return time.Now().UTC()

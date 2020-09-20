@@ -9,20 +9,23 @@ import (
 
 	"github.com/UdonSari/beer-server/domain/beer"
 	beerRepo "github.com/UdonSari/beer-server/domain/beer/repo"
+	"github.com/UdonSari/beer-server/domain/user"
+	userRepo "github.com/UdonSari/beer-server/domain/user/repo"
 	"github.com/UdonSari/beer-server/main/server"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/urfave/cli/v2"
 )
 
 const (
-	rateCommentNumber = 2000
-	beerNumber        = 100
-	rateBase          = 3
-	abvLimit          = 10
-	countryNumber     = 10
-	beerStyleNumber   = 5
-	breweryNumber     = 100
-	aromaNumber       = 5
+	reviewNumber    = 1000
+	beerNumber      = 100
+	userNumber      = 100
+	rateBase        = 3
+	abvLimit        = 10
+	countryNumber   = 10
+	beerStyleNumber = 5
+	breweryNumber   = 100
+	aromaNumber     = 5
 
 	imageWidth  = 320
 	imageHeight = 480
@@ -48,8 +51,10 @@ func (c *seedCommand) Command() *cli.Command {
 }
 
 func (c *seedCommand) main(ctx *cli.Context) error {
-	br := beerRepo.New(c.d.MysqlDB(), 100)
+	br := beerRepo.New(c.d.MysqlDB(false), 100)
+	ur := userRepo.New(c.d.MysqlDB(false))
 	bu := beer.NewUseCase(br)
+	uu := user.NewUseCase(ur, "", "")
 
 	for i := 0; i < beerNumber; i++ {
 		beer := getRandomBeer()
@@ -59,17 +64,26 @@ func (c *seedCommand) main(ctx *cli.Context) error {
 		}
 	}
 
-	for i := 0; i < 2000; i++ {
-		comment := getRandomComment()
-		log.Printf("trying to put %vth comment %v", i, comment)
-		if err := bu.AddComment(comment); err != nil {
-			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(comment), spew.Sdump(err))
+	for i := 0; i < reviewNumber; i++ {
+		review := getRandomReview()
+		log.Printf("trying to put %vth review %v", i, review)
+		if err := bu.AddReview(review); err != nil {
+			// Review가 duplicate으로 들어ㅏ가지 않을 수 있다. 해당 경우 무시.
+			log.Printf("failed to add %+v with err %+v", spew.Sdump(review), spew.Sdump(err))
+			i--
+			continue
 		}
+	}
 
-		rate := getRandomRate()
-		log.Printf("trying to put %vth rate %v", i, rate)
-		if err := bu.AddRate(rate); err != nil {
-			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(rate), spew.Sdump(err))
+	for i := 0; i < userNumber; i++ {
+		user := getRandomUser()
+		log.Printf("trying to put %vth user %v", i, user)
+		if err := uu.CreateUser(user); err != nil {
+			// User duplicate으로 들어ㅏ가지 않을 수 있다. 해당 경우 무시.
+			log.Printf("failed to add %+v with err %+v", spew.Sdump(user), spew.Sdump(err))
+			i--
+			continue
+
 		}
 	}
 	return nil
@@ -106,18 +120,22 @@ func getRandomBeer() beer.Beer {
 	}
 }
 
-func getRandomComment() beer.Comment {
-	return beer.Comment{
+func getRandomReview() beer.Review {
+	return beer.Review{
 		BeerID:  rand.Int63n(beerNumber) + 1,
-		Content: "TEST_COMMENT_" + strconv.Itoa(rand.Int()),
-		UserID:  rand.Int63n(beerNumber) + 1,
+		Content: "TEST_CONTENT_" + strconv.Itoa(rand.Int()),
+		Ratio:   rand.Float64()*rateBase + (5 - rateBase),
+		UserID:  rand.Int63n(userNumber) + 1,
 	}
 }
 
-func getRandomRate() beer.Rate {
-	return beer.Rate{
-		BeerID: rand.Int63n(beerNumber) + 1,
-		Ratio:  rand.Float64()*rateBase + (5 - rateBase),
-		UserID: rand.Int63n(beerNumber) + 1,
+func getRandomUser() user.User {
+	return user.User{
+		ExternalID: "TEST_EXTERNAL_ID_" + strconv.Itoa(rand.Int()),
+		Properties: user.Properties{
+			NickName:       "TEST_NICKNAME_" + strconv.Itoa(rand.Int()),
+			ProfileImage:   fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight),
+			ThumbnailImage: fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight),
+		},
 	}
 }

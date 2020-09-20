@@ -4,8 +4,8 @@ import "time"
 
 type DBUser struct {
 	ID             int64
-	ExternalID     string
-	NickName       string
+	ExternalID     string `gorm:"unique"`
+	NickName       string `gorm:"unique"`
 	ProfileImage   string
 	ThumbnailImage string
 
