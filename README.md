@@ -716,9 +716,5 @@
 * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 ---
 ### On Going
-* `Done` 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
-* `Done` Beer List에서 Review는 필요 없을 것 같다
-    * 생각해보니 Beer List는 Reduced Beer로 내리면 되는구나
-* `Done` 문서 최신화
 * 마지막 페이지면, next_cursor null 내려주기
 * Beer List Query Key 다 적기
