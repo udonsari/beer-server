@@ -1065,3 +1065,6 @@
 ### On Going
 * 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
     * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
+* 마지막 페이지면, next_cursor null 내려주기
+* Beer List에서 Review는 필요 없을 것 같다
+* Beer List Query Key 다 적기
