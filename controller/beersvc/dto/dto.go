@@ -17,13 +17,15 @@ type GetBeersRequest struct {
 	// Cursor Pagination
 	Cursor   *int64 `query:"cursor"`
 	MaxCount *int64 `query:"max_count"`
+
+	SortBy *string `query:"sort_by"`
 }
 
 type GetBeersResponse struct {
-	Beers []Beer `json:"beers"`
+	ReducedBeer []ReducedBeer `json:"beers"`
 
 	// Cursor Pagination
-	Cursor *int64 `json:"next_cursor,omitempty"`
+	Cursor *int64 `json:"next_cursor"` // If it is last page, this will be nil
 }
 
 type GetBeerRequest struct {
@@ -59,6 +61,7 @@ type Beer struct {
 
 	Reviews     []Review `json:"reviews"`
 	RateAvg     float64  `json:"rate_avg"`
+	ReviewCount int64    `json:"review_count"`
 	ReviewOwner *Review  `json:"review_owner,omitempty"`
 }
 
@@ -78,6 +81,7 @@ type ReducedBeer struct {
 	Aroma          []string `json:"aroma"`
 	ThumbnailImage string   `json:"thumbnail_image"`
 	RateAvg        float64  `json:"rate_avg"`
+	ReviewCount    int64    `json:"review_count"`
 }
 
 type Review struct {

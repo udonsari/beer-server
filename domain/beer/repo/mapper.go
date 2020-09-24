@@ -55,6 +55,7 @@ func (m mapper) mapDBBeerToBeer(dbBeer DBBeer) beer.Beer {
 		ImageURL:       m.splitAndGetArray(dbBeer.ImageURLList, maxImageURLListLen),
 		ThumbnailImage: dbBeer.ThumbnailImage,
 		RateAvg:        dbBeer.RateAvg,
+		ReviewCount:    dbBeer.ReviewCount,
 	}
 }
 

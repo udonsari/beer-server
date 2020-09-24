@@ -50,6 +50,9 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		log.Printf("Controller - GetBeers() - Failed to bind %+v", err)
 		return err
 	}
+	if err = beer.IsValidSortBy(req.SortBy); err != nil {
+		return err
+	}
 	log.Printf("Controller - GetBeers() - Param %+v", spew.Sdump(req))
 
 	args, err := cont.mapper.MapGetBeersRequestToBeerQueryArgs(req)
@@ -65,7 +68,6 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	var res dto.GetBeersResponse
 	for idx, br := range beerList {
 		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
-		var dtoReviewOwner *dto.Review
 		var dtoReviews []dto.Review
 		reviews, err := cont.beerUseCase.GetReviews(br.ID)
 		if err != nil {
@@ -85,30 +87,16 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 			dtoReviews = append(dtoReviews, *dtoReview)
 		}
 
-		if user != nil {
-			reviewOwner, err := cont.beerUseCase.GetReviewByBeerIDAndUserID(br.ID, user.ID)
-			if err != nil {
-				return err
-			}
-			if reviewOwner != nil {
-				reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
-				if err != nil {
-					return err
-				}
-				dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
-				dtoReviewOwner = cont.mapper.MapReviewToDTOReview(*reviewOwner, user.NickName, dtoReviewOwnerBeer)
-			}
-		}
-		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, dtoReviews, dtoReviewOwner)
-		res.Beers = append(res.Beers, dtoBeer)
+		dtoBeer := cont.mapper.MapBeerToDTReducedBeer(br)
+		res.ReducedBeer = append(res.ReducedBeer, dtoBeer)
 	}
 
 	// TODO 지금 Cursor 설정이 Controller에도, Repo에도 분포되어 있는 느낌인데 괜찮을까 고찰
 	if len(beerList) != 0 {
-		res.Cursor = &(res.Beers[len(beerList)-1].ID)
+		res.Cursor = &(res.ReducedBeer[len(beerList)-1].ID)
 	}
 
-	log.Printf("Controller - GetBeers() dto beer list %+v", res.Beers)
+	log.Printf("Controller - GetBeers() dto beer list %+v", res.ReducedBeer)
 
 	return ctx.JSON(
 		http.StatusOK,

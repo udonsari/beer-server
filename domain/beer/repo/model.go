@@ -22,7 +22,8 @@ type DBBeer struct {
 	ImageURLList   string `gorm:"image_url_list"`
 	ThumbnailImage string
 
-	RateAvg float64
+	RateAvg     float64
+	ReviewCount int64
 }
 
 func (DBBeer) TableName() string {
