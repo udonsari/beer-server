@@ -1,5 +1,10 @@
-## Beer Server
+# Beer Server
 
+
+### Description
+맥주에 대해 검색하고, 리뷰를 달고 서로의 리뷰를 살펴볼 수 있는 Server 입니다
+
+--- 
 ### Make Command
 * `make build` : 서버용 Docker Image를 빌드 합니다
 * `make migrate-up` : 서버를 위한 MySQL Table을 Migration 합니다
@@ -7,12 +12,14 @@
 * `make seed` : 서버를 위한 Beer Test Data를 넣습니다
 * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
 * `make test` : 코드 테스트를 실행 합니다
+
 ---
 ### Stack
 * Language : Golang
 * DB : MySQL
 * ORM : gORM 
 * Etc : Docker, Makefile
+
 ---
 ### API 예시
 * Nit.
@@ -607,7 +614,7 @@
     ```
     </p>
     </details>
-* User Detail
+* User Detail (For Logined User)
     * command : `curl --location --request GET 'http://localhost:8081/api/user' --header 'Authorization: PodT6jlL4lAB6i_bT3lSyMnXguXbKMPeHjasdworDKcAAAF0h3rw4g'` 
         * SignIn을 통해 얻은 Access Token을 Header에 담아 API 호출해야합니다
     <details>
@@ -627,10 +634,10 @@
     ```
     </p>
     </details>
-* Update User Nickname
+* Update User Nickname (For Logined User)
     * command : `curl --location --request POST 'http://localhost:8081/api/user/update' --header 'Authorization: PodT6jlL4lAB6i_bT3lSyMnXguXbKMPeHjasdworDKcAAAF0h3rw4g' --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'nickname=Crownbig-1976380737404962472'`
     * Resonse : None
-* Add Review
+* Add Review (For Logined User)
     * command : `curl --location --request POST 'http://localhost:8081/api/review' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg' --form 'beer_id=30' --form 'ratio=4.2' --form 'content=JUST_3'`
     * Response : None
 * Get Review (For Logined User)
@@ -689,11 +696,11 @@
     ```
     </p>
     </details>
+
 ---
 ### TODO
 * CI / CD
 * 코드 내부에 TODO 달아 놓은 것들
-    * 우선순위 별로 별 달아놓음
 * 라이센스 추가
 * REST API Convention 적용 점검
 * Logger 사용
@@ -704,10 +711,12 @@
 * `Develop ?` 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
 * `Develop ?` 소셜 로그인 연동 확장 (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
 * `Develop ?` 켜뮤니티
+* `Develop ?` 맥주 취향 추천 ?
 * `중요` 맥주 데이터 넣기 - 기한 27일
 * `중요` AWS 서버 띄우는 건 - 기한 27일
 * `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
 * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
+
 ---
 ### On Going
 * 마지막 페이지면, next_cursor null 내려주기
