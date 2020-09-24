@@ -68,6 +68,7 @@ func (m *Mapper) MapReviewToDTOReview(review beer.Review, nickName string, beer 
 		Ratio:       util.Floor(review.Ratio, 2),
 		UserID:      review.UserID,
 		NickName:    nickName,
+		CreatedAt:   review.CreatedAt,
 	}
 }
 

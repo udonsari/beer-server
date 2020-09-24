@@ -1,5 +1,7 @@
 package repo
 
+import "time"
+
 const (
 	maxAromaListLen    = 3
 	maxImageURLListLen = 5
@@ -28,11 +30,12 @@ func (DBBeer) TableName() string {
 }
 
 type DBReview struct {
-	ID      int64
-	BeerID  int64
-	Ratio   float64
-	Content string
-	UserID  int64
+	ID        int64
+	BeerID    int64
+	Ratio     float64
+	Content   string
+	UserID    int64
+	CreatedAt time.Time
 }
 
 func (DBReview) TableName() string {
