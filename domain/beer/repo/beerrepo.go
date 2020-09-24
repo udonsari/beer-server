@@ -56,7 +56,7 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	// TODO Need test really
 
 	var dbBeers []DBBeer
-	baseQuery := r.db.Order("id asc")
+	baseQuery := r.db
 
 	if args.ABVInterval != nil {
 		baseQuery = baseQuery.Where("abv BETWEEN ? AND ? ", args.ABVInterval.MinABV, args.ABVInterval.MaxABV)
@@ -88,6 +88,19 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 		baseQuery = baseQuery.Limit(*args.MaxCount)
 	}
 
+	// Sort by
+	if args.SortBy == nil {
+		baseQuery = baseQuery.Order("id asc")
+	} else if *args.SortBy == beer.SortByRateAvgAsc {
+		baseQuery = baseQuery.Order("rate_avg asc")
+	} else if *args.SortBy == beer.SortByRateAvgDesc {
+		baseQuery = baseQuery.Order("rate_avg desc")
+	} else if *args.SortBy == beer.SortByReviewCountAsc {
+		baseQuery = baseQuery.Order("review_count asc")
+	} else if *args.SortBy == beer.SortByReviewCountDesc {
+		baseQuery = baseQuery.Order("review_count desc")
+	}
+
 	if err := baseQuery.Find(&dbBeers).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
@@ -117,6 +130,7 @@ func (r *beerRepo) AddReview(review beer.Review) error {
 	}
 
 	if preReview == nil {
+		// TODO 아래 쿼리들이 Transactional하게 이뤄져야함. 충돌나면 동시성 문제 생길 듯. Retry...
 		dbReview := r.mapper.mapReviewToDBReview(review)
 		res := r.db.Create(&dbReview)
 		// https://github.com/go-gorm/gorm/issues/2903
@@ -124,6 +138,7 @@ func (r *beerRepo) AddReview(review beer.Review) error {
 		if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
 			return errors.New("already added review")
 		}
+		res = r.db.Model(&DBBeer{}).Where("id = ?", review.BeerID).Update("review_count", gorm.Expr("review_count + ?", 1))
 		return res.Error
 
 	}

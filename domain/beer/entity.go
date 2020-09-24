@@ -13,6 +13,7 @@ type Beer struct {
 	ImageURL       []string
 	ThumbnailImage string
 	RateAvg        float64
+	ReviewCount    int64
 }
 
 type Review struct {

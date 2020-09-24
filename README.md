@@ -18,9 +18,19 @@
 * Nit.
     * 정확한 Parameter, Body는 각 Controller의 DTO를 봐주시면 좋습니다
 * Beer List
-    * command : `curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&cursor=61&max_count=2'`
+    * command : `curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&beer_style=TEST_STYLE_1&aroma=TEST_AROMA_4&cursor=10&max_count=100&sort_by=review_count_desc'`
+        * min_abv, max_abv를 명시하여 알콜 도수 범위를 제한할 수 있습니다
         * aroma, county, beer_style 등의 key를 중복 사용해서 해당 조건을 or로 걸 수 있습니다. 위 url에서는 beer_style이 중복 사용
         * Pagination - cursor는 첫 페이지의 경우 0으로 주고, 그 다음 호출 부터는 이 API의 Response cursor값을 넣으면 됩니다
+        * SortBy - sort_by는 아래 값을 인자로 넣어주시면 됩니다
+            ```go
+            const (
+                SortByRateAvgAsc      = "rate_avg_asc"
+                SortByRateAvgDesc     = "rate_avg_desc"
+                SortByReviewCountAsc  = "review_count_asc"
+                SortByReviewCountDesc = "review_count_desc"
+            )
+            ```
     <details>
     <summary>Response Example</summary>
     <p>
@@ -30,412 +40,55 @@
         "result": {
             "beers": [
                 {
-                    "id": 79,
-                    "name": "TEST_NAME_6359516315660856847",
-                    "brewery": "TEST_BREWAERY_70",
-                    "abv": 5.37,
-                    "country": "TEST_COUNTRY_3",
-                    "beer_style": "TEST_STYLE_4",
+                    "id": 21,
+                    "name": "TEST_NAME_2849071904095419409",
+                    "brewery": "TEST_BREWAERY_78",
+                    "abv": 5.8,
+                    "country": "TEST_COUNTRY_7",
+                    "beer_style": "TEST_STYLE_1",
                     "aroma": [
-                        "TEST_AROMA_3",
-                        "TEST_AROMA_3",
-                        "TEST_AROMA_3"
-                    ],
-                    "image_url": [
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480"
+                        "TEST_AROMA_0",
+                        "TEST_AROMA_2",
+                        "TEST_AROMA_4"
                     ],
                     "thumbnail_image": "https://picsum.photos/320/480",
-                    "reviews": [
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_7388582044909595896",
-                            "ratio": 4.59,
-                            "user_id": 19,
-                            "nickname": "TEST_NICKNAME_2399578652595903116"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_7036775995447857290",
-                            "ratio": 3.8,
-                            "user_id": 20,
-                            "nickname": "TEST_NICKNAME_9184890450261584277"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_2391156082219578938",
-                            "ratio": 3.69,
-                            "user_id": 25,
-                            "nickname": "TEST_NICKNAME_1916903903388503463"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_5924617277191323549",
-                            "ratio": 3.19,
-                            "user_id": 43,
-                            "nickname": "TEST_NICKNAME_3210880343281673809"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_6452731955647185282",
-                            "ratio": 4.94,
-                            "user_id": 45,
-                            "nickname": "TEST_NICKNAME_9191961633212244318"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_5801703947891575618",
-                            "ratio": 2.23,
-                            "user_id": 46,
-                            "nickname": "TEST_NICKNAME_4628425314673383947"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_8647855132242115017",
-                            "ratio": 4.57,
-                            "user_id": 48,
-                            "nickname": "TEST_NICKNAME_4133041801356895198"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_2298469925369900087",
-                            "ratio": 4.39,
-                            "user_id": 53,
-                            "nickname": "TEST_NICKNAME_4300038458279069427"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_4013933872477880882",
-                            "ratio": 4.61,
-                            "user_id": 68,
-                            "nickname": "TEST_NICKNAME_542935270987147634"
-                        },
-                        {
-                            "beer": {
-                                "id": 79,
-                                "name": "TEST_NAME_6359516315660856847",
-                                "brewery": "TEST_BREWAERY_70",
-                                "abv": 5.37,
-                                "country": "TEST_COUNTRY_3",
-                                "beer_style": "TEST_STYLE_4",
-                                "aroma": [
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3",
-                                    "TEST_AROMA_3"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.9
-                            },
-                            "content": "TEST_CONTENT_6662959013763429116",
-                            "ratio": 2.97,
-                            "user_id": 97,
-                            "nickname": "TEST_NICKNAME_7599357322839615581"
-                        }
-                    ],
-                    "rate_avg": 3.9
+                    "rate_avg": 3.31,
+                    "review_count": 12
                 },
                 {
-                    "id": 95,
-                    "name": "TEST_NAME_723102351307689977",
-                    "brewery": "TEST_BREWAERY_5",
-                    "abv": 5.1,
-                    "country": "TEST_COUNTRY_7",
-                    "beer_style": "TEST_STYLE_2",
+                    "id": 77,
+                    "name": "TEST_NAME_5394966169249731379",
+                    "brewery": "TEST_BREWAERY_3",
+                    "abv": 5.98,
+                    "country": "TEST_COUNTRY_8",
+                    "beer_style": "TEST_STYLE_1",
                     "aroma": [
-                        "TEST_AROMA_1",
                         "TEST_AROMA_4",
-                        "TEST_AROMA_1"
-                    ],
-                    "image_url": [
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480",
-                        "https://picsum.photos/320/480"
+                        "TEST_AROMA_1",
+                        "TEST_AROMA_0"
                     ],
                     "thumbnail_image": "https://picsum.photos/320/480",
-                    "reviews": [
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_5961655009417013599",
-                            "ratio": 3.4,
-                            "user_id": 22,
-                            "nickname": "TEST_NICKNAME_4615009674455111748"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_986019216809696119",
-                            "ratio": 4.83,
-                            "user_id": 23,
-                            "nickname": "TEST_NICKNAME_5345315911668805533"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_1913799607136721406",
-                            "ratio": 4.63,
-                            "user_id": 25,
-                            "nickname": "TEST_NICKNAME_1916903903388503463"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_8837695456469781027",
-                            "ratio": 2.73,
-                            "user_id": 29,
-                            "nickname": "TEST_NICKNAME_2348336246068030497"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_2143404436982914079",
-                            "ratio": 3.59,
-                            "user_id": 62,
-                            "nickname": "TEST_NICKNAME_4459496347945300277"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_1004243693761545598",
-                            "ratio": 3.4,
-                            "user_id": 67,
-                            "nickname": "TEST_NICKNAME_7781229485883467616"
-                        },
-                        {
-                            "beer": {
-                                "id": 95,
-                                "name": "TEST_NAME_723102351307689977",
-                                "brewery": "TEST_BREWAERY_5",
-                                "abv": 5.1,
-                                "country": "TEST_COUNTRY_7",
-                                "beer_style": "TEST_STYLE_2",
-                                "aroma": [
-                                    "TEST_AROMA_1",
-                                    "TEST_AROMA_4",
-                                    "TEST_AROMA_1"
-                                ],
-                                "thumbnail_image": "https://picsum.photos/320/480",
-                                "rate_avg": 3.74
-                            },
-                            "content": "TEST_CONTENT_8085769321972188030",
-                            "ratio": 3.62,
-                            "user_id": 87,
-                            "nickname": "TEST_NICKNAME_6235857566738269820"
-                        }
+                    "rate_avg": 3.42,
+                    "review_count": 10
+                },
+                {
+                    "id": 87,
+                    "name": "TEST_NAME_4256757104347050020",
+                    "brewery": "TEST_BREWAERY_94",
+                    "abv": 5.44,
+                    "country": "TEST_COUNTRY_6",
+                    "beer_style": "TEST_STYLE_1",
+                    "aroma": [
+                        "TEST_AROMA_2",
+                        "TEST_AROMA_3",
+                        "TEST_AROMA_4"
                     ],
-                    "rate_avg": 3.74
+                    "thumbnail_image": "https://picsum.photos/320/480",
+                    "rate_avg": 3.48,
+                    "review_count": 7
                 }
             ],
-            "next_cursor": 95
+            "next_cursor": 87
         }
     }
     ```
@@ -1063,8 +716,9 @@
 * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 ---
 ### On Going
-* 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
-    * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
+* `Done` 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
+* `Done` Beer List에서 Review는 필요 없을 것 같다
+    * 생각해보니 Beer List는 Reduced Beer로 내리면 되는구나
+* `Done` 문서 최신화
 * 마지막 페이지면, next_cursor null 내려주기
-* Beer List에서 Review는 필요 없을 것 같다
 * Beer List Query Key 다 적기

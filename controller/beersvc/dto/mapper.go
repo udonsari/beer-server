@@ -27,6 +27,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReview
 		Reviews:        dtoReviews,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
 		ReviewOwner:    dtoReviewOwner,
+		ReviewCount:    beer.ReviewCount,
 	}
 }
 
@@ -41,6 +42,7 @@ func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
 		Aroma:          beer.Aroma,
 		ThumbnailImage: beer.ThumbnailImage,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
+		ReviewCount:    beer.ReviewCount,
 	}
 }
 
@@ -92,5 +94,7 @@ func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.B
 
 	args.Cursor = req.Cursor
 	args.MaxCount = req.MaxCount
+	args.SortBy = req.SortBy
+
 	return &args, nil
 }

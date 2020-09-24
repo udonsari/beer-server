@@ -98,7 +98,21 @@ func getRandomBeer() beer.Beer {
 
 	aroma := []string{}
 	for i := 0; i < 3; i++ {
-		aroma = append(aroma, "TEST_AROMA_"+strconv.Itoa(rand.Int()%aromaNumber))
+		newAroma := ""
+		for true {
+			notDuplicatedCount := 0
+			newAroma = "TEST_AROMA_" + strconv.Itoa(rand.Int()%aromaNumber)
+			for ; notDuplicatedCount < i; notDuplicatedCount++ {
+				if newAroma == aroma[notDuplicatedCount] {
+					break
+				}
+			}
+
+			if notDuplicatedCount == i {
+				break
+			}
+		}
+		aroma = append(aroma, newAroma)
 	}
 
 	imageURL := []string{}
