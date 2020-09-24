@@ -1,5 +1,7 @@
 package beer
 
+import "time"
+
 type Beer struct {
 	ID             int64
 	Name           string
@@ -14,9 +16,10 @@ type Beer struct {
 }
 
 type Review struct {
-	ID      int64
-	BeerID  int64
-	Content string
-	Ratio   float64
-	UserID  int64
+	ID        int64
+	BeerID    int64
+	Content   string
+	Ratio     float64
+	UserID    int64
+	CreatedAt time.Time
 }

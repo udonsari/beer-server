@@ -61,16 +61,14 @@ func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers
 	return &dtoRelatedBeers
 }
 
-func (m *Mapper) MapReviewToDTOReview(review *beer.Review, nickName string, beer ReducedBeer) *Review {
-	if review == nil {
-		return nil
-	}
+func (m *Mapper) MapReviewToDTOReview(review beer.Review, nickName string, beer ReducedBeer) *Review {
 	return &Review{
 		ReducedBeer: beer,
 		Content:     review.Content,
 		Ratio:       util.Floor(review.Ratio, 2),
 		UserID:      review.UserID,
 		NickName:    nickName,
+		CreatedAt:   review.CreatedAt,
 	}
 }
 

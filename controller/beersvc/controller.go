@@ -81,7 +81,7 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 				return err
 			}
 			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
-			dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+			dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
 			dtoReviews = append(dtoReviews, *dtoReview)
 		}
 
@@ -90,12 +90,14 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 			if err != nil {
 				return err
 			}
-			reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
-			if err != nil {
-				return err
+			if reviewOwner != nil {
+				reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+				if err != nil {
+					return err
+				}
+				dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+				dtoReviewOwner = cont.mapper.MapReviewToDTOReview(*reviewOwner, user.NickName, dtoReviewOwnerBeer)
 			}
-			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
-			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
 		}
 		dtoBeer := cont.mapper.MapBeerToDTOBeer(br, dtoReviews, dtoReviewOwner)
 		res.Beers = append(res.Beers, dtoBeer)
@@ -154,7 +156,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 			return err
 		}
 		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
-		dtoReview := cont.mapper.MapReviewToDTOReview(&review, reviewUser.NickName, dtoReducedBeer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
 
@@ -163,12 +165,14 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 		if err != nil {
 			return err
 		}
-		reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
-		if err != nil {
-			return err
+		if reviewOwner != nil {
+			reviewOwnerBeer, err := cont.beerUseCase.GetBeer(reviewOwner.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(*reviewOwner, user.NickName, dtoReviewOwnerBeer)
 		}
-		dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
-		dtoReviewOwner = cont.mapper.MapReviewToDTOReview(reviewOwner, user.NickName, dtoReviewOwnerBeer)
 	}
 	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, dtoReviews, dtoReviewOwner)
 
@@ -244,7 +248,7 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 			return err
 		}
 		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
-		dtoReview := cont.mapper.MapReviewToDTOReview(&review, user.NickName, dtoReducedBeer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(review, user.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
 

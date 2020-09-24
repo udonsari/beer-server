@@ -1,5 +1,7 @@
 package dto
 
+import "time"
+
 type GetBeersRequest struct {
 	// ABV : Alcohol by Volume
 	MinABV *float64 `query:"min_abv"`
@@ -84,4 +86,5 @@ type Review struct {
 	Ratio       float64     `json:"ratio"`
 	UserID      int64       `json:"user_id"`
 	NickName    string      `json:"nickname"`
+	CreatedAt   time.Time   `json:"created_at"`
 }

@@ -1037,32 +1037,34 @@
     </p>
     </details>
 ---
-* TODO
-    * CI / CD
-    * 코드 내부에 TODO 달아 놓은 것들
-        * 우선순위 별로 별 달아놓음
-    * 라이센스 추가
-    * REST API Convention 적용 점검
-    * Test 구현
-    * Logger 사용
-    * 문서화
-    * Graceful Shutdown 처리 (서버, 외부 Dependency ...)
-    * 리뷰 삭제 ? - 일단은 없다.
-    * 평균 별점 구간도 쿼리 할 수 있어야겠네
-    * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
-    * `Develop` 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
-    * `Develop` 소셜 로그인 연동 확장 (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
-    * `Develop` 켜뮤니티
-    * `중요` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
-    * `중요` 전반적으로 Validation 다듬기
-        * 한 맥주에 두 번 댓글 금지
-        * DB 자체에 Name Unique 등
-    * `중요` 맥주 데이터 넣기 - 기한 27일
-    * `중요` AWS 서버 띄우는 건 - 기한 27일
-    * `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
-    * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
+### TODO
+* CI / CD
+* 코드 내부에 TODO 달아 놓은 것들
+    * 우선순위 별로 별 달아놓음
+* 라이센스 추가
+* REST API Convention 적용 점검
+* Test 구현
+* Logger 사용
+* 문서화
+* Graceful Shutdown 처리 (서버, 외부 Dependency ...)
+* 리뷰 삭제 ? - 일단은 없다.
+* 평균 별점 구간도 쿼리 할 수 있어야겠네
+* Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
+* `Develop` 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
+* `Develop` 소셜 로그인 연동 확장 (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
+* `Develop` 켜뮤니티
+* `중요` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
+* `중요` 전반적으로 Validation 다듬기
+    * 한 맥주에 두 번 댓글 금지
+    * DB 자체에 Name Unique 등
+* `중요` 맥주 데이터 넣기 - 기한 27일
+* `중요` AWS 서버 띄우는 건 - 기한 27일
+* `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
+* `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 ---
-* On Going
-    * 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
-        * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
-    
+### On Going
+* 맥주 Sorting도 해서 내려주는거 열기 (Comment 많은 순, RateAvg 높은 순)
+    * Comment 많은 순은 쿼리를 Join해서 좀 만져야할 듯
+* 마지막 페이지면, next_cursor null 내려주기
+* Beer List에서 Review는 필요 없을 것 같다
+* Beer List Query Key 다 적기

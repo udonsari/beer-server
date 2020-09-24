@@ -11,11 +11,12 @@ type mapper struct{}
 
 func (m mapper) mapDBReviewToReview(dbReview DBReview) beer.Review {
 	return beer.Review{
-		ID:      dbReview.ID,
-		BeerID:  dbReview.BeerID,
-		Content: dbReview.Content,
-		Ratio:   dbReview.Ratio,
-		UserID:  dbReview.UserID,
+		ID:        dbReview.ID,
+		BeerID:    dbReview.BeerID,
+		Content:   dbReview.Content,
+		Ratio:     dbReview.Ratio,
+		UserID:    dbReview.UserID,
+		CreatedAt: dbReview.CreatedAt,
 	}
 }
 
