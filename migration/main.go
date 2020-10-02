@@ -13,6 +13,7 @@ func getCommands(d *server.Dependency) []*cli.Command {
 	return []*cli.Command{
 		commands.NewMigrationUpCommand(d).Command(),
 		commands.NewMigrationDownCommand(d).Command(),
+		commands.NewSeedFakeCommand(d).Command(),
 		commands.NewSeedCommand(d).Command(),
 	}
 }

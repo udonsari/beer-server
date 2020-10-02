@@ -10,6 +10,7 @@
 * `make migrate-up` : 서버를 위한 MySQL Table을 Migration 합니다
 * `make migrate-down` : 서버를 위한 MySQL Table을 지웁니다
 * `make seed` : 서버를 위한 Beer Test Data를 넣습니다
+* `make seed` : 서버를 위한 Beer Data를 넣습니다 (현재 일부 Field는 의미 없는 값입니다)
 * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
 * `make test` : 코드 테스트를 실행 합니다
 
@@ -708,17 +709,20 @@
 * Graceful Shutdown 처리 (서버, 외부 Dependency ...)
 * `Develop ?` 리뷰 삭제 ?
 * `Develop ?` 평균 별점 구간도 쿼리 ? 
-* `Develop ?` 스타일 세분화 필요. ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
-* `Develop ?` 소셜 로그인 연동 확장 (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
-* `Develop ?` 켜뮤니티
+* `Develop ?` 스타일 세분화 필요 ? ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
+* `Develop ?` 소셜 로그인 연동 확장 ? (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
+* `Develop ?` 켜뮤니티 게시판 ?
 * `Develop ?` 맥주 취향 추천 ?
-* `중요` 맥주 데이터 넣기 - 기한 27일
-* `중요` AWS 서버 띄우는 건 - 기한 27일
+* `Develop ?` 리뷰 달면 경헙치 -> 계급 올리는 개념 ?
 * `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
 * `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
 
 ---
 ### On Going
+* `중요` 맥주 데이터 넣기
+    * 현재 문제가 다른 데이터는 찾을 수 있는데 Aroma, Image를 찾기 힘듬 (아니면 수기로 100개 정도 처리해야하나 ?)
+    * Style List도 Client와 공유되어야함
+* `중요` AWS 서버 띄우기
 * 마지막 페이지면, next_cursor null 내려주기
 * Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
 * 전반적으로 Validation 다듬기
