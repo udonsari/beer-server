@@ -90,6 +90,7 @@ func (s *serverImpl) engine() *echo.Echo {
 			}
 		},
 	)
+	s._engine.Static("/static", "static")
 
 	s._engine.HTTPErrorHandler = func(err error, c echo.Context) {
 		log.Printf(c.Path(), err.Error())
