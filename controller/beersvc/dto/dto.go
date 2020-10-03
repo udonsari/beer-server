@@ -92,3 +92,11 @@ type Review struct {
 	NickName    string      `json:"nickname"`
 	CreatedAt   time.Time   `json:"created_at"`
 }
+
+type AppConfig struct {
+	AromaList     []string `json:"aroma_list"`
+	CountryList   []string `json:"country_list"`
+	BeerStyleList []string `json:"style_list"`
+	MinABV        float64  `json:"min_abv"`
+	MaxABV        float64  `json:"max_abv"`
+}

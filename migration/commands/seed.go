@@ -28,7 +28,7 @@ func NewSeedCommand(d *server.Dependency) *seedCommand {
 
 	// From https://winning-homebrew.com/beer-flavor-descriptors.html
 	fakeAromaList = []string{
-		"malty", "grainy", "sweet", "corn-like", "hay", "straw", "graham cracker", "bicuity", "caramel", "toast", "roast", "coffee", "espresso", "burnt", "alcohol", "tobacco", "gunpowder", "leather", "pine", "fresh cut grass", "raisins", "currant", "plum", "dates", "prunes", "figs", "blackberry", "blueberry", "banana", "pineapple", "apricot", "pear", "apple", "nectarine", "peach", "mango", "prickly pear", "lemon", "lime", "orange", "tangerine", "clementine", "grapefruit", "Curaçao orange peel", "lemon zest", "metallic", "vinegar", "copper", "cidery", "champagne-like", "astringent", "chlorine", "phenolic", "white pepper", "clove", "anise", "licorice", "smoked bacon", "fatty", "nutty", "butterscotch", "vanilla", "earthy", "woody", "horsey", "fresh bread", "saddle", "musty", "barnyard",
+		"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
 	}
 
 	return &seedCommand{

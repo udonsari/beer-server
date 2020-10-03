@@ -25,6 +25,69 @@
 ### API 예시
 * Nit.
     * 정확한 Parameter, Body는 각 Controller의 DTO를 봐주시면 좋습니다
+* AppConfig
+    * command : `curl --location --request GET 'http://localhost:8081/api/app-config'`
+        * 클라이언트는 이 API를 호출하여 맥주 Filter UI를 위한 Aroma, Country, Style List를 얻어 초기화 합니다
+    <details>
+    <summary>Response Example</summary>
+    <p>
+
+    ```json
+    {
+        "result": {
+            "aroma_list": [
+                "malty",
+                "bicuity",
+                "caramel",
+                "roast",
+                "coffee",
+                "burnt",
+                "grass",
+                "blueberry",
+                "banana",
+                "pineapple",
+                "apricot",
+                "pear",
+                "apple",
+                "peach",
+                "mango",
+                "lemon",
+                "orange",
+                "grapefruit",
+                "vinegar",
+                "nutty"
+            ],
+            "country_list": [
+                "USA",
+                "Begium",
+                "Genmany",
+                "Korea",
+                "UK",
+                "Czech",
+                "France"
+            ],
+            "style_list": [
+                "Porter",
+                "Stout",
+                "Pilsener",
+                "Light Lager",
+                "Scotch Ale",
+                "Saison",
+                "Pale Ale",
+                "Brown Ale",
+                "India Pale Ale",
+                "Gose",
+                "Quadrupel",
+                "Tripel",
+                "Lambic"
+            ],
+            "min_abv": 0,
+            "max_abv": 15
+        }
+    }
+    ```
+    </p>
+    </details>
 * Beer List
     * command : `curl --location --request GET 'http://localhost:8081/api/beers?min_abv=5&max_abv=6&beer_style=TEST_STYLE_1&aroma=TEST_AROMA_4&cursor=10&max_count=100&sort_by=review_count_desc'`
         * min_abv, max_abv를 명시하여 알콜 도수 범위를 제한할 수 있습니다
@@ -697,6 +760,7 @@
     ```
     </p>
     </details>
+
 
 ---
 ### TODO

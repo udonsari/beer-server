@@ -33,6 +33,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	engine.GET("/api/beer", cont.GetBeer)
 	engine.POST("/api/review", cont.AddReview)
 	engine.GET("/api/review", cont.GetReview)
+	engine.GET("/api/app-config", cont.GetAppConfig)
 	return cont
 }
 
@@ -251,4 +252,30 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 			"result": dtoReviews,
 		},
 	)
+}
+
+func (cont *Controller) GetAppConfig(ctx echo.Context) error {
+	// Currently dummy config
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": cont.getDummyAppConfig(),
+		},
+	)
+}
+
+func (cont *Controller) getDummyAppConfig() dto.AppConfig {
+	return dto.AppConfig{
+		AromaList: []string{
+			"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
+		},
+		CountryList: []string{
+			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
+		},
+		BeerStyleList: []string{
+			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic",
+		},
+		MinABV: 0.0,
+		MaxABV: 15.0,
+	}
 }
