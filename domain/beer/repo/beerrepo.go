@@ -6,9 +6,15 @@ import (
 	"strings"
 
 	"github.com/UdonSari/beer-server/domain/beer"
+	"github.com/UdonSari/beer-server/util"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
+)
+
+const (
+	DefaultMaxCount = int64(20)
+	DefaultCursor   = int64(0)
 )
 
 // TODO *** Attach ElasticSearch ? (Good for search)
@@ -54,7 +60,6 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	log.Printf("beerRepo - GetBeers args : %+v", spew.Sdump(args))
 
 	// TODO Need test really
-
 	var dbBeers []DBBeer
 	baseQuery := r.db
 
@@ -81,12 +86,15 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	}
 
 	// Cursor is just id value
+	cursor := DefaultCursor
 	if args.Cursor != nil {
-		baseQuery = baseQuery.Where("id > ?", *args.Cursor)
+		cursor = *args.Cursor
 	}
+	maxCount := DefaultMaxCount
 	if args.MaxCount != nil {
-		baseQuery = baseQuery.Limit(*args.MaxCount)
+		maxCount = *args.MaxCount
 	}
+	// baseQuery = baseQuery.Limit(maxCount)
 
 	// Sort by
 	if args.SortBy == nil {
@@ -107,9 +115,23 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 		}
 	}
 
+	var limitedDBBeers []DBBeer
+	var i int
+	for ; i < len(dbBeers); i++ {
+		if dbBeers[i].ID == cursor {
+			break
+		}
+	}
+	if cursor == DefaultCursor {
+		i = -1
+	}
+	if i != len(dbBeers) {
+		limitedDBBeers = dbBeers[i+1 : util.Min(i+1+int(maxCount), len(dbBeers))]
+	}
+
 	var beers []beer.Beer
-	for idx := range dbBeers {
-		beers = append(beers, r.mapDBBeerToBeer(dbBeers[idx]))
+	for _, limitedDBBeer := range limitedDBBeers {
+		beers = append(beers, r.mapDBBeerToBeer(limitedDBBeer))
 	}
 	log.Printf("beerRepo - GetBeers return beer len : %+v", len(beers))
 	return beers, nil

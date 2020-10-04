@@ -20,6 +20,7 @@
 * DB : MySQL
 * ORM : gORM 
 * Etc : Docker, Makefile
+* Deployment : 단순히 AWS EC2 인스턴스에서 Git Pull 이후 Docker 빌드 및 실행합니다. (추후 변경)
 
 ---
 ### API 예시
@@ -786,7 +787,7 @@
 * `중요` 맥주 데이터 넣기
     * 현재 문제가 다른 데이터는 찾을 수 있는데 Aroma, Image를 찾기 힘듬 (아니면 수기로 100개 정도 처리해야하나 ?)
     * Style List도 Client와 공유되어야함
-* `중요` AWS 서버 띄우기
+* `중요` AWS 서버 띄우기 - 우선 Simple하게 EC2에 Docker 설치 후 Git Pull 땡겨서 Docker-Compose 이용 (안좋다는거 알지만 아직은 상용이 아니니), Elastic IP 연결
 * 마지막 페이지면, next_cursor null 내려주기
 * Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
 * 전반적으로 Validation 다듬기
@@ -794,3 +795,5 @@
     * DB 자체에 Name Unique 등
 * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
 * Test 구현
+* EC2에서 Static File 서빙이 안되는지 알아보기
+* 처음 호출할 때는 Cursor값 넣지 말고 호출해달라고 하기
