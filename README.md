@@ -796,4 +796,3 @@
 * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
 * Test 구현
 * EC2에서 Static File 서빙이 안되는지 알아보기
-* 처음 호출할 때는 Cursor값 넣지 말고 호출해달라고 하기

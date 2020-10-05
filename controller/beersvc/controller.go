@@ -9,7 +9,6 @@ import (
 	"github.com/UdonSari/beer-server/controller/beersvc/dto"
 	"github.com/UdonSari/beer-server/domain/beer"
 	"github.com/UdonSari/beer-server/domain/user"
-	"github.com/UdonSari/beer-server/util"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/labstack/echo"
 )
@@ -95,11 +94,7 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 
 	// TODO 지금 Cursor 설정이 Controller에도, Repo에도 분포되어 있는 느낌인데 괜찮을까 고찰
 	if len(beerList) != 0 {
-		cursorValue := int64(-1)
-		for _, beer := range beerList {
-			cursorValue = int64(util.Max(int(cursorValue), int(beer.ID)))
-		}
-		res.Cursor = &cursorValue
+		res.Cursor = &beerList[len(beerList)-1].ID
 	}
 
 	log.Printf("Controller - GetBeers() dto beer list %+v", res.ReducedBeer)

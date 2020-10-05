@@ -55,8 +55,17 @@ func (u *useCase) AddReview(review Review) error {
 	if reviewsLen == 0 {
 		newRateAvg = review.Ratio
 	} else {
-		newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio) / (float64(reviewsLen) + 1.0)
+		preReview, err := u.beerRepo.GetReviewByBeerIDAndUserID(review.BeerID, review.UserID)
+		if err != nil {
+			return err
+		}
+		if preReview == nil {
+			newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio) / (float64(reviewsLen) + 1.0)
+		} else {
+			newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio - preReview.Ratio) / (float64(reviewsLen))
+		}
 	}
+
 	err = u.beerRepo.UpdateBeerRateAvg(review.BeerID, newRateAvg)
 	if err != nil {
 		return err
