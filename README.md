@@ -796,4 +796,3 @@
     * DB 자체에 Name Unique 등
 * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
 * Test 구현
-* EC2에서 Static File 서빙이 안되는지 알아보기
