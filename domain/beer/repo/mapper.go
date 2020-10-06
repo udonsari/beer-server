@@ -66,8 +66,11 @@ func (m mapper) splitAndGetArray(str string, maxLen int) []string {
 
 func (m mapper) splitAndGetString(strList []string) string {
 	ret := ""
-	for _, v := range strList {
-		ret += v + listSplitChar
+	for idx, v := range strList {
+		ret += v
+		if idx != len(strList)-1 {
+			ret += listSplitChar
+		}
 	}
 	return ret
 }

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/controller/usersvc"
@@ -34,22 +32,6 @@ type serverImpl struct {
 }
 
 func (s *serverImpl) Init() {
-	var ok bool
-	PORT_STR, ok = os.LookupEnv("PORT")
-	if !ok {
-		log.Printf("failed to find port in env so set 8081")
-		PORT = 8081
-		PORT_STR = "8081"
-	} else {
-		var err error
-		PORT, err = strconv.Atoi(PORT_STR)
-		if err != nil {
-			log.Printf("failed to parse port %+v err %+v", PORT, err)
-			os.Exit(1)
-		}
-	}
-	HOST = "http://127.0.0.1:" + PORT_STR
-
 	log.Printf("# server initialization starts ...")
 	engine := s.engine()
 	s.registerRoute(engine)
@@ -70,6 +52,10 @@ func (s *serverImpl) Start() {
 
 func (s *serverImpl) engine() *echo.Echo {
 	d := NewDependency()
+
+	PORT_STR = d.PortStr()
+	PORT = int(d.PortInt())
+	HOST = fmt.Sprintf("%s:%s", d.Host(), PORT_STR)
 
 	beerRepo := beerRepo.New(d.MysqlDB(true), d.BeerCacheDuration())
 	s.beerUseCase = beer.NewUseCase(beerRepo)

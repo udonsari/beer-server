@@ -9,7 +9,8 @@
 * `make build` : 서버용 Docker Image를 빌드 합니다
 * `make migrate-up` : 서버를 위한 MySQL Table을 Migration 합니다
 * `make migrate-down` : 서버를 위한 MySQL Table을 지웁니다
-* `make seed` : 서버를 위한 Beer Test Data를 넣습니다
+* `make seed-fake` : 서버를 위한 Beer Test Data를 넣습니다
+* `make seed-manual` : 서버를 위한 Beer Manual Data를 넣습니다
 * `make seed` : 서버를 위한 Beer Data를 넣습니다 (현재 일부 Field는 의미 없는 값입니다)
 * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
 * `make test` : 코드 테스트를 실행 합니다

@@ -18,6 +18,9 @@ migrate-up:
 seed-fake:
 	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration seed-fake'
 
+seed-manual:
+	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration seed-manual'
+
 seed:
 	docker-compose run app bash -c './wait-for-it.sh mysqldb:3306 -- /bin/migration seed'
 
@@ -39,3 +42,9 @@ refresh-fake:
 	make migrate-down
 	make migrate-up
 	make seed-fake
+
+refresh-manual:
+	make build
+	make migrate-down
+	make migrate-up
+	make seed-manual

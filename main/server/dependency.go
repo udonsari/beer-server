@@ -14,6 +14,9 @@ type Dependency struct{}
 const (
 	envKeyMySQLDataSourceName = "MYSQL_DATA_SOURCE_NAME"
 	envKeyBeerCacheDuration   = "BEER_CACHE_DURATION"
+	envKeyHost                = "HOST"
+	envKeyPort                = "PORT"
+	envKeyServerEnv           = "SERVER_ENV"
 
 	mysqlMaxConn     = 30
 	mysqlMaxIdleConn = 5
@@ -44,6 +47,22 @@ func (d *Dependency) MysqlDB(logMode bool) *gorm.DB {
 
 func (d *Dependency) BeerCacheDuration() int64 {
 	return d.getInt64Env(envKeyBeerCacheDuration)
+}
+
+func (d *Dependency) Host() string {
+	return d.getEnvOrExit(envKeyHost)
+}
+
+func (d *Dependency) PortStr() string {
+	return d.getEnvOrExit(envKeyPort)
+}
+
+func (d *Dependency) PortInt() int64 {
+	return d.getInt64Env(envKeyPort)
+}
+
+func (d *Dependency) ServerEnv() string {
+	return d.getEnvOrExit(envKeyServerEnv)
 }
 
 func (d *Dependency) getEnvOrExit(key string) string {

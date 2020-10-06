@@ -262,13 +262,13 @@ func (cont *Controller) GetAppConfig(ctx echo.Context) error {
 func (cont *Controller) getDummyAppConfig() dto.AppConfig {
 	return dto.AppConfig{
 		AromaList: []string{
-			"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
+			"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty",
 		},
 		CountryList: []string{
 			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
 		},
 		BeerStyleList: []string{
-			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic",
+			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic", "Rye Amber", "Kolsch",
 		},
 		MinABV: 0.0,
 		MaxABV: 15.0,
