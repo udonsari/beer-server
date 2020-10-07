@@ -41,7 +41,7 @@ func (c *seedManualCommand) main(ctx *cli.Context) error {
 
 	beers := c.GetBeers()
 	for _, beer := range beers {
-		if err := bu.Addbeer(beer); err != nil {
+		if err := bu.AddBeer(beer); err != nil {
 			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(beer), spew.Sdump(err))
 		}
 	}

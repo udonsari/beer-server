@@ -37,7 +37,6 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 }
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
-	// TODO GetBeers, GetBeer 중복 제거
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.User()

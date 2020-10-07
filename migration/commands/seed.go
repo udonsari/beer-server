@@ -67,7 +67,7 @@ func (c *seedCommand) main(ctx *cli.Context) error {
 		}
 		beer := c.mapper.MapDataBeerToBeer(dataBeer)
 		log.Printf("trying to put %vth beer %v", i, beer)
-		if err := bu.Addbeer(beer); err != nil {
+		if err := bu.AddBeer(beer); err != nil {
 			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(beer), spew.Sdump(err))
 		}
 		beerCount++

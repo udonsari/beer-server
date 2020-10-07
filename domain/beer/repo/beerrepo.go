@@ -33,7 +33,7 @@ func New(db *gorm.DB, cacheDuration int64) *beerRepo {
 	}
 }
 
-func (r *beerRepo) Addbeer(beer beer.Beer) error {
+func (r *beerRepo) AddBeer(beer beer.Beer) error {
 	dbBeer := r.mapper.mapBeerToDBBeer(beer)
 	res := r.db.Create(&dbBeer)
 	return res.Error

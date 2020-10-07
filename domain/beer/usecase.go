@@ -1,6 +1,7 @@
 package beer
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -8,7 +9,7 @@ import (
 )
 
 type UseCase interface {
-	Addbeer(beer Beer) error
+	AddBeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
 	GetBeer(beerID int64) (*Beer, error)
 	AddReview(review Review) error
@@ -29,8 +30,8 @@ func NewUseCase(beerRepo BeerRepo) UseCase {
 	}
 }
 
-func (u *useCase) Addbeer(beer Beer) error {
-	return u.beerRepo.Addbeer(beer)
+func (u *useCase) AddBeer(beer Beer) error {
+	return u.beerRepo.AddBeer(beer)
 }
 
 func (u *useCase) GetBeers(args BeerQueryArgs) ([]Beer, error) {
@@ -45,14 +46,12 @@ func (u *useCase) AddReview(review Review) error {
 	beer, err := u.GetBeer(review.BeerID)
 	if err != nil {
 		return err
-	}
-	reviewsLen, err := u.beerRepo.GetReviewCount(review.BeerID)
-	if err != nil {
-		return err
+	} else if beer == nil {
+		return fmt.Errorf("no matching beer to add review")
 	}
 
 	var newRateAvg float64
-	if reviewsLen == 0 {
+	if beer.ReviewCount == 0 {
 		newRateAvg = review.Ratio
 	} else {
 		preReview, err := u.beerRepo.GetReviewByBeerIDAndUserID(review.BeerID, review.UserID)
@@ -60,9 +59,9 @@ func (u *useCase) AddReview(review Review) error {
 			return err
 		}
 		if preReview == nil {
-			newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio) / (float64(reviewsLen) + 1.0)
+			newRateAvg = (beer.RateAvg*float64(beer.ReviewCount) + review.Ratio) / (float64(beer.ReviewCount) + 1.0)
 		} else {
-			newRateAvg = (beer.RateAvg*float64(reviewsLen) + review.Ratio - preReview.Ratio) / (float64(reviewsLen))
+			newRateAvg = (beer.RateAvg*float64(beer.ReviewCount) + review.Ratio - preReview.Ratio) / (float64(beer.ReviewCount))
 		}
 	}
 

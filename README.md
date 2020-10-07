@@ -14,7 +14,113 @@
 * `make seed` : 서버를 위한 Beer Data를 넣습니다 (현재 일부 Field는 의미 없는 값입니다)
 * `make up` : 서버를 실행합니다. 이후 `localhost:8081`로 접근 가능합니다 
 * `make test` : 코드 테스트를 실행 합니다
+    <details>
+    <summary>Current Test Coverage</summary>
+    <p>
 
+    ```bash
+    go test ./... -coverprofile cover.out
+
+
+    ?       github.com/UdonSari/beer-server/controller      [no test files]
+    ok      github.com/UdonSari/beer-server/controller/beersvc      0.749s  coverage: 0.0% of statements [no tests to run]
+    ?       github.com/UdonSari/beer-server/controller/beersvc/dto  [no test files]
+    ok      github.com/UdonSari/beer-server/controller/usersvc      0.567s  coverage: 0.0% of statements [no tests to run]
+    ?       github.com/UdonSari/beer-server/controller/usersvc/dto  [no test files]
+    ok      github.com/UdonSari/beer-server/domain/beer     1.011s  coverage: 88.1% of statements
+    ok      github.com/UdonSari/beer-server/domain/beer/repo        0.386s  coverage: 0.0% of statements [no tests to run]
+    ok      github.com/UdonSari/beer-server/domain/user     0.375s  coverage: 0.0% of statements [no tests to run]
+    ok      github.com/UdonSari/beer-server/domain/user/repo        0.993s  coverage: 0.0% of statements [no tests to run]
+    ?       github.com/UdonSari/beer-server/main    [no test files]
+    ok      github.com/UdonSari/beer-server/main/server     1.167s  coverage: 0.0% of statements [no tests to run]
+    ?       github.com/UdonSari/beer-server/migration       [no test files]
+    ?       github.com/UdonSari/beer-server/migration/commands      [no test files]
+    ?       github.com/UdonSari/beer-server/util    [no test files]
+    ```
+
+    ```bash
+    go tool cover -func cover.out
+
+
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:25:    NewController                   0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:39:    GetBeers                        0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:109:   GetBeer                         0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:186:   AddReview                       0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:217:   GetReview                       0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:251:   GetAppConfig                    0.0%
+    github.com/UdonSari/beer-server/controller/beersvc/controller.go:261:   getDummyAppConfig               0.0%
+    github.com/UdonSari/beer-server/controller/usersvc/controller.go:21:    NewController                   0.0%
+    github.com/UdonSari/beer-server/controller/usersvc/controller.go:33:    SignInKakao                     0.0%
+    github.com/UdonSari/beer-server/controller/usersvc/controller.go:47:    GetToken                        0.0%
+    github.com/UdonSari/beer-server/controller/usersvc/controller.go:64:    GetUser                         0.0%
+    github.com/UdonSari/beer-server/controller/usersvc/controller.go:79:    UpdateNickName                  0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:29:        New                             0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:36:        AddBeer                         0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:43:        GetBeer                         0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:59:        GetBeers                        0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:140:       UpdateBeerRateAvg               0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:145:       AddReview                       0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:171:       GetReviews                      0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:190:       GetReviewCount                  0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:196:       GetReviewByBeerIDAndUserID      0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/beerrepo.go:211:       GetReviewsByUserID              0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:12:          mapDBReviewToReview             0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:23:          mapReviewToDBReview             0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:32:          mapBeerToDBBeer                 0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:46:          mapDBBeerToBeer                 0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:62:          splitAndGetArray                0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/mapper.go:67:          splitAndGetString               0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/model.go:29:           TableName                       0.0%
+    github.com/UdonSari/beer-server/domain/beer/repo/model.go:42:           TableName                       0.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:26:              NewUseCase                      100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:33:              AddBeer                         100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:37:              GetBeers                        100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:41:              GetBeer                         100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:45:              AddReview                       88.9%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:76:              GetReviews                      100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:80:              GetReviewsByUserID              100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:84:              GetReviewByBeerIDAndUserID      100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:88:              GetRelatedBeers                 100.0%
+    github.com/UdonSari/beer-server/domain/beer/usecase.go:123:             getRelatedBeersWithQueryArgs    100.0%
+    github.com/UdonSari/beer-server/domain/beer/valueobject.go:45:          IsValidSortBy                   0.0%
+    github.com/UdonSari/beer-server/domain/user/mapper.go:14:               NewMapper                       0.0%
+    github.com/UdonSari/beer-server/domain/user/mapper.go:18:               MapKakaoUserToUser              0.0%
+    github.com/UdonSari/beer-server/domain/user/mapper.go:30:               getRandomNickName               0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/mapper.go:7:           mapDBUserToUser                 0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/mapper.go:19:          mapUserToDBUser                 0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/model.go:16:           TableName                       0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/userrepo.go:20:        New                             0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/userrepo.go:26:        GetUserByExternalID             0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/userrepo.go:43:        GetUserByID                     0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/userrepo.go:58:        CreateUser                      0.0%
+    github.com/UdonSari/beer-server/domain/user/repo/userrepo.go:69:        UpdateNickName                  0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:37:              NewUseCase                      0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:45:              CreateUser                      0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:49:              GetToken                        0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:82:              GetUser                         0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:145:             GetUserByID                     0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:149:             GetUserByExternalID             0.0%
+    github.com/UdonSari/beer-server/domain/user/usecase.go:153:             UpdateNickName                  0.0%
+    github.com/UdonSari/beer-server/main/server/customcontext.go:15:        User                            0.0%
+    github.com/UdonSari/beer-server/main/server/customcontext.go:28:        UserMust                        0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:25:           NewDependency                   0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:29:           MysqlDB                         0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:48:           BeerCacheDuration               0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:52:           Host                            0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:56:           PortStr                         0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:60:           PortInt                         0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:64:           ServerEnv                       0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:68:           getEnvOrExit                    0.0%
+    github.com/UdonSari/beer-server/main/server/dependency.go:76:           getInt64Env                     0.0%
+    github.com/UdonSari/beer-server/main/server/server.go:32:               Init                            0.0%
+    github.com/UdonSari/beer-server/main/server/server.go:38:               Start                           0.0%
+    github.com/UdonSari/beer-server/main/server/server.go:51:               engine                          0.0%
+    github.com/UdonSari/beer-server/main/server/server.go:90:               registerRoute                   0.0%
+    github.com/UdonSari/beer-server/main/server/server.go:95:               New                             0.0%
+    total:                                                                  (statements)                    10.1%
+    ```
+    </p>
+    </details>
 ---
 ### Stack
 * Language : Golang
@@ -796,3 +902,4 @@
     * DB 자체에 Name Unique 등
 * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
 * Test 구현
+* 맥파이의 경우 그냥 맥주 그림이 있길래, 그거 복붙. 다만 Thumbnail로는 쓰되, 다른 이미지들은 어떻게 얻을지 애매함

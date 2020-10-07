@@ -59,7 +59,7 @@ func (c *seedFakeCommand) main(ctx *cli.Context) error {
 	for i := 0; i < beerNumber; i++ {
 		beer := getRandomBeer()
 		log.Printf("trying to put %vth beer %v", i, beer)
-		if err := bu.Addbeer(beer); err != nil {
+		if err := bu.AddBeer(beer); err != nil {
 			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(beer), spew.Sdump(err))
 		}
 	}
