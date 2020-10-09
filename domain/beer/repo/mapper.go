@@ -39,7 +39,6 @@ func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
 		AromaList:      m.splitAndGetString(beer.Aroma),
 		ImageURLList:   m.splitAndGetString(beer.ImageURL),
 		ThumbnailImage: beer.ThumbnailImage,
-		RateAvg:        beer.RateAvg,
 	}
 }
 

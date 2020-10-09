@@ -20,9 +20,13 @@ type ucTestSuite struct {
 	uc beer.UseCase
 }
 
-func (ts *ucTestSuite) BeforeTest(_, _ string) {
+func (ts *ucTestSuite) SetupTest() {
 	ts.r = new(mockBeerRepo)
 	ts.uc = beer.NewUseCase(ts.r)
+}
+
+func (ts *ucTestSuite) AfterTest() {
+	ts.r.AssertExpectations(ts.T())
 }
 
 func (ts *ucTestSuite) Test_AddBeer() {
@@ -245,10 +249,6 @@ func (ts *ucTestSuite) Test_GetRelatedBeers() {
 		ts.NoError(err)
 		// Output check is omitted. For it's randomness in beer order
 	})
-}
-
-func (ts *ucTestSuite) AfterTest(_, _ string) {
-	ts.r.AssertExpectations(ts.T())
 }
 
 type mockBeerRepo struct {

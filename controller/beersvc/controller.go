@@ -249,7 +249,7 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetAppConfig(ctx echo.Context) error {
-	// Currently dummy config
+	// TODO Currently dummy config, later change to all aroma, country, beer style in DB
 	return ctx.JSON(
 		http.StatusOK,
 		map[string]interface{}{
