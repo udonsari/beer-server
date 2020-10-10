@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/controller/usersvc"
@@ -17,10 +15,6 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-var PORT int
-var PORT_STR string
-var HOST string
-
 type Server interface {
 	Init()
 	Start()
@@ -31,25 +25,11 @@ type serverImpl struct {
 	_server     *http.Server
 	beerUseCase beer.UseCase
 	userUseCase user.UseCase
+	host        string
+	port        string
 }
 
 func (s *serverImpl) Init() {
-	var ok bool
-	PORT_STR, ok = os.LookupEnv("PORT")
-	if !ok {
-		log.Printf("failed to find port in env so set 8081")
-		PORT = 8081
-		PORT_STR = "8081"
-	} else {
-		var err error
-		PORT, err = strconv.Atoi(PORT_STR)
-		if err != nil {
-			log.Printf("failed to parse port %+v err %+v", PORT, err)
-			os.Exit(1)
-		}
-	}
-	HOST = "http://127.0.0.1:" + PORT_STR
-
 	log.Printf("# server initialization starts ...")
 	engine := s.engine()
 	s.registerRoute(engine)
@@ -57,11 +37,11 @@ func (s *serverImpl) Init() {
 
 func (s *serverImpl) Start() {
 	s._server = &http.Server{
-		Addr:    fmt.Sprintf(":%d", PORT),
+		Addr:    fmt.Sprintf(":%s", s.port),
 		Handler: s._engine,
 	}
 
-	log.Printf("# server up starts at port %+v ...", PORT)
+	log.Printf("# server up starts at port %+v ...", s.port)
 
 	if err := s._server.ListenAndServe(); err != http.ErrServerClosed {
 		log.Printf("# server failed with err : %+v", err)
@@ -71,10 +51,13 @@ func (s *serverImpl) Start() {
 func (s *serverImpl) engine() *echo.Echo {
 	d := NewDependency()
 
+	s.port = d.PortStr()
+	s.host = fmt.Sprintf("%s:%s", d.Host(), s.port)
+
 	beerRepo := beerRepo.New(d.MysqlDB(true), d.BeerCacheDuration())
 	s.beerUseCase = beer.NewUseCase(beerRepo)
 	userRepo := userRepo.New(d.MysqlDB(true))
-	s.userUseCase = user.NewUseCase(userRepo, HOST, PORT_STR)
+	s.userUseCase = user.NewUseCase(userRepo, s.host, s.port)
 
 	if s._engine != nil {
 		return s._engine
@@ -106,7 +89,7 @@ func (s *serverImpl) engine() *echo.Echo {
 
 func (s *serverImpl) registerRoute(engine *echo.Echo) {
 	beersvc.NewController(engine, s.beerUseCase, s.userUseCase)
-	usersvc.NewController(engine, s.userUseCase, HOST)
+	usersvc.NewController(engine, s.userUseCase, s.host)
 }
 
 func New() Server {

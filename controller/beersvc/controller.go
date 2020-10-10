@@ -37,7 +37,6 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 }
 
 func (cont *Controller) GetBeers(ctx echo.Context) error {
-	// TODO GetBeers, GetBeer 중복 제거
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
 	user, err := _ctx.User()
@@ -250,7 +249,7 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetAppConfig(ctx echo.Context) error {
-	// Currently dummy config
+	// TODO Currently dummy config, later change to all aroma, country, beer style in DB
 	return ctx.JSON(
 		http.StatusOK,
 		map[string]interface{}{
@@ -262,13 +261,13 @@ func (cont *Controller) GetAppConfig(ctx echo.Context) error {
 func (cont *Controller) getDummyAppConfig() dto.AppConfig {
 	return dto.AppConfig{
 		AromaList: []string{
-			"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
+			"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty", "Pineapple", "Melon", "Blackberry", "Chocolate", "Cherry", "Lemon", "Passion Fruit", "Grapefruit",
 		},
 		CountryList: []string{
 			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
 		},
 		BeerStyleList: []string{
-			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic",
+			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic", "Rye Amber", "Kolsch", "Witbier", "Red Ale", "New England IPA", "Sour Ale", "ETC",
 		},
 		MinABV: 0.0,
 		MaxABV: 15.0,

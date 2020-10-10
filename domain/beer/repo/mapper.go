@@ -39,7 +39,6 @@ func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
 		AromaList:      m.splitAndGetString(beer.Aroma),
 		ImageURLList:   m.splitAndGetString(beer.ImageURL),
 		ThumbnailImage: beer.ThumbnailImage,
-		RateAvg:        beer.RateAvg,
 	}
 }
 
@@ -66,8 +65,11 @@ func (m mapper) splitAndGetArray(str string, maxLen int) []string {
 
 func (m mapper) splitAndGetString(strList []string) string {
 	ret := ""
-	for _, v := range strList {
-		ret += v + listSplitChar
+	for idx, v := range strList {
+		ret += v
+		if idx != len(strList)-1 {
+			ret += listSplitChar
+		}
 	}
 	return ret
 }

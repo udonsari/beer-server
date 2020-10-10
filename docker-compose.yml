@@ -11,6 +11,7 @@ services:
       - 8081:8081
     environment:
       - SERVER_ENV=local
+      - HOST=http://127.0.0.1
       - PORT=8081
       - MYSQL_DATA_SOURCE_NAME=beerserver:beerserver@tcp(mysqldb:3306)/beerserver?parseTime=true
       - BEER_CACHE_DURATION=10

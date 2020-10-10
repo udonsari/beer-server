@@ -1,7 +1,7 @@
 package beer
 
 type BeerRepo interface {
-	Addbeer(beer Beer) error
+	AddBeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
 	GetBeer(beerID int64) (*Beer, error)
 	UpdateBeerRateAvg(beerID int64, rateAvg float64) error
