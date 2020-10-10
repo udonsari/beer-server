@@ -9,7 +9,6 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/Buzzvil/buzzlib-go/core"
 	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc"
 	"github.com/UdonSari/beer-server/domain/beer"
@@ -28,7 +27,7 @@ func TestControllerSuite(t *testing.T) {
 type controllerTestSuite struct {
 	suite.Suite
 	controller  beersvc.Controller
-	engine      *core.Engine
+	engine      *echo.Echo
 	beerUseCase *mockBeerUseCase
 	userUseCase *mockUserUseCase
 }
