@@ -50,9 +50,13 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		log.Printf("Controller - GetBeers() - Failed to bind %+v", err)
 		return err
 	}
-	if err = beer.IsValidSortBy(req.SortBy); err != nil {
+	if err = cont.isValidSortBy(req.SortBy); err != nil {
 		return err
 	}
+	if (req.MinABV != nil && req.MaxABV == nil) || (req.MinABV == nil && req.MaxABV != nil) {
+		return InvalidArgsError{Message: "MinABV and MaxABV should come together"}
+	}
+
 	log.Printf("Controller - GetBeers() - Param %+v", spew.Sdump(req))
 
 	args, err := cont.mapper.MapGetBeersRequestToBeerQueryArgs(req)
@@ -186,11 +190,11 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 func (cont *Controller) AddReview(ctx echo.Context) error {
 	log.Printf("Controller - AddReview() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.UserMust()
+	usr, err := _ctx.UserMust()
 	if err != nil {
 		return err
-	} else if user == nil || user.ID == 0 {
-		return fmt.Errorf("user not found")
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
 	}
 
 	var req dto.AddReviewRequest
@@ -205,7 +209,7 @@ func (cont *Controller) AddReview(ctx echo.Context) error {
 			BeerID:  req.BeerID,
 			Content: req.Content,
 			Ratio:   req.Ratio,
-			UserID:  user.ID,
+			UserID:  usr.ID,
 		},
 	)
 	if err != nil {
@@ -217,14 +221,14 @@ func (cont *Controller) AddReview(ctx echo.Context) error {
 func (cont *Controller) GetReview(ctx echo.Context) error {
 	log.Printf("Controller - GetReview() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.UserMust()
+	usr, err := _ctx.UserMust()
 	if err != nil {
 		return err
-	} else if user == nil || user.ID == 0 {
-		return fmt.Errorf("user not found")
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
 	}
 
-	reviews, err := cont.beerUseCase.GetReviewsByUserID(user.ID)
+	reviews, err := cont.beerUseCase.GetReviewsByUserID(usr.ID)
 	if err != nil {
 		return err
 	}
@@ -236,7 +240,7 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 			return err
 		}
 		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
-		dtoReview := cont.mapper.MapReviewToDTOReview(review, user.NickName, dtoReducedBeer)
+		dtoReview := cont.mapper.MapReviewToDTOReview(review, usr.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
 
@@ -272,4 +276,14 @@ func (cont *Controller) getDummyAppConfig() dto.AppConfig {
 		MinABV: 0.0,
 		MaxABV: 15.0,
 	}
+}
+
+func (cont *Controller) isValidSortBy(val *string) error {
+	if val == nil {
+		return nil
+	}
+	if *val == beer.SortByRateAvgAsc || *val == beer.SortByRateAvgDesc || *val == beer.SortByReviewCountAsc || *val == beer.SortByReviewCountDesc {
+		return nil
+	}
+	return InvalidArgsError{fmt.Sprintf("invalid sortBy %+v", *val)}
 }

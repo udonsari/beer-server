@@ -2,7 +2,6 @@ package user
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -28,17 +27,19 @@ type UseCase interface {
 }
 
 type useCase struct {
-	userRepo UserRepo
-	mapper   mapper
-	port     string
-	host     string
+	userRepo  UserRepo
+	mapper    mapper
+	port      string
+	host      string
+	serverEnv string
 }
 
-func NewUseCase(userRepo UserRepo, host string, port string) UseCase {
+func NewUseCase(userRepo UserRepo, host string, port string, serverEnv string) UseCase {
 	return &useCase{
-		userRepo: userRepo,
-		host:     host,
-		port:     port,
+		userRepo:  userRepo,
+		host:      host,
+		port:      port,
+		serverEnv: serverEnv,
 	}
 }
 
@@ -69,7 +70,7 @@ func (u *useCase) GetToken(code string) (*Token, error) {
 	if err != nil {
 		return nil, err
 	} else if kakaoToken.AccessToken == "" {
-		return nil, errors.New("failed to get access token from kakao")
+		return nil, ProviderError{"failed to get access token from kakao"}
 	}
 
 	log.Printf("UseCase - GetToken() - respBytes : %+v", string(respBytes))
@@ -104,8 +105,10 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 		log.Printf("UseCase - GetUser() - unmarshal error %v", err)
 		return nil, err
 	} else if kakaoUser.ID == 0 {
-		// [연동 참조] 아래 주석을 풀어줍니다
-		// return nil, errors.New("failed to get user from kakao")
+		// Dev Env일시 카카오 통신을 무시하고 계정 생성. Prod Env인 경우만 동작
+		if u.serverEnv == "prod" {
+			return nil, InvalidTokenError{Message: "failed to get user from kakao"}
+		}
 	}
 
 	log.Printf("UseCase - GetUser() - respBytes : %+v", string(respBytes))
@@ -119,7 +122,7 @@ func (u *useCase) GetUser(accessToken string) (*User, error) {
 
 	// Goroutine 처리 고민했지만 user를 반환 해야하므로 동기 처리
 	if user == nil {
-		// Unique 조건에서 걸릴수 있으니 Retry
+		// Random Nickname이 Unique 조건에서 걸릴수 있으니 Retry
 		for i := 0; i < createRetryCount; i++ {
 			err = u.CreateUser(
 				u.mapper.MapKakaoUserToUser(kakaoUser),

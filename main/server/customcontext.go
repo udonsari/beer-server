@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/UdonSari/beer-server/domain/user"
 	"github.com/labstack/echo"
 )
@@ -27,11 +25,11 @@ func (ctx CustomContext) User() (*user.User, error) {
 }
 
 func (ctx CustomContext) UserMust() (*user.User, error) {
-	user, err := ctx.User()
+	usr, err := ctx.User()
 	if err != nil {
 		return nil, err
-	} else if user == nil || user.ID == 0 {
-		return nil, fmt.Errorf("failed to find user")
+	} else if usr == nil || usr.ID == 0 {
+		return nil, user.UserNotFoundError{}
 	}
-	return user, nil
+	return usr, nil
 }

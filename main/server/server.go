@@ -27,6 +27,7 @@ type serverImpl struct {
 	userUseCase user.UseCase
 	host        string
 	port        string
+	errorMapper errorMapper
 }
 
 func (s *serverImpl) Init() {
@@ -57,7 +58,7 @@ func (s *serverImpl) engine() *echo.Echo {
 	beerRepo := beerRepo.New(d.MysqlDB(true), d.BeerCacheDuration())
 	s.beerUseCase = beer.NewUseCase(beerRepo)
 	userRepo := userRepo.New(d.MysqlDB(true))
-	s.userUseCase = user.NewUseCase(userRepo, s.host, s.port)
+	s.userUseCase = user.NewUseCase(userRepo, s.host, s.port, d.ServerEnv())
 
 	if s._engine != nil {
 		return s._engine
@@ -75,10 +76,12 @@ func (s *serverImpl) engine() *echo.Echo {
 	)
 	s._engine.Static("/static", "static")
 
+	// Error Middleware. Care all domain errors
 	s._engine.HTTPErrorHandler = func(err error, c echo.Context) {
 		log.Printf(c.Path(), err.Error())
+
 		retErr := echo.HTTPError{
-			Code:    http.StatusInternalServerError, // Currently all error returns with 500
+			Code:    s.errorMapper.fromDomainErrorToStatusCode(err),
 			Message: err.Error(),
 		}
 		s._engine.DefaultHTTPErrorHandler(&retErr, c)

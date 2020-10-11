@@ -75,10 +75,6 @@ func (m *Mapper) MapReviewToDTOReview(review beer.Review, nickName string, beer 
 }
 
 func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.BeerQueryArgs, error) {
-	if (req.MinABV != nil && req.MaxABV == nil) || (req.MinABV == nil && req.MaxABV != nil) {
-		return nil, NewMapperError("MinABV and MaxABV should come together")
-	}
-
 	var args beer.BeerQueryArgs
 	if req.MinABV != nil {
 		args.ABVInterval = &beer.ABVInterval{

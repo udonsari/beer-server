@@ -54,7 +54,7 @@ func (c *seedFakeCommand) main(ctx *cli.Context) error {
 	br := beerRepo.New(c.d.MysqlDB(false), 100)
 	ur := userRepo.New(c.d.MysqlDB(false))
 	bu := beer.NewUseCase(br)
-	uu := user.NewUseCase(ur, "", "")
+	uu := user.NewUseCase(ur, "", "", "")
 
 	for i := 0; i < beerNumber; i++ {
 		beer := getRandomBeer()
