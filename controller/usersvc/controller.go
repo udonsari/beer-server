@@ -1,6 +1,7 @@
 package usersvc
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -79,7 +80,7 @@ func (cont *Controller) GetUser(ctx echo.Context) error {
 func (cont *Controller) UpdateNickName(ctx echo.Context) error {
 	log.Printf("Controller - UpdateNickName() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.UserMust()
+	usr, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}
@@ -89,9 +90,12 @@ func (cont *Controller) UpdateNickName(ctx echo.Context) error {
 		log.Printf("Controller - UpdateNickName() - Failed to bind %+v", err)
 		return err
 	}
+	if len(req.NickName) > user.MaxNicknameLen {
+		return InvalidArgsError{fmt.Sprintf("nickname length should be under %v", user.MaxNicknameLen)}
+	}
 	log.Printf("Controller - UpdateNickName() - Body %+v", spew.Sdump(req))
 
-	err = cont.userUseCase.UpdateNickName(user.ID, req.NickName)
+	err = cont.userUseCase.UpdateNickName(usr.ID, req.NickName)
 	if err != nil {
 		return err
 	}

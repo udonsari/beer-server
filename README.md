@@ -891,19 +891,14 @@
 
 ---
 ### On Going
-* `중요` 맥주 데이터 넣기
-    * 현재 문제가 다른 데이터는 찾을 수 있는데 Aroma, Image를 찾기 힘듬 (아니면 수기로 100개 정도 처리해야하나 ?)
-    * Style List도 Client와 공유되어야함
-* `중요` AWS 서버 띄우기 - 우선 Simple하게 EC2에 Docker 설치 후 Git Pull 땡겨서 Docker-Compose 이용 (안좋다는거 알지만 아직은 상용이 아니니), Elastic IP 연결
+* `Done` 10자로 닉네임 제한을 걸면 좋겠다
+* `Done` 쿼리시 공백이 오면 어떻게 되지 ? -> 잘 됨
+* `Done` 맥주 사이즈 정하고 (360 * 260), 그에 맞게 데이터 가공 하기 (이거 미정님 가이드 받고 배워두기. 이미지 사이즈에 맞게 재가공 하는 것, 누끼 따는 것 ... 그 외 미정님한테 도움될만한거 묻기 ) + 데이터 몇개 까지 (100개) ?
+* `Done` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
+* 미정님한테 맥주 이미지 수정 부탁 -> 완료시 반영하여 서버 업데이트
 * 마지막 페이지면, next_cursor null 내려주기
-* Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
 * 전반적으로 Validation 다듬기
     * 한 맥주에 두 번 댓글 금지
     * DB 자체에 Name Unique 등
 * Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
 * Test 구현 ( + Integration Test)
-* 맥파이의 경우 그냥 맥주 그림이 있길래, 그거 복붙. 다만 Thumbnail로는 쓰되, 다른 이미지들은 어떻게 얻을지 애매함
-* `WIP` 10자로 닉네임 제한을 걸면 좋겠다
-* `WIP` 데이터만 나름 열심히 찾자 (국가도 골고루 하자) - 이미지 없는건 기본 이미지로 ! 다만 향이 ..., 이미지를 캔이나 병으로 더 잘 찾자 
-* `WIP` 쿼리시 공백이 오면 어떻게 되지 ?
-* `WIP` 플레이그라운드 맥주들 이미지 치우침

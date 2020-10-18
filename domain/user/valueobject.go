@@ -10,6 +10,8 @@ const KakaoUserURL = "https://kapi.kakao.com/v2/user/me"
 // [연동 참조] 아래 값을 카카오 개발자 페이지에서 얻어 세팅합니다. 웹의 경우 REST API KEY를 설정합니다.
 const KakaoAppKey = "FILLIT"
 
+const MaxNicknameLen = 10
+
 type Token struct {
 	AccessToken string `json:"access_token"`
 }

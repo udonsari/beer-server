@@ -1,9 +1,5 @@
 package beer
 
-import (
-	"fmt"
-)
-
 const (
 	relatedBeersMaxLen = 3
 )
@@ -40,14 +36,4 @@ type RelatedBeers struct {
 	AromaRelatedBeer    []Beer
 	StyleRelatedBeer    []Beer
 	RandomlyRelatedBeer []Beer
-}
-
-func IsValidSortBy(val *string) error {
-	if val == nil {
-		return nil
-	}
-	if *val == SortByRateAvgAsc || *val == SortByRateAvgDesc || *val == SortByReviewCountAsc || *val == SortByReviewCountDesc {
-		return nil
-	}
-	return fmt.Errorf("invalid sortBy %+v", *val)
 }

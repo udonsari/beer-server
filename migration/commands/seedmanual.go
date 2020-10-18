@@ -172,16 +172,6 @@ func (c *seedManualCommand) GetBeers() []beer.Beer {
 			ThumbnailImage: fmt.Sprintf("%s/%s", c.hostStatic, "thebooth_taegangpaleale.png"),
 		},
 		{
-			Name:           "대강 페일 에일",
-			Brewery:        "더부스",
-			ABV:            4.6,
-			Country:        "Korea",
-			BeerStyle:      "Pale Ale",
-			Aroma:          []string{"Orange"},
-			ImageURL:       []string{fmt.Sprintf("%s/%s", c.hostStatic, "thebooth_kieukipa.png")},
-			ThumbnailImage: fmt.Sprintf("%s/%s", c.hostStatic, "thebooth_taegangpaleale.png"),
-		},
-		{
 			Name:           "윗 마이 엑스",
 			Brewery:        "더부스",
 			ABV:            5.5,
@@ -270,16 +260,6 @@ func (c *seedManualCommand) GetBeers() []beer.Beer {
 			Aroma:          []string{"Orange", "Pineapple"},
 			ImageURL:       []string{fmt.Sprintf("%s/%s", c.hostStatic, "craftbros_lifeipacheguevara.png")},
 			ThumbnailImage: fmt.Sprintf("%s/%s", c.hostStatic, "craftbros_lifeipacheguevara.png"),
-		},
-		{
-			Name:           "홉스플래쉬 IPA",
-			Brewery:        "플레이그라운드",
-			ABV:            6.7,
-			Country:        "Korea",
-			BeerStyle:      "New England IPA",
-			Aroma:          []string{"Orange", "Pineapple"},
-			ImageURL:       []string{fmt.Sprintf("%s/%s", c.hostStatic, "playground_hopsplash.png")},
-			ThumbnailImage: fmt.Sprintf("%s/%s", c.hostStatic, "playground_hopsplash.png"),
 		},
 		{
 			Name:           "홉스플래쉬 IPA",
