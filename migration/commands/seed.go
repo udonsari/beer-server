@@ -19,20 +19,23 @@ import (
 var fakeAromaList []string
 
 type seedCommand struct {
-	d *server.Dependency
+	d          *server.Dependency
+	hostStatic string
 	mapper
 }
 
 func NewSeedCommand(d *server.Dependency) *seedCommand {
 	rand.Seed(time.Now().UnixNano())
+	hostStatic := fmt.Sprintf("%s:%s/static", d.Host(), d.PortStr())
 
 	// From https://winning-homebrew.com/beer-flavor-descriptors.html
-	fakeAromaList = []string{
-		"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
-	}
+	// fakeAromaList = []string{
+	// 	"malty", "caramel", "roast", "coffee", "grass", "banana", "apple", "peach", "mango", "orange", "grapefruit", "vinegar", "nutty",
+	// }
 
 	return &seedCommand{
-		d: d,
+		d:          d,
+		hostStatic: hostStatic,
 	}
 }
 
@@ -66,6 +69,11 @@ func (c *seedCommand) main(ctx *cli.Context) error {
 			continue
 		}
 		beer := c.mapper.MapDataBeerToBeer(dataBeer)
+
+		// Override
+		beer.ImageURL = []string{fmt.Sprintf("%s/%s", c.hostStatic, "basic_beer_image.png")}
+		beer.ThumbnailImage = fmt.Sprintf("%s/%s", c.hostStatic, "basic_beer_image.png")
+
 		log.Printf("trying to put %vth beer %v", i, beer)
 		if err := bu.AddBeer(beer); err != nil {
 			log.Fatalf("failed to add %+v with err %+v", spew.Sdump(beer), spew.Sdump(err))
@@ -102,30 +110,8 @@ type mapper struct{}
 
 func (m *mapper) MapDataBeerToBeer(dataBeer Beer) beer.Beer {
 	aroma := []string{}
-	for i := 0; i < 3; i++ {
-		newAroma := ""
-		for true {
-			notDuplicatedCount := 0
-			newAroma = fakeAromaList[rand.Int()%len(fakeAromaList)]
-			for ; notDuplicatedCount < i; notDuplicatedCount++ {
-				if newAroma == aroma[notDuplicatedCount] {
-					break
-				}
-			}
-
-			if notDuplicatedCount == i {
-				break
-			}
-		}
-		aroma = append(aroma, newAroma)
-	}
-
 	imageURL := []string{}
-	for i := 0; i < 5; i++ {
-		imageURL = append(imageURL, fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight))
-	}
-
-	thumbnailImage := fmt.Sprintf("https://picsum.photos/%v/%v", imageWidth, imageHeight)
+	thumbnailImage := ""
 
 	return beer.Beer{
 		Name:      dataBeer.Fields.Name,

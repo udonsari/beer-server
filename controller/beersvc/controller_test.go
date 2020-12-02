@@ -173,13 +173,13 @@ func (ts *controllerTestSuite) Test_GetAppConfig() {
 	output := map[string]interface{}{
 		"result": map[string]interface{}{
 			"aroma_list": []interface{}{
-				"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty",
+				"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty", "Pineapple", "Melon", "Blackberry", "Chocolate", "Cherry", "Lemon", "Passion Fruit", "Grapefruit",
 			},
 			"country_list": []interface{}{
 				"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
 			},
 			"style_list": []interface{}{
-				"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic", "Rye Amber", "Kolsch",
+				"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic", "Rye Amber", "Kolsch", "Witbier", "Red Ale", "New England IPA", "Sour Ale", "ETC",
 			},
 			"min_abv": 0.0,
 			"max_abv": 15.0,
