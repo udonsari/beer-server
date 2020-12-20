@@ -124,22 +124,3 @@ func (Ts *repoTestSuite) equalBeer(b1 beer.Beer, b2 beer.Beer) bool {
 
 	return ret
 }
-
-// Example
-// func (ts *repoTestSuite) Test_GetByAppID() {
-// 	req := "SELECT * FROM `point_app_config` WHERE (`point_app_config`.`app_id` = ?) ORDER BY `point_app_config`.`id` ASC LIMIT 1"
-
-// 	ts.Run("Not Cached", func() {
-// 		var appConfig point.AppConfig
-// 		ts.NoError(faker.FakeData(&appConfig))
-
-// 		ts.mock.ExpectQuery(ts.FixedFullRe(req)).WithArgs(appConfig.AppID).WillReturnRows((&test.MockRowBuilder{}).Add(*ts.mapEntityToPointConfig(appConfig)).Build())
-
-// 		ctx := context.Background()
-
-// 		res, err := ts.repo.GetByAppID(ctx, appConfig.AppID)
-// 		ts.NoError(err)
-// 		ts.Equal(appConfig, *res)
-// 	})
-
-// }

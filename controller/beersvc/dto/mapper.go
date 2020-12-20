@@ -5,6 +5,11 @@ import (
 	"github.com/UdonSari/beer-server/util"
 )
 
+const (
+	DefaultMaxCount = int64(20)
+	DefaultCursor   = int64(0)
+)
+
 type Mapper struct {
 }
 
@@ -88,8 +93,17 @@ func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.B
 	args.BeerStyle = req.BeerStyle
 	args.Aroma = req.Aroma
 
-	args.Cursor = req.Cursor
-	args.MaxCount = req.MaxCount
+	if req.Cursor == nil {
+		args.Cursor = DefaultCursor
+	} else {
+		args.Cursor = *req.Cursor
+	}
+
+	if req.MaxCount == nil {
+		args.MaxCount = DefaultMaxCount
+	} else {
+		args.MaxCount = *req.MaxCount
+	}
 	args.SortBy = req.SortBy
 
 	return &args, nil

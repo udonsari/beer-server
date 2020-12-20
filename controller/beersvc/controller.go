@@ -97,7 +97,16 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 
 	// TODO 지금 Cursor 설정이 Controller에도, Repo에도 분포되어 있는 느낌인데 괜찮을까 고찰
 	if len(beerList) != 0 {
-		res.Cursor = &beerList[len(beerList)-1].ID
+		args.MaxCount++
+		lastPageCheckBeersList, err := cont.beerUseCase.GetBeers(*args)
+		if err != nil {
+			return err
+		}
+
+		// 만약 maxCount + 1개 로 제한을 걸고 쿼리했을때 이전과 같은 개수의 맥주가 나온다면 마지막 페이지
+		if len(lastPageCheckBeersList) != len(beerList) {
+			res.Cursor = &beerList[len(beerList)-1].ID
+		}
 	}
 
 	log.Printf("Controller - GetBeers() dto beer list %+v", res.ReducedBeer)

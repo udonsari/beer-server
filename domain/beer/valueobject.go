@@ -21,8 +21,8 @@ type BeerQueryArgs struct {
 	Aroma     []string
 
 	// Cursor Pagination
-	Cursor   *int64
-	MaxCount *int64
+	Cursor   int64
+	MaxCount int64
 
 	SortBy *string
 }

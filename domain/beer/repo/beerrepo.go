@@ -12,11 +12,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-const (
-	DefaultMaxCount = int64(20)
-	DefaultCursor   = int64(0)
-)
-
 // TODO *** Attach ElasticSearch ? (Good for search)
 // TODO *** Add Cache (Beer not change much). Currently only added duration (만약 BeerQueryArgs를 Key로 한다면 얼마나 메모리가 들어갈까 ?)
 // Gorm 사용시 함수 인자로 구조체를 넣는것과, Key와 Value 넣는 것 구분해라. 동작이 이상한 경우 있음 (ex. Single Column 업데이트와 Batch Column 업데이트)
@@ -86,14 +81,8 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 	}
 
 	// Cursor is just id value
-	cursor := DefaultCursor
-	if args.Cursor != nil {
-		cursor = *args.Cursor
-	}
-	maxCount := DefaultMaxCount
-	if args.MaxCount != nil {
-		maxCount = *args.MaxCount
-	}
+	cursor := args.Cursor
+	maxCount := args.MaxCount
 	// baseQuery = baseQuery.Limit(maxCount)
 
 	// Sort by
@@ -117,13 +106,14 @@ func (r *beerRepo) GetBeers(args beer.BeerQueryArgs) ([]beer.Beer, error) {
 
 	var limitedDBBeers []DBBeer
 	var i int
-	for ; i < len(dbBeers); i++ {
-		if dbBeers[i].ID == cursor {
-			break
-		}
-	}
-	if cursor == DefaultCursor {
+	if cursor <= 0 {
 		i = -1
+	} else {
+		for ; i < len(dbBeers); i++ {
+			if dbBeers[i].ID == cursor {
+				break
+			}
+		}
 	}
 	if i != len(dbBeers) {
 		limitedDBBeers = dbBeers[i+1 : util.Min(i+1+int(maxCount), len(dbBeers))]
