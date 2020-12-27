@@ -33,6 +33,8 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	engine.POST("/api/review", cont.AddReview)
 	engine.GET("/api/review", cont.GetReview)
 	engine.GET("/api/app-config", cont.GetAppConfig)
+	engine.POST("/api/favorite", cont.AddFavorite)
+	engine.GET("/api/favorite", cont.GetFavorites)
 	return cont
 }
 
@@ -69,6 +71,16 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 		return err
 	}
 
+	favoriteList, err := cont.beerUseCase.GetFavorites(user.ID)
+	if err != nil {
+		return err
+	}
+	var favoriteMap map[int64]bool
+	for _, favorite := range favoriteList {
+		// If none, flag would be initial false
+		favoriteMap[favorite.BeerID] = favorite.Flag
+	}
+
 	var res dto.GetBeersResponse
 	for idx, br := range beerList {
 		log.Printf("Controller - GetBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
@@ -86,12 +98,12 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 			if err != nil {
 				return err
 			}
-			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favoriteMap[br.ID])
 			dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
 			dtoReviews = append(dtoReviews, *dtoReview)
 		}
 
-		dtoBeer := cont.mapper.MapBeerToDTReducedBeer(br)
+		dtoBeer := cont.mapper.MapBeerToDTReducedBeer(br, favoriteMap[br.ID])
 		res.ReducedBeer = append(res.ReducedBeer, dtoBeer)
 	}
 
@@ -140,6 +152,16 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 		return err
 	}
 
+	favoriteList, err := cont.beerUseCase.GetFavorites(user.ID)
+	if err != nil {
+		return err
+	}
+	var favoriteMap map[int64]bool
+	for _, favorite := range favoriteList {
+		// If none, flag would be initial false
+		favoriteMap[favorite.BeerID] = favorite.Flag
+	}
+
 	var res dto.GetBeerResponse
 	var dtoReviewOwner *dto.Review
 	var dtoReviews []dto.Review
@@ -156,7 +178,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 		if err != nil {
 			return err
 		}
-		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favoriteMap[beer.ID])
 		dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
@@ -171,7 +193,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 			if err != nil {
 				return err
 			}
-			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer)
+			dtoReviewOwnerBeer := cont.mapper.MapBeerToDTReducedBeer(*reviewOwnerBeer, favoriteMap[br.ID])
 			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(*reviewOwner, user.NickName, dtoReviewOwnerBeer)
 		}
 	}
@@ -242,13 +264,23 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 		return err
 	}
 
+	favoriteList, err := cont.beerUseCase.GetFavorites(usr.ID)
+	if err != nil {
+		return err
+	}
+	var favoriteMap map[int64]bool
+	for _, favorite := range favoriteList {
+		// If none, flag would be initial false
+		favoriteMap[favorite.BeerID] = favorite.Flag
+	}
+
 	var dtoReviews []dto.Review
 	for _, review := range reviews {
 		beer, err := cont.beerUseCase.GetBeer(review.BeerID)
 		if err != nil {
 			return err
 		}
-		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer)
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favoriteMap[beer.ID])
 		dtoReview := cont.mapper.MapReviewToDTOReview(review, usr.NickName, dtoReducedBeer)
 		dtoReviews = append(dtoReviews, *dtoReview)
 	}
@@ -271,6 +303,72 @@ func (cont *Controller) GetAppConfig(ctx echo.Context) error {
 	)
 }
 
+func (cont *Controller) AddFavorite(ctx echo.Context) error {
+	log.Printf("Controller - AddFavorite() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	usr, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
+	}
+
+	var req dto.AddFavoriteRequest
+	if err := cont.Bind(ctx, &req); err != nil {
+		log.Printf("Controller - AddFavorite() - Failed to bind %+v", err)
+		return err
+	}
+	log.Printf("Controller - AddFavorite() - Param %+v", spew.Sdump(req))
+
+	err = cont.beerUseCase.AddFavorite(
+		beer.Favorite{
+			BeerID: req.BeerID,
+			Flag:   req.Flag,
+			UserID: usr.ID,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return ctx.NoContent(http.StatusOK)
+}
+
+func (cont *Controller) GetFavorites(ctx echo.Context) error {
+	log.Printf("Controller - GetFavorites() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	usr, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
+	}
+
+	favorites, err := cont.beerUseCase.GetFavorites(usr.ID)
+	if err != nil {
+		return err
+	}
+
+	var dtoFavorites []dto.Favorite
+	for _, favorite := range favorites {
+		beer, err := cont.beerUseCase.GetBeer(favorite.BeerID)
+		if err != nil {
+			return err
+		}
+		dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favorite.Flag)
+		dtoFavorite := cont.mapper.MapFavoriteToDTOFavorite(favorite, dtoReducedBeer)
+		dtoFavorites = append(dtoFavorites, *dtoFavorite)
+	}
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": dtoFavorites,
+		},
+	)
+
+}
+
+// TODO Replac real aroma in db
 func (cont *Controller) getDummyAppConfig() dto.AppConfig {
 	return dto.AppConfig{
 		AromaList: []string{

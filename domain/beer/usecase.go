@@ -17,6 +17,8 @@ type UseCase interface {
 	GetReviewsByUserID(userID int64) ([]Review, error)
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 	GetRelatedBeers(beerID int64) (*RelatedBeers, error)
+	AddFavorite(avorite Favorite) error
+	GetFavorites(userID int64) ([]Favorite, error)
 }
 
 type useCase struct {
@@ -130,4 +132,12 @@ func (u *useCase) getRelatedBeersWithQueryArgs(args BeerQueryArgs) ([]Beer, erro
 		relatedBeers[i], relatedBeers[j] = relatedBeers[j], relatedBeers[i]
 	})
 	return relatedBeers[0:util.Min(len(relatedBeers), relatedBeersMaxLen)], nil
+}
+
+func (u *useCase) AddFavorite(favorite Favorite) error {
+	return u.beerRepo.AddFavorite(favorite)
+}
+
+func (u *useCase) GetFavorites(userID int64) ([]Favorite, error) {
+	return u.beerRepo.GetFavorites(userID)
 }

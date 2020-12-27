@@ -10,4 +10,6 @@ type BeerRepo interface {
 	GetReviewsByUserID(userID int64) ([]Review, error)
 	GetReviewCount(beerID int64) (int64, error)
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
+	AddFavorite(favorite Favorite) error
+	GetFavorites(userID int64) ([]Favorite, error)
 }

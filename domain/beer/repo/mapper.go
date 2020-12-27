@@ -58,6 +58,14 @@ func (m mapper) mapDBBeerToBeer(dbBeer DBBeer) beer.Beer {
 	}
 }
 
+func (m mapper) mapDBFavoriteToFavorite(dbFavorite DBFavorite) beer.Favorite {
+	return beer.Favorite{
+		BeerID: dbFavorite.BeerID,
+		Flag:   dbFavorite.Flag,
+		UserID: dbFavorite.UserID,
+	}
+}
+
 func (m mapper) splitAndGetArray(str string, maxLen int) []string {
 	list := strings.Split(str, listSplitChar)
 	return list[0:util.Min(len(list), maxLen)]

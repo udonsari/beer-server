@@ -216,3 +216,38 @@ func (r *beerRepo) GetReviewsByUserID(userID int64) ([]beer.Review, error) {
 	}
 	return reviews, nil
 }
+
+func (r *beerRepo) AddFavorite(favorite beer.Favorite) error {
+	// Upsert
+	var err error
+	if err = r.db.Model(&DBFavorite{}).Where("beer_id = ? AND user_id = ?", favorite.BeerID, favorite.UserID).Update("flag", true).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			dbFavorite := DBFavorite{
+				BeerID: favorite.BeerID,
+				Flag:   favorite.Flag,
+				UserID: favorite.UserID,
+			}
+			err = r.db.Create(&dbFavorite).Error
+		}
+	}
+	return err
+}
+
+func (r *beerRepo) GetFavorites(userID int64) ([]beer.Favorite, error) {
+	query := DBFavorite{UserID: userID}
+	var dbFavorites []DBFavorite
+	if err := r.db.Where(&query).Find(&dbFavorites).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get favorites. userID id: %v", userID))
+		}
+	}
+
+	var favorites []beer.Favorite
+	for _, dbFavorite := range dbFavorites {
+		favorites = append(favorites, r.mapper.mapDBFavoriteToFavorite(dbFavorite))
+	}
+	return favorites, nil
+}

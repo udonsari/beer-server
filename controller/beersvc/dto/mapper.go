@@ -36,7 +36,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReview
 	}
 }
 
-func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
+func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer, favoriteFlag bool) ReducedBeer {
 	return ReducedBeer{
 		ID:             beer.ID,
 		Name:           beer.Name,
@@ -48,22 +48,25 @@ func (m *Mapper) MapBeerToDTReducedBeer(beer beer.Beer) ReducedBeer {
 		ThumbnailImage: beer.ThumbnailImage,
 		RateAvg:        util.Floor(beer.RateAvg, 2),
 		ReviewCount:    beer.ReviewCount,
+		FavoriteFlag:   favoriteFlag,
 	}
 }
 
-func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers) *RelatedBeers {
+// TODO 여기에 Favorite Flag를 넣는게 이상할 수 있다. 어디는 mapper 밖에서 처리하고, 어디는 넘겨서 mapper에서 처리하고
+// favoriteMap : [beer, favoriteFlag]
+func (m *Mapper) MapRelatedBeersToDTORelatedBeers(relatedBeer *beer.RelatedBeers, favoriteMap map[int64]bool) *RelatedBeers {
 	if relatedBeer == nil {
 		return nil
 	}
 	var dtoRelatedBeers RelatedBeers
 	for _, b := range relatedBeer.AromaRelatedBeer {
-		dtoRelatedBeers.AromaRelatedBeer = append(dtoRelatedBeers.AromaRelatedBeer, m.MapBeerToDTReducedBeer(b))
+		dtoRelatedBeers.AromaRelatedBeer = append(dtoRelatedBeers.AromaRelatedBeer, m.MapBeerToDTReducedBeer(b, favoriteMap[b.ID]))
 	}
 	for _, b := range relatedBeer.StyleRelatedBeer {
-		dtoRelatedBeers.StyleRelatedBeer = append(dtoRelatedBeers.StyleRelatedBeer, m.MapBeerToDTReducedBeer(b))
+		dtoRelatedBeers.StyleRelatedBeer = append(dtoRelatedBeers.StyleRelatedBeer, m.MapBeerToDTReducedBeer(b, favoriteMap[b.ID]))
 	}
 	for _, b := range relatedBeer.RandomlyRelatedBeer {
-		dtoRelatedBeers.RandomlyRelatedBeer = append(dtoRelatedBeers.RandomlyRelatedBeer, m.MapBeerToDTReducedBeer(b))
+		dtoRelatedBeers.RandomlyRelatedBeer = append(dtoRelatedBeers.RandomlyRelatedBeer, m.MapBeerToDTReducedBeer(b, favoriteMap[b.ID]))
 	}
 	return &dtoRelatedBeers
 }
@@ -76,6 +79,14 @@ func (m *Mapper) MapReviewToDTOReview(review beer.Review, nickName string, beer 
 		UserID:      review.UserID,
 		NickName:    nickName,
 		CreatedAt:   review.CreatedAt,
+	}
+}
+
+func (m *Mapper) MapFavoriteToDTOFavorite(favorite beer.Favorite, beer ReducedBeer) *Favorite {
+	return &Favorite{
+		ReducedBeer: beer,
+		UserID:      favorite.UserID,
+		BeerID:      favorite.BeerID,
 	}
 }
 
