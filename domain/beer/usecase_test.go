@@ -299,3 +299,13 @@ func (r *mockBeerRepo) GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*
 	ret := r.Called(beerID, userID)
 	return ret.Get(0).(*beer.Review), ret.Error(1)
 }
+
+func (r *mockBeerRepo) AddFavorite(favorite beer.Favorite) error {
+	ret := r.Called(favorite)
+	return ret.Error(0)
+}
+
+func (r *mockBeerRepo) GetFavorites(userID int64) ([]beer.Favorite, error) {
+	ret := r.Called(userID)
+	return ret.Get(0).([]beer.Favorite), ret.Error(1)
+}

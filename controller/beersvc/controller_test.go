@@ -273,6 +273,16 @@ func (u *mockBeerUseCase) GetRelatedBeers(beerID int64) (*beer.RelatedBeers, err
 	return ret.Get(0).(*beer.RelatedBeers), ret.Error(1)
 }
 
+func (u *mockBeerUseCase) AddFavorite(favorite beer.Favorite) error {
+	ret := u.Called(favorite)
+	return ret.Error(0)
+}
+
+func (u *mockBeerUseCase) GetFavorites(userID int64) ([]beer.Favorite, error) {
+	ret := u.Called(userID)
+	return ret.Get(0).([]beer.Favorite), ret.Error(1)
+}
+
 type mockUserUseCase struct {
 	mock.Mock
 }

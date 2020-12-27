@@ -30,7 +30,7 @@ func (c *migrationDownCommand) Command() *cli.Command {
 }
 
 func (c *migrationDownCommand) main(ctx *cli.Context) error {
-	result := c.d.MysqlDB(true).DropTableIfExists(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{})
+	result := c.d.MysqlDB(true).DropTableIfExists(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{}, beerRepo.DBFavorite{})
 	if result.Error != nil {
 		log.Printf("failed migration down %+v", result.Error)
 	} else {

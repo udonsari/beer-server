@@ -29,6 +29,21 @@ func (m mapper) mapReviewToDBReview(review beer.Review) DBReview {
 	}
 }
 
+func (m mapper) mapFavoriteToDBFavorite(favorite beer.Favorite) DBFavorite {
+	return DBFavorite{
+		BeerID: favorite.BeerID,
+		Flag:   favorite.Flag,
+		UserID: favorite.UserID,
+	}
+}
+
+func (m mapper) mapDBFavoriteToFavorite(dbFavorite DBFavorite) beer.Favorite {
+	return beer.Favorite{
+		BeerID: dbFavorite.BeerID,
+		Flag:   dbFavorite.Flag,
+		UserID: dbFavorite.UserID,
+	}
+}
 func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
 	return DBBeer{
 		Name:           beer.Name,

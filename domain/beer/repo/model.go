@@ -42,3 +42,14 @@ type DBReview struct {
 func (DBReview) TableName() string {
 	return "beer_review"
 }
+
+type DBFavorite struct {
+	ID     int64
+	BeerID int64
+	Flag   bool
+	UserID int64
+}
+
+func (DBFavorite) TableName() string {
+	return "beer_favorite"
+}

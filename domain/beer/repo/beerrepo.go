@@ -216,3 +216,57 @@ func (r *beerRepo) GetReviewsByUserID(userID int64) ([]beer.Review, error) {
 	}
 	return reviews, nil
 }
+
+func (r *beerRepo) AddFavorite(favorite beer.Favorite) error {
+	// Upsert Implementation
+	preFavorite, err := r.getFavorite(favorite.BeerID, favorite.UserID)
+	if err != nil {
+		return err
+	}
+
+	if preFavorite == nil {
+		dbFavorite := r.mapper.mapFavoriteToDBFavorite(favorite)
+		res := r.db.Create(&dbFavorite)
+		// https://github.com/go-gorm/gorm/issues/2903
+		// Gorm V1에서는 Duplicate Error를 정의하지 않음
+		if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
+			return errors.New("already added favorite")
+		}
+		return res.Error
+	}
+	res := r.db.Model(&DBFavorite{}).Where("beer_id = ? AND user_id = ?", favorite.BeerID, favorite.UserID).Update("flag", favorite.Flag)
+	return res.Error
+}
+
+func (r *beerRepo) GetFavorites(userID int64) ([]beer.Favorite, error) {
+	query := DBFavorite{UserID: userID}
+	var dbFavorites []DBFavorite
+	if err := r.db.Where(&query).Find(&dbFavorites).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get favorites. userID id: %v", userID))
+		}
+	}
+
+	var favorites []beer.Favorite
+	for _, dbFavorite := range dbFavorites {
+		favorites = append(favorites, r.mapper.mapDBFavoriteToFavorite(dbFavorite))
+	}
+	return favorites, nil
+}
+
+func (r *beerRepo) getFavorite(beerID int64, userID int64) (*DBFavorite, error) {
+	query := DBFavorite{BeerID: beerID, UserID: userID}
+	var dbFavorite DBFavorite
+	if err := r.db.Where(&query).First(&dbFavorite).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get favorites. beer id: %v, user id : %v", beerID, userID))
+		}
+	}
+	return &dbFavorite, nil
+}

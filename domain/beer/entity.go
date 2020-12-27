@@ -24,3 +24,10 @@ type Review struct {
 	UserID    int64
 	CreatedAt time.Time
 }
+
+type Favorite struct {
+	ID     int64
+	BeerID int64
+	Flag   bool
+	UserID int64
+}

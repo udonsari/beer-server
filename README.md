@@ -868,6 +868,62 @@
     ```
     </p>
     </details>
+* Add Favorite
+    * command : `curl --location --request POST 'http://localhost:8081/api/favorite' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg' --form 'beer_id="10"'  --form 'flag="false"'`
+    * Response : None
+* Get Favorites
+    * command : `curl --location --request GET 'http://localhost:8081/api/favorite' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg'`
+    <details>
+    <summary>Response Example</summary>
+    <p>
+
+    ```json
+    {
+        "result": [
+            {
+                "beer": {
+                    "id": 11,
+                    "name": "LIFE IPA 체게바라",
+                    "brewery": "크래프트브로스",
+                    "abv": 6.5,
+                    "country": "Korea",
+                    "beer_style": "New England IPA",
+                    "aroma": [
+                        "Orange",
+                        "Pineapple"
+                    ],
+                    "thumbnail_image": "http://127.0.0.1:8081/static/craftbros_lifeipacheguevara.png",
+                    "rate_avg": 0,
+                    "review_count": 0,
+                    "favorite_flag": true
+                },
+                "user_id": 1,
+                "beer_id": 11
+            },
+            {
+                "beer": {
+                    "id": 15,
+                    "name": "헌치백 세션 IPA",
+                    "brewery": "플레이그라운드",
+                    "abv": 4,
+                    "country": "Korea",
+                    "beer_style": "India Pale Ale",
+                    "aroma": [
+                        "Orange"
+                    ],
+                    "thumbnail_image": "http://127.0.0.1:8081/static/playground_hunchback.png",
+                    "rate_avg": 0,
+                    "review_count": 0,
+                    "favorite_flag": true
+                },
+                "user_id": 1,
+                "beer_id": 15
+            }
+        ]
+    }
+    ```
+    </p>
+    </details>
 
 
 ---
@@ -891,9 +947,8 @@
 
 * `중요` RDS 분리
 * `중요` 비슷한 맥주에 해당 맥주가 보인다.
-* `중요` 즐겨찾기 (추가, 자기가 즐겨찾기 한 맥주 보기)
 * `중요` 이미지 가운데 정렬
-* `중요` 마지막 페이지면, next_cursor null 내려주기
+* `중요` 실제 DB에 있는 향 리스트 내려주기
 
 * `중요` 게시글 CRUD, 게시글 디테일, 댓글
 * `중요` 와인그래프. App 찾아보기. 대댓글.
@@ -901,12 +956,18 @@
 
 ---
 ### On Going
+* 미정님한테 맥주 이미지 수정 부탁 -> 완료시 반영하여 서버 업데이트
+* 전반적으로 Validation 다듬기
+    * DB 자체에 Name Unique 등
+* Not fsound일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
+* Test 구현 ( + Integration Test)
+
+---
+
+### Done
+* `Done` 즐겨찾기 (추가 및 제거, 자기가 즐겨찾기 한 맥주 보기, 맥주 내려줄 때 자기가 즐겨찾기 했는지 체크)
 * `Done` 10자로 닉네임 제한을 걸면 좋겠다
 * `Done` 쿼리시 공백이 오면 어떻게 되지 ? -> 잘 됨
 * `Done` 맥주 사이즈 정하고 (360 * 260), 그에 맞게 데이터 가공 하기 (이거 미정님 가이드 받고 배워두기. 이미지 사이즈에 맞게 재가공 하는 것, 누끼 따는 것 ... 그 외 미정님한테 도움될만한거 묻기 ) + 데이터 몇개 까지 (100개) ?
 * `Done` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
-* 미정님한테 맥주 이미지 수정 부탁 -> 완료시 반영하여 서버 업데이트
-* 전반적으로 Validation 다듬기
-    * DB 자체에 Name Unique 등
-* Not found일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
-* Test 구현 ( + Integration Test)
+* `Done` 마지막 페이지면, next_cursor null 내려주기

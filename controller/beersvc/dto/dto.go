@@ -47,6 +47,11 @@ type GetReviewResponse struct {
 	Reviews []Review `json:"reviews"`
 }
 
+type AddFavoriteRequest struct {
+	BeerID int64 `form:"beer_id"`
+	Flag   bool  `form:"flag"`
+}
+
 type Beer struct {
 	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Reviews는 Pagination ?
 	ID             int64    `json:"id"`
@@ -59,10 +64,11 @@ type Beer struct {
 	ImageURL       []string `json:"image_url"`
 	ThumbnailImage string   `json:"thumbnail_image"`
 
-	Reviews     []Review `json:"reviews"`
-	RateAvg     float64  `json:"rate_avg"`
-	ReviewCount int64    `json:"review_count"`
-	ReviewOwner *Review  `json:"review_owner,omitempty"`
+	Reviews      []Review `json:"reviews"`
+	RateAvg      float64  `json:"rate_avg"`
+	ReviewCount  int64    `json:"review_count"`
+	ReviewOwner  *Review  `json:"review_owner,omitempty"`
+	FavoriteFlag bool     `json:"favorite_flag"`
 }
 
 type RelatedBeers struct {
@@ -82,6 +88,7 @@ type ReducedBeer struct {
 	ThumbnailImage string   `json:"thumbnail_image"`
 	RateAvg        float64  `json:"rate_avg"`
 	ReviewCount    int64    `json:"review_count"`
+	FavoriteFlag   bool     `json:"favorite_flag"`
 }
 
 type Review struct {
@@ -91,6 +98,12 @@ type Review struct {
 	UserID      int64       `json:"user_id"`
 	NickName    string      `json:"nickname"`
 	CreatedAt   time.Time   `json:"created_at"`
+}
+
+type Favorite struct {
+	ReducedBeer ReducedBeer `json:"beer"`
+	UserID      int64       `json:"user_id"`
+	BeerID      int64       `json:"beer_id"`
 }
 
 type AppConfig struct {
