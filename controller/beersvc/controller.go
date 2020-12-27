@@ -203,7 +203,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	dtorRelatedBeers := cont.mapper.MapRelatedBeersToDTORelatedBeers(relatedBeers)
+	dtorRelatedBeers := cont.mapper.MapRelatedBeersToDTORelatedBeers(relatedBeers, favoriteMap)
 
 	res.Beer = dtoBeer
 	res.RelatedBeers = dtorRelatedBeers
