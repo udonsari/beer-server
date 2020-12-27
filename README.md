@@ -219,55 +219,54 @@
         "result": {
             "beers": [
                 {
-                    "id": 21,
-                    "name": "TEST_NAME_2849071904095419409",
-                    "brewery": "TEST_BREWAERY_78",
-                    "abv": 5.8,
-                    "country": "TEST_COUNTRY_7",
-                    "beer_style": "TEST_STYLE_1",
+                    "id": 9,
+                    "name": "유레카 서울",
+                    "brewery": "더부스",
+                    "abv": 6.5,
+                    "country": "Korea",
+                    "beer_style": "ETC",
                     "aroma": [
-                        "TEST_AROMA_0",
-                        "TEST_AROMA_2",
-                        "TEST_AROMA_4"
+                        "Peach"
                     ],
-                    "thumbnail_image": "https://picsum.photos/320/480",
-                    "rate_avg": 3.31,
-                    "review_count": 12
+                    "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_eurekaseoul.png",
+                    "rate_avg": 0,
+                    "review_count": 0,
+                    "favorite_flag": false
                 },
                 {
-                    "id": 77,
-                    "name": "TEST_NAME_5394966169249731379",
-                    "brewery": "TEST_BREWAERY_3",
-                    "abv": 5.98,
-                    "country": "TEST_COUNTRY_8",
-                    "beer_style": "TEST_STYLE_1",
+                    "id": 10,
+                    "name": "LIFE IPA 마릴린먼로",
+                    "brewery": "크래프트브로스",
+                    "abv": 6.5,
+                    "country": "Korea",
+                    "beer_style": "New England IPA",
                     "aroma": [
-                        "TEST_AROMA_4",
-                        "TEST_AROMA_1",
-                        "TEST_AROMA_0"
+                        "Orange",
+                        "Pineapple"
                     ],
-                    "thumbnail_image": "https://picsum.photos/320/480",
-                    "rate_avg": 3.42,
-                    "review_count": 10
+                    "thumbnail_image": "http://127.0.0.1:8081/static/craftbros_lifeipamarilynmonroe.png",
+                    "rate_avg": 4.5,
+                    "review_count": 1,
+                    "favorite_flag": false
                 },
                 {
-                    "id": 87,
-                    "name": "TEST_NAME_4256757104347050020",
-                    "brewery": "TEST_BREWAERY_94",
-                    "abv": 5.44,
-                    "country": "TEST_COUNTRY_6",
-                    "beer_style": "TEST_STYLE_1",
+                    "id": 11,
+                    "name": "LIFE IPA 체게바라",
+                    "brewery": "크래프트브로스",
+                    "abv": 6.5,
+                    "country": "Korea",
+                    "beer_style": "New England IPA",
                     "aroma": [
-                        "TEST_AROMA_2",
-                        "TEST_AROMA_3",
-                        "TEST_AROMA_4"
+                        "Orange",
+                        "Pineapple"
                     ],
-                    "thumbnail_image": "https://picsum.photos/320/480",
-                    "rate_avg": 3.48,
-                    "review_count": 7
+                    "thumbnail_image": "http://127.0.0.1:8081/static/craftbros_lifeipacheguevara.png",
+                    "rate_avg": 0,
+                    "review_count": 0,
+                    "favorite_flag": true
                 }
             ],
-            "next_cursor": 87
+            "next_cursor": 11
         }
     }
     ```
@@ -284,484 +283,110 @@
     {
         "result": {
             "beer": {
-                "id": 30,
-                "name": "TEST_NAME_4137880265740432633",
-                "brewery": "TEST_BREWAERY_86",
-                "abv": 2.85,
-                "country": "TEST_COUNTRY_0",
-                "beer_style": "TEST_STYLE_4",
+                "id": 8,
+                "name": "LGBTQ Smoothie IPA",
+                "brewery": "더부스",
+                "abv": 7.5,
+                "country": "Korea",
+                "beer_style": "India Pale Ale",
                 "aroma": [
-                    "TEST_AROMA_1",
-                    "TEST_AROMA_2",
-                    "TEST_AROMA_1"
+                    "Blackberry"
                 ],
                 "image_url": [
-                    "https://picsum.photos/320/480",
-                    "https://picsum.photos/320/480",
-                    "https://picsum.photos/320/480",
-                    "https://picsum.photos/320/480",
-                    "https://picsum.photos/320/480"
+                    "http://127.0.0.1:8081/static/thebooth_lgbtqsmoothieipa.png"
                 ],
-                "thumbnail_image": "https://picsum.photos/320/480",
-                "reviews": [
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_2555230713823100474",
-                        "ratio": 2.96,
-                        "user_id": 18,
-                        "nickname": "TEST_NICKNAME_2865495138003791683"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_2013357936790157503",
-                        "ratio": 3.01,
-                        "user_id": 20,
-                        "nickname": "TEST_NICKNAME_9184890450261584277"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_1358455889342800964",
-                        "ratio": 3.06,
-                        "user_id": 28,
-                        "nickname": "TEST_NICKNAME_646140600132340307"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_6022346283882884485",
-                        "ratio": 3.12,
-                        "user_id": 30,
-                        "nickname": "TEST_NICKNAME_1667525891839284287"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_2816295878650713538",
-                        "ratio": 4.68,
-                        "user_id": 33,
-                        "nickname": "TEST_NICKNAME_2286410554287199904"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_6329023503589439101",
-                        "ratio": 4.51,
-                        "user_id": 36,
-                        "nickname": "TEST_NICKNAME_5632003992361113250"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_1913796447148404678",
-                        "ratio": 4.12,
-                        "user_id": 44,
-                        "nickname": "TEST_NICKNAME_5620865574498117321"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_5578483510544644879",
-                        "ratio": 3.54,
-                        "user_id": 47,
-                        "nickname": "TEST_NICKNAME_8641665568174466744"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_4292709364036596106",
-                        "ratio": 4.45,
-                        "user_id": 63,
-                        "nickname": "TEST_NICKNAME_6244968064195571465"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_8203359081787729076",
-                        "ratio": 2.97,
-                        "user_id": 65,
-                        "nickname": "TEST_NICKNAME_4908180098745379294"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_8483473889263299268",
-                        "ratio": 3.04,
-                        "user_id": 78,
-                        "nickname": "TEST_NICKNAME_1744005986462343804"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_2050597700810524849",
-                        "ratio": 4.55,
-                        "user_id": 86,
-                        "nickname": "TEST_NICKNAME_2883257872911213149"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "TEST_CONTENT_7976959338559980696",
-                        "ratio": 3.35,
-                        "user_id": 99,
-                        "nickname": "TEST_NICKNAME_8219864395714989725"
-                    },
-                    {
-                        "beer": {
-                            "id": 30,
-                            "name": "TEST_NAME_4137880265740432633",
-                            "brewery": "TEST_BREWAERY_86",
-                            "abv": 2.85,
-                            "country": "TEST_COUNTRY_0",
-                            "beer_style": "TEST_STYLE_4",
-                            "aroma": [
-                                "TEST_AROMA_1",
-                                "TEST_AROMA_2",
-                                "TEST_AROMA_1"
-                            ],
-                            "thumbnail_image": "https://picsum.photos/320/480",
-                            "rate_avg": 3.64
-                        },
-                        "content": "JUST_3",
-                        "ratio": 4.2,
-                        "user_id": 101,
-                        "nickname": "Crownbig-1976380737404962472"
-                    }
-                ],
-                "rate_avg": 3.64,
-                "review_owner": {
-                    "beer": {
-                        "id": 30,
-                        "name": "TEST_NAME_4137880265740432633",
-                        "brewery": "TEST_BREWAERY_86",
-                        "abv": 2.85,
-                        "country": "TEST_COUNTRY_0",
-                        "beer_style": "TEST_STYLE_4",
-                        "aroma": [
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_2",
-                            "TEST_AROMA_1"
-                        ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.64
-                    },
-                    "content": "JUST_3",
-                    "ratio": 4.2,
-                    "user_id": 101,
-                    "nickname": "Crownbig-1976380737404962472"
-                }
+                "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_lgbtqsmoothieipa.png",
+                "reviews": null,
+                "rate_avg": 0,
+                "review_count": 0,
+                "favorite_flag": false
             },
             "related_beers": {
-                "aroma_related": [
-                    {
-                        "id": 57,
-                        "name": "TEST_NAME_368154985306580155",
-                        "brewery": "TEST_BREWAERY_64",
-                        "abv": 8.81,
-                        "country": "TEST_COUNTRY_7",
-                        "beer_style": "TEST_STYLE_2",
-                        "aroma": [
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_2",
-                            "TEST_AROMA_0"
-                        ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.37
-                    },
-                    {
-                        "id": 4,
-                        "name": "TEST_NAME_2636780126543146206",
-                        "brewery": "TEST_BREWAERY_86",
-                        "abv": 2.27,
-                        "country": "TEST_COUNTRY_3",
-                        "beer_style": "TEST_STYLE_1",
-                        "aroma": [
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_2",
-                            "TEST_AROMA_1"
-                        ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 2.79
-                    },
-                    {
-                        "id": 45,
-                        "name": "TEST_NAME_1297920382251099222",
-                        "brewery": "TEST_BREWAERY_41",
-                        "abv": 8.48,
-                        "country": "TEST_COUNTRY_5",
-                        "beer_style": "TEST_STYLE_0",
-                        "aroma": [
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_0",
-                            "TEST_AROMA_2"
-                        ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.6
-                    }
-                ],
+                "aroma_related": null,
                 "style_related": [
                     {
-                        "id": 60,
-                        "name": "TEST_NAME_6490111625982009499",
-                        "brewery": "TEST_BREWAERY_71",
-                        "abv": 3.03,
-                        "country": "TEST_COUNTRY_2",
-                        "beer_style": "TEST_STYLE_4",
+                        "id": 1,
+                        "name": "ㅋ IPA",
+                        "brewery": "더부스",
+                        "abv": 4.5,
+                        "country": "Korea",
+                        "beer_style": "India Pale Ale",
                         "aroma": [
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_3"
+                            "Peach",
+                            "Mango"
                         ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.59
+                        "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_kieukipa.png",
+                        "rate_avg": 0,
+                        "review_count": 0,
+                        "favorite_flag": false
                     },
                     {
-                        "id": 68,
-                        "name": "TEST_NAME_4087782157814699375",
-                        "brewery": "TEST_BREWAERY_52",
-                        "abv": 4.81,
-                        "country": "TEST_COUNTRY_4",
-                        "beer_style": "TEST_STYLE_4",
+                        "id": 5,
+                        "name": "경리단 힙스터",
+                        "brewery": "더부스",
+                        "abv": 4.5,
+                        "country": "Korea",
+                        "beer_style": "India Pale Ale",
                         "aroma": [
-                            "TEST_AROMA_0",
-                            "TEST_AROMA_1",
-                            "TEST_AROMA_1"
+                            "Orange",
+                            "Grass"
                         ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.7
-                    },
-                    {
-                        "id": 16,
-                        "name": "TEST_NAME_3684883192478116607",
-                        "brewery": "TEST_BREWAERY_22",
-                        "abv": 7.83,
-                        "country": "TEST_COUNTRY_0",
-                        "beer_style": "TEST_STYLE_4",
-                        "aroma": [
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_3",
-                            "TEST_AROMA_1"
-                        ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.24
+                        "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_gyunglidanhipster.png",
+                        "rate_avg": 0,
+                        "review_count": 0,
+                        "favorite_flag": false
                     }
                 ],
                 "randomly_related": [
                     {
-                        "id": 51,
-                        "name": "TEST_NAME_6629569320063026401",
-                        "brewery": "TEST_BREWAERY_12",
-                        "abv": 3.01,
-                        "country": "TEST_COUNTRY_4",
-                        "beer_style": "TEST_STYLE_2",
+                        "id": 3,
+                        "name": "윗 마이 엑스",
+                        "brewery": "더부스",
+                        "abv": 5.5,
+                        "country": "Korea",
+                        "beer_style": "Witbier",
                         "aroma": [
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_1"
+                            "Orange",
+                            "Spicy",
+                            "Grass"
                         ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.88
+                        "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_witmyex.png",
+                        "rate_avg": 0,
+                        "review_count": 0,
+                        "favorite_flag": false
                     },
                     {
-                        "id": 81,
-                        "name": "TEST_NAME_6832561201158269111",
-                        "brewery": "TEST_BREWAERY_71",
-                        "abv": 1.72,
-                        "country": "TEST_COUNTRY_5",
-                        "beer_style": "TEST_STYLE_2",
+                        "id": 4,
+                        "name": "국민 IPA",
+                        "brewery": "더부스",
+                        "abv": 6.5,
+                        "country": "Korea",
+                        "beer_style": "India Pale Ale",
                         "aroma": [
-                            "TEST_AROMA_3",
-                            "TEST_AROMA_2",
-                            "TEST_AROMA_3"
+                            "Orange",
+                            "Pineapple",
+                            "Melon"
                         ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 3.32
+                        "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_kookminipa.png",
+                        "rate_avg": 0,
+                        "review_count": 0,
+                        "favorite_flag": false
                     },
                     {
-                        "id": 29,
-                        "name": "TEST_NAME_5918515489820760331",
-                        "brewery": "TEST_BREWAERY_78",
-                        "abv": 2.08,
-                        "country": "TEST_COUNTRY_0",
-                        "beer_style": "TEST_STYLE_0",
+                        "id": 1,
+                        "name": "ㅋ IPA",
+                        "brewery": "더부스",
+                        "abv": 4.5,
+                        "country": "Korea",
+                        "beer_style": "India Pale Ale",
                         "aroma": [
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_4",
-                            "TEST_AROMA_0"
+                            "Peach",
+                            "Mango"
                         ],
-                        "thumbnail_image": "https://picsum.photos/320/480",
-                        "rate_avg": 4.45
+                        "thumbnail_image": "http://127.0.0.1:8081/static/thebooth_kieukipa.png",
+                        "rate_avg": 0,
+                        "review_count": 0,
+                        "favorite_flag": false
                     }
                 ]
             }

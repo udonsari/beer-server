@@ -94,28 +94,49 @@ func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
 		return nil, err
 	}
 
+	const maxCount = 5
+
 	var relatedBeers RelatedBeers
 
+	// TODO MaxCount Default를 어디서 설정해야할까
 	var aromaQueryArgs BeerQueryArgs
+	aromaQueryArgs.MaxCount = maxCount
 	aromaQueryArgs.Aroma = baseBeer.Aroma
 	aromaRelatedBeers, err := u.getRelatedBeersWithQueryArgs(aromaQueryArgs)
 	if err != nil {
 		return nil, err
 	}
+	for i, queriedBeer := range aromaRelatedBeers {
+		if queriedBeer.ID == beerID {
+			aromaRelatedBeers = append(aromaRelatedBeers[:i], aromaRelatedBeers[i+1:]...)
+		}
+	}
 	relatedBeers.AromaRelatedBeer = aromaRelatedBeers
 
 	var styleQueryArgs BeerQueryArgs
+	styleQueryArgs.MaxCount = maxCount
 	styleQueryArgs.BeerStyle = append(styleQueryArgs.BeerStyle, baseBeer.BeerStyle)
 	styleRelatedBeers, err := u.getRelatedBeersWithQueryArgs(styleQueryArgs)
 	if err != nil {
 		return nil, err
 	}
+	for i, queriedBeer := range styleRelatedBeers {
+		if queriedBeer.ID == beerID {
+			styleRelatedBeers = append(styleRelatedBeers[:i], styleRelatedBeers[i+1:]...)
+		}
+	}
 	relatedBeers.StyleRelatedBeer = styleRelatedBeers
 
 	var randomlyQueryArgs BeerQueryArgs
+	randomlyQueryArgs.MaxCount = maxCount
 	randomlyRelatedBeers, err := u.getRelatedBeersWithQueryArgs(randomlyQueryArgs)
 	if err != nil {
 		return nil, err
+	}
+	for i, queriedBeer := range randomlyRelatedBeers {
+		if queriedBeer.ID == beerID {
+			randomlyRelatedBeers = append(randomlyRelatedBeers[:i], randomlyRelatedBeers[i+1:]...)
+		}
 	}
 	relatedBeers.RandomlyRelatedBeer = randomlyRelatedBeers
 
