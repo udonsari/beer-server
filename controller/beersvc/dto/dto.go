@@ -50,7 +50,6 @@ type GetReviewResponse struct {
 type AddFavoriteRequest struct {
 	BeerID int64 `form:"beer_id"`
 	Flag   bool  `form:"flag"`
-	UserID int64 `form:"user_id"`
 }
 
 type Beer struct {

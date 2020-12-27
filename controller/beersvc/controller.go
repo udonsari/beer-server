@@ -41,7 +41,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 func (cont *Controller) GetBeers(ctx echo.Context) error {
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	var favoriteMap map[int64]bool
+	favoriteMap := make(map[int64]bool)
 	for _, favorite := range favoriteList {
 		// If none, flag would be initial false
 		favoriteMap[favorite.BeerID] = favorite.Flag
@@ -134,7 +134,7 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 func (cont *Controller) GetBeer(ctx echo.Context) error {
 	log.Printf("Controller - GetBeer() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}
@@ -156,7 +156,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	var favoriteMap map[int64]bool
+	favoriteMap := make(map[int64]bool)
 	for _, favorite := range favoriteList {
 		// If none, flag would be initial false
 		favoriteMap[favorite.BeerID] = favorite.Flag
@@ -268,7 +268,7 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 	if err != nil {
 		return err
 	}
-	var favoriteMap map[int64]bool
+	favoriteMap := make(map[int64]bool)
 	for _, favorite := range favoriteList {
 		// If none, flag would be initial false
 		favoriteMap[favorite.BeerID] = favorite.Flag
@@ -350,6 +350,10 @@ func (cont *Controller) GetFavorites(ctx echo.Context) error {
 
 	var dtoFavorites []dto.Favorite
 	for _, favorite := range favorites {
+		if !favorite.Flag {
+			continue
+		}
+
 		beer, err := cont.beerUseCase.GetBeer(favorite.BeerID)
 		if err != nil {
 			return err
