@@ -197,7 +197,7 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 			dtoReviewOwner = cont.mapper.MapReviewToDTOReview(*reviewOwner, user.NickName, dtoReviewOwnerBeer)
 		}
 	}
-	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, dtoReviews, dtoReviewOwner)
+	dtoBeer := cont.mapper.MapBeerToDTOBeer(*br, dtoReviews, dtoReviewOwner, favoriteMap[br.ID])
 
 	relatedBeers, err := cont.beerUseCase.GetRelatedBeers(br.ID)
 	if err != nil {

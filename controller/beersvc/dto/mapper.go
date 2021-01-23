@@ -17,7 +17,7 @@ func NewMapper() Mapper {
 	return Mapper{}
 }
 
-func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReviewOwner *Review) Beer {
+func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReviewOwner *Review, favoriteFlag bool) Beer {
 	// TODO 이미 밖에서 DTO를 만들어서 다시 Map한다는게 이상
 	return Beer{
 		ID:             beer.ID,
@@ -33,6 +33,7 @@ func (m *Mapper) MapBeerToDTOBeer(beer beer.Beer, dtoReviews []Review, dtoReview
 		RateAvg:        util.Floor(beer.RateAvg, 2),
 		ReviewOwner:    dtoReviewOwner,
 		ReviewCount:    beer.ReviewCount,
+		FavoriteFlag:   favoriteFlag,
 	}
 }
 
