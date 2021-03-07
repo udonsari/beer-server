@@ -31,3 +31,10 @@ type Favorite struct {
 	Flag   bool
 	UserID int64
 }
+
+type UserBeerConfig struct {
+	ID     int64
+	UserID int64
+	Aroma  []string
+	Style  []string
+}

@@ -552,50 +552,30 @@
     ```
     </p>
     </details>
+* Add User Beer Config
+    * command : `curl --location --request POST 'http://localhost:8081/api/user-beer-config' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg' --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'aroma=aroma1, aroma2' --data-urlencode 'style=style1, style2'`
+    * Response : None
+* Get User Beer Config
+    * command : `curl --location --request GET 'http://localhost:8081/api/user-beer-config' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg'`
+    <details>
+    <summary>Response Example</summary>
+    <p>
+
+    ```json
+    {
+        "result": {
+            "Aroma": [
+                "aroma1, aroma2"
+            ],
+            "Style": [
+                "style1, style2"
+            ]
+        }
+    }
+    ```
+    </p>
+    </details>
 
 
----
-### TODO
-* CI / CD
-* 코드 내부에 TODO 달아 놓은 것들
-* 라이센스 추가
-* REST API Convention 적용 점검
-* Logger 사용
-* Documentation
-* Graceful Shutdown 처리 (서버, 외부 Dependency ...)
-* `Develop ?` 리뷰 삭제 ?
-* `Develop ?` 평균 별점 구간도 쿼리 ? 
-* `Develop ?` 스타일 세분화 필요 ? ex) 대분류 에일, 중분류 IPA, 소분류 NEIPA
-* `Develop ?` 소셜 로그인 연동 확장 ? (Factory 패턴. Naver, Google - external ID는 hashing 해서 provider별 prefix 달기, Model External ID 유니크 걸기)
-* `Develop ?` 켜뮤니티 게시판 ?
-* `Develop ?` 맥주 취향 추천 ?
-* `Develop ?` 리뷰 달면 경헙치 -> 계급 올리는 개념 ?
-* `중요` 토큰 Refresh, 만료 Client, Server 누가 처리하는지 알아보고 처리하기 (+로그아웃)
-* `중요` 로그인 Token 자체를 Client에서 받게 하기. 서버는 Token 그냥 받고 (필요 없는 로직 지우기 - 근데 웹프론트에서는 필요할 것 같은데)
-
-* `중요` RDS 분리
-* `중요` 비슷한 맥주에 해당 맥주가 보인다.
-* `중요` 이미지 가운데 정렬
-* `중요` 실제 DB에 있는 향 리스트 내려주기
-
-* `중요` 게시글 CRUD, 게시글 디테일, 댓글
-* `중요` 와인그래프. App 찾아보기. 대댓글.
-* `중요` 근처 맥주 바틀샵 찾기.
 
 ---
-### On Going
-* 미정님한테 맥주 이미지 수정 부탁 -> 완료시 반영하여 서버 업데이트
-* 전반적으로 Validation 다듬기
-    * DB 자체에 Name Unique 등
-* Not fsound일 때 해당 객체 Nil 예외 처리 (ex. if err != nil 거르고, 바로 포인터 Dereference하지 않고 nil 체크)
-* Test 구현 ( + Integration Test)
-
----
-
-### Done
-* `Done` 즐겨찾기 (추가 및 제거, 자기가 즐겨찾기 한 맥주 보기, 맥주 내려줄 때 자기가 즐겨찾기 했는지 체크)
-* `Done` 10자로 닉네임 제한을 걸면 좋겠다
-* `Done` 쿼리시 공백이 오면 어떻게 되지 ? -> 잘 됨
-* `Done` 맥주 사이즈 정하고 (360 * 260), 그에 맞게 데이터 가공 하기 (이거 미정님 가이드 받고 배워두기. 이미지 사이즈에 맞게 재가공 하는 것, 누끼 따는 것 ... 그 외 미정님한테 도움될만한거 묻기 ) + 데이터 몇개 까지 (100개) ?
-* `Done` Error 정의 및 대응되는 Status Code 사용 (ex. Auth Error)
-* `Done` 마지막 페이지면, next_cursor null 내려주기

@@ -12,4 +12,6 @@ type BeerRepo interface {
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 	AddFavorite(favorite Favorite) error
 	GetFavorites(userID int64) ([]Favorite, error)
+	AddUserBeerConfig(userBeerConfig UserBeerConfig) error
+	GetUserBeerConfig(userID int64) (*UserBeerConfig, error)
 }

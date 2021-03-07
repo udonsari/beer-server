@@ -20,6 +20,8 @@ type UseCase interface {
 	GetRelatedBeers(beerID int64) (*RelatedBeers, error)
 	AddFavorite(avorite Favorite) error
 	GetFavorites(userID int64) ([]Favorite, error)
+	AddUserBeerConfig(userBeerConfig UserBeerConfig) error
+	GetUserBeerConfig(userID int64) (*UserBeerConfig, error)
 }
 
 type useCase struct {
@@ -174,4 +176,12 @@ func (u *useCase) AddFavorite(favorite Favorite) error {
 
 func (u *useCase) GetFavorites(userID int64) ([]Favorite, error) {
 	return u.beerRepo.GetFavorites(userID)
+}
+
+func (u *useCase) AddUserBeerConfig(userBeerConfig UserBeerConfig) error {
+	return u.beerRepo.AddUserBeerConfig(userBeerConfig)
+}
+
+func (u *useCase) GetUserBeerConfig(userID int64) (*UserBeerConfig, error) {
+	return u.beerRepo.GetUserBeerConfig(userID)
 }

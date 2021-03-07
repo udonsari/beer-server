@@ -52,6 +52,11 @@ type AddFavoriteRequest struct {
 	Flag   bool  `form:"flag"`
 }
 
+type AddUserBeerConfig struct {
+	Aroma []string `form:"aroma"`
+	Style []string `form:"style"`
+}
+
 type Beer struct {
 	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Reviews는 Pagination ?
 	ID             int64    `json:"id"`
@@ -112,4 +117,9 @@ type AppConfig struct {
 	BeerStyleList []string `json:"style_list"`
 	MinABV        float64  `json:"min_abv"`
 	MaxABV        float64  `json:"max_abv"`
+}
+
+type UserBeerConfig struct {
+	Aroma []string `query:"aroma"`
+	Style []string `query:"style"`
 }

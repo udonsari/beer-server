@@ -30,7 +30,7 @@ func (c *migrationUpCommand) Command() *cli.Command {
 }
 
 func (c *migrationUpCommand) main(ctx *cli.Context) error {
-	result := c.d.MysqlDB(true).AutoMigrate(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{}, &beerRepo.DBFavorite{})
+	result := c.d.MysqlDB(true).AutoMigrate(&userRepo.DBUser{}, &beerRepo.DBBeer{}, &beerRepo.DBReview{}, &beerRepo.DBFavorite{}, &beerRepo.DBUserBeerConfig{})
 	if result.Error != nil {
 		log.Printf("failed migration up %+v", result.Error)
 	} else {

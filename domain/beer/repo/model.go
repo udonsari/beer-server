@@ -4,6 +4,7 @@ import "time"
 
 const (
 	maxAromaListLen    = 3
+	maxStyleListLen    = 3
 	maxImageURLListLen = 5
 
 	listSplitChar = "___"
@@ -52,4 +53,15 @@ type DBFavorite struct {
 
 func (DBFavorite) TableName() string {
 	return "beer_favorite"
+}
+
+type DBUserBeerConfig struct {
+	ID        int64
+	UserID    int64
+	AromaList string
+	StyleList string
+}
+
+func (DBUserBeerConfig) TableName() string {
+	return "user_beer_config"
 }

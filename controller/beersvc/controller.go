@@ -36,6 +36,8 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	engine.GET("/api/app-config", cont.GetAppConfig)
 	engine.POST("/api/favorite", cont.AddFavorite)
 	engine.GET("/api/favorite", cont.GetFavorites)
+	engine.POST("/api/user-beer-config", cont.AddUserBeerConfig)
+	engine.GET("/api/user-beer-config", cont.GetUserBeerConfig)
 	return cont
 }
 
@@ -429,6 +431,60 @@ func (cont *Controller) GetFavorites(ctx echo.Context) error {
 		http.StatusOK,
 		map[string]interface{}{
 			"result": dtoFavorites,
+		},
+	)
+}
+
+func (cont *Controller) AddUserBeerConfig(ctx echo.Context) error {
+	log.Printf("Controller - AddUserBeerConfig() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	usr, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
+	}
+
+	var req dto.AddUserBeerConfig
+	if err := cont.Bind(ctx, &req); err != nil {
+		log.Printf("Controller - AddUserBeerConfig() - Failed to bind %+v", err)
+		return err
+	}
+	log.Printf("Controller - AddUserBeerConfig() - Param %+v", spew.Sdump(req))
+
+	err = cont.beerUseCase.AddUserBeerConfig(
+		beer.UserBeerConfig{
+			UserID: usr.ID,
+			Aroma:  req.Aroma,
+			Style:  req.Style,
+		},
+	)
+	if err != nil {
+		return err
+	}
+	return ctx.NoContent(http.StatusOK)
+}
+
+func (cont *Controller) GetUserBeerConfig(ctx echo.Context) error {
+	log.Printf("Controller - GetUserBeerConfig() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	usr, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	} else if usr == nil || usr.ID == 0 {
+		return user.UserNotFoundError{}
+	}
+
+	userBeerConfig, err := cont.beerUseCase.GetUserBeerConfig(usr.ID)
+	if err != nil {
+		return err
+	}
+	dtoUserBeerConfig := cont.mapper.MapUserBeerConfigToDTOUserBeerConfig(*userBeerConfig)
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": dtoUserBeerConfig,
 		},
 	)
 }

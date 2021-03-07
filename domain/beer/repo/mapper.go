@@ -44,6 +44,25 @@ func (m mapper) mapDBFavoriteToFavorite(dbFavorite DBFavorite) beer.Favorite {
 		UserID: dbFavorite.UserID,
 	}
 }
+
+func (m mapper) mapUserBeerConfigToDBUserBeerConfig(userBeerConfig beer.UserBeerConfig) DBUserBeerConfig {
+	return DBUserBeerConfig{
+		ID:        userBeerConfig.ID,
+		UserID:    userBeerConfig.UserID,
+		AromaList: m.splitAndGetString(userBeerConfig.Aroma),
+		StyleList: m.splitAndGetString(userBeerConfig.Style),
+	}
+}
+
+func (m mapper) mapDBUserBeerConfigToUserBeerConfig(dbUserBeerConfig DBUserBeerConfig) beer.UserBeerConfig {
+	return beer.UserBeerConfig{
+		ID:     dbUserBeerConfig.ID,
+		UserID: dbUserBeerConfig.UserID,
+		Aroma:  m.splitAndGetArray(dbUserBeerConfig.AromaList, maxAromaListLen),
+		Style:  m.splitAndGetArray(dbUserBeerConfig.StyleList, maxStyleListLen),
+	}
+}
+
 func (m mapper) mapBeerToDBBeer(beer beer.Beer) DBBeer {
 	return DBBeer{
 		Name:           beer.Name,

@@ -91,6 +91,13 @@ func (m *Mapper) MapFavoriteToDTOFavorite(favorite beer.Favorite, beer ReducedBe
 	}
 }
 
+func (m *Mapper) MapUserBeerConfigToDTOUserBeerConfig(userBeerConfig beer.UserBeerConfig) UserBeerConfig {
+	return UserBeerConfig{
+		Aroma: userBeerConfig.Aroma,
+		Style: userBeerConfig.Style,
+	}
+}
+
 func (m *Mapper) MapGetBeersRequestToBeerQueryArgs(req GetBeersRequest) (*beer.BeerQueryArgs, error) {
 	var args beer.BeerQueryArgs
 	if req.MinABV != nil {

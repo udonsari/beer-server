@@ -204,7 +204,10 @@ func (ts *ucTestSuite) Test_GetRelatedBeers() {
 
 	var aromaRelatedQueryArgs, styleRelatedQueryArgs, randomlyRelatedQueryArgs beer.BeerQueryArgs
 	aromaRelatedQueryArgs.Aroma = baseBeer.Aroma
+	aromaRelatedQueryArgs.MaxCount = 5
 	styleRelatedQueryArgs.BeerStyle = append(styleRelatedQueryArgs.BeerStyle, baseBeer.BeerStyle)
+	styleRelatedQueryArgs.MaxCount = 5
+	randomlyRelatedQueryArgs.MaxCount = 5
 
 	var nilBeer *beer.Beer
 	var nilBeers []beer.Beer
@@ -308,4 +311,14 @@ func (r *mockBeerRepo) AddFavorite(favorite beer.Favorite) error {
 func (r *mockBeerRepo) GetFavorites(userID int64) ([]beer.Favorite, error) {
 	ret := r.Called(userID)
 	return ret.Get(0).([]beer.Favorite), ret.Error(1)
+}
+
+func (r *mockBeerRepo) AddUserBeerConfig(userBeerConfig beer.UserBeerConfig) error {
+	ret := r.Called(userBeerConfig)
+	return ret.Error(0)
+}
+
+func (r *mockBeerRepo) GetUserBeerConfig(userID int64) (*beer.UserBeerConfig, error) {
+	ret := r.Called(userID)
+	return ret.Get(0).(*beer.UserBeerConfig), ret.Error(1)
 }

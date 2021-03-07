@@ -270,3 +270,51 @@ func (r *beerRepo) getFavorite(beerID int64, userID int64) (*DBFavorite, error) 
 	}
 	return &dbFavorite, nil
 }
+
+func (r *beerRepo) AddUserBeerConfig(userBeerConfig beer.UserBeerConfig) error {
+	// Upsert Implementation
+	preUserBeerConfig, err := r.getUserBeerConfig(userBeerConfig.UserID)
+	if err != nil {
+		return err
+	}
+
+	dbUserBeerConfig := r.mapper.mapUserBeerConfigToDBUserBeerConfig(userBeerConfig)
+	if preUserBeerConfig == nil {
+		res := r.db.Create(&dbUserBeerConfig)
+		// https://github.com/go-gorm/gorm/issues/2903
+		// Gorm V1에서는 Duplicate Error를 정의하지 않음
+		if res.Error != nil && strings.Contains(res.Error.Error(), "Error 1062: Duplicate entry") {
+			return errors.New("already added favorite")
+		}
+		return res.Error
+	}
+	res := r.db.Model(&DBUserBeerConfig{}).Where("user_id = ?", dbUserBeerConfig.UserID).Updates(DBUserBeerConfig{AromaList: dbUserBeerConfig.AromaList, StyleList: dbUserBeerConfig.StyleList})
+	return res.Error
+}
+
+func (r *beerRepo) getUserBeerConfig(userID int64) (*DBUserBeerConfig, error) {
+	query := DBUserBeerConfig{UserID: userID}
+	var dbUserBeerConfig DBUserBeerConfig
+	if err := r.db.Where(&query).First(&dbUserBeerConfig).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, errors.Wrap(err, fmt.Sprintf("failed to get user beer config. user id : %v", userID))
+		}
+	}
+	return &dbUserBeerConfig, nil
+
+}
+
+func (r *beerRepo) GetUserBeerConfig(userID int64) (*beer.UserBeerConfig, error) {
+	dbUserBeerConfig, err := r.getUserBeerConfig(userID)
+	if err != nil {
+		return nil, err
+	} else if dbUserBeerConfig == nil {
+		return &beer.UserBeerConfig{}, nil // Returns DBUserConfig with default values
+	}
+
+	userBeerConfig := r.mapper.mapDBUserBeerConfigToUserBeerConfig(*dbUserBeerConfig)
+	return &userBeerConfig, nil
+}
