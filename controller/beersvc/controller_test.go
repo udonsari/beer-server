@@ -248,6 +248,11 @@ func (u *mockBeerUseCase) GetBeer(beerID int64) (*beer.Beer, error) {
 	return ret.Get(0).(*beer.Beer), ret.Error(1)
 }
 
+func (u *mockBeerUseCase) GetRandomBeers() ([]beer.Beer, error) {
+	ret := u.Called()
+	return ret.Get(0).([]beer.Beer), ret.Error(1)
+}
+
 func (u *mockBeerUseCase) AddReview(review beer.Review) error {
 	ret := u.Called(review)
 	return ret.Error(0)

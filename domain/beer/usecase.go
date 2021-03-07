@@ -12,6 +12,7 @@ type UseCase interface {
 	AddBeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
 	GetBeer(beerID int64) (*Beer, error)
+	GetRandomBeers() ([]Beer, error)
 	AddReview(review Review) error
 	GetReviews(beerID int64) ([]Review, error)
 	GetReviewsByUserID(userID int64) ([]Review, error)
@@ -42,6 +43,18 @@ func (u *useCase) GetBeers(args BeerQueryArgs) ([]Beer, error) {
 
 func (u *useCase) GetBeer(beerID int64) (*Beer, error) {
 	return u.beerRepo.GetBeer(beerID)
+}
+
+func (u *useCase) GetRandomBeers() ([]Beer, error) {
+	const maxCount = 5
+
+	var randomlyQueryArgs BeerQueryArgs
+	randomlyQueryArgs.MaxCount = maxCount
+	randomlyRelatedBeers, err := u.getRelatedBeersWithQueryArgs(randomlyQueryArgs)
+	if err != nil {
+		return nil, err
+	}
+	return randomlyRelatedBeers, nil
 }
 
 func (u *useCase) AddReview(review Review) error {

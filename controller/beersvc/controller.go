@@ -30,6 +30,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	}
 	engine.GET("/api/beers", cont.GetBeers)
 	engine.GET("/api/beer", cont.GetBeer)
+	engine.GET("/api/random-beers", cont.GetRandomBeers)
 	engine.POST("/api/review", cont.AddReview)
 	engine.GET("/api/review", cont.GetReview)
 	engine.GET("/api/app-config", cont.GetAppConfig)
@@ -41,7 +42,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 func (cont *Controller) GetBeers(ctx echo.Context) error {
 	log.Printf("Controller - GetBeers() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}
@@ -134,7 +135,7 @@ func (cont *Controller) GetBeers(ctx echo.Context) error {
 func (cont *Controller) GetBeer(ctx echo.Context) error {
 	log.Printf("Controller - GetBeer() - Controller")
 	_ctx := ctx.(controller.CustomContext)
-	user, err := _ctx.User()
+	user, err := _ctx.UserMust()
 	if err != nil {
 		return err
 	}
@@ -209,6 +210,67 @@ func (cont *Controller) GetBeer(ctx echo.Context) error {
 	res.RelatedBeers = dtorRelatedBeers
 
 	log.Printf("Controller - GetBeer() dto beer %+v", res)
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": res,
+		},
+	)
+}
+
+func (cont *Controller) GetRandomBeers(ctx echo.Context) error {
+	log.Printf("Controller - GetRandomBeers() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	}
+	log.Printf("Controller - GetRandomBeers() - User %+v", spew.Sdump(user))
+
+	beerList, err := cont.beerUseCase.GetRandomBeers()
+	if err != nil {
+		return err
+	}
+
+	favoriteList, err := cont.beerUseCase.GetFavorites(user.ID)
+	if err != nil {
+		return err
+	}
+	favoriteMap := make(map[int64]bool)
+	for _, favorite := range favoriteList {
+		// If none, flag would be initial false
+		favoriteMap[favorite.BeerID] = favorite.Flag
+	}
+
+	// GetRandomBeers response's cursor is nil
+	var res dto.GetBeersResponse
+	for idx, br := range beerList {
+		log.Printf("Controller - GetRandomBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
+		var dtoReviews []dto.Review
+		reviews, err := cont.beerUseCase.GetReviews(br.ID)
+		if err != nil {
+			return err
+		}
+		for _, review := range reviews {
+			reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
+			if err != nil {
+				return err
+			}
+			beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favoriteMap[br.ID])
+			dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
+			dtoReviews = append(dtoReviews, *dtoReview)
+		}
+
+		dtoBeer := cont.mapper.MapBeerToDTReducedBeer(br, favoriteMap[br.ID])
+		res.ReducedBeer = append(res.ReducedBeer, dtoBeer)
+	}
+
+	log.Printf("Controller - GetRandomBeers() dto beer list %+v", res.ReducedBeer)
 
 	return ctx.JSON(
 		http.StatusOK,
@@ -369,7 +431,6 @@ func (cont *Controller) GetFavorites(ctx echo.Context) error {
 			"result": dtoFavorites,
 		},
 	)
-
 }
 
 // TODO Replac real aroma in db

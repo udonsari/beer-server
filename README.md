@@ -395,6 +395,9 @@
     ```
     </p>
     </details>
+* Get RandomBeers
+    * command : `curl --location --request GET 'http://localhost:8081/api/random-beers'`
+        * Parameter를 가지지 않으며 Return 형태는 BeerList API와 같습니다. 다만, cursor는 매번 nil로 내려갑니다.
 * Sign In (Kakao Only)
     * command : `curl --location --request GET 'http://localhost:8081/api/kakao/signin'` 
         * `api/token`로 Redirect되어 Access Token을 내려줍니다
