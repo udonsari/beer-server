@@ -360,11 +360,25 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 }
 
 func (cont *Controller) GetAppConfig(ctx echo.Context) error {
-	// TODO Currently dummy config, later change to all aroma, country, beer style in DB
+	// TODO Add Semantic Versioning
+	var req dto.GetAppConfigRequest
+	if err := cont.Bind(ctx, &req); err != nil {
+		log.Printf("Controller - GetAppConfig() - Failed to bind %+v", err)
+		return err
+	}
+	log.Printf("Controller - GetAppConfig() - Param %+v", spew.Sdump(req))
+	if req.Version == nil || *req.Version == "" {
+		return ctx.JSON(
+			http.StatusOK,
+			map[string]interface{}{
+				"result": cont.getAppConfigV1(),
+			},
+		)
+	}
 	return ctx.JSON(
 		http.StatusOK,
 		map[string]interface{}{
-			"result": cont.getDummyAppConfig(),
+			"result": cont.getAppConfigV2(),
 		},
 	)
 }
@@ -508,7 +522,7 @@ func (cont *Controller) GetPopularBeers(ctx echo.Context) error {
 	}
 	log.Printf("Controller - GetPopularBeers() - Param %+v", spew.Sdump(req))
 
-	// TODO Add Timesonze Concept
+	// TODO Add Timezone Concept
 	const timeLayout = "2006-01-01 15:04:05"
 	startDate, err := time.Parse(timeLayout, req.StartDate)
 	if err != nil {
@@ -570,9 +584,8 @@ func (cont *Controller) GetPopularBeers(ctx echo.Context) error {
 	)
 }
 
-// TODO Replac real aroma in db
-func (cont *Controller) getDummyAppConfig() dto.AppConfig {
-	return dto.AppConfig{
+func (cont *Controller) getAppConfigV1() dto.AppConfigV1 {
+	return dto.AppConfigV1{
 		AromaList: []string{
 			"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty", "Pineapple", "Melon", "Blackberry", "Chocolate", "Cherry", "Lemon", "Passion Fruit", "Grapefruit",
 		},
@@ -582,6 +595,50 @@ func (cont *Controller) getDummyAppConfig() dto.AppConfig {
 		BeerStyleList: []string{
 			"Porter", "Stout", "Pilsener", "Light Lager", "Scotch Ale", "Saison", "Pale Ale", "Brown Ale", "India Pale Ale", "Gose", "Quadrupel", "Tripel", "Lambic", "Rye Amber", "Kolsch", "Witbier", "Red Ale", "New England IPA", "Sour Ale", "ETC",
 		},
+		MinABV: 0.0,
+		MaxABV: 15.0,
+	}
+}
+
+func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
+	return dto.AppConfigV2{
+		AromaList: []string{
+			"Malty", "Caramel", "Roast", "Coffee", "Grass", "Banana", "Apple", "Peach", "Mango", "Orange", "Spicy", "Vinegar", "Nutty", "Pineapple", "Melon", "Blackberry", "Chocolate", "Cherry", "Lemon", "Passion Fruit", "Grapefruit",
+		},
+		CountryList: []string{
+			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
+		},
+		BeerStyleList: map[string][]string{
+			"Ale": {
+				"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
+			},
+			"IPA": {
+				"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
+			},
+			"Dark Beer": {
+				"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
+			},
+			"Wheat Beer": {
+				"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
+			},
+			"Larger": {
+				"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
+			},
+			"Bock": {
+				"Bock",
+				"Weizen Bock",
+				"Double Bock",
+				"MaiBock",
+			},
+			"Lambic": {
+				"Lambic",
+				"Gueuze",
+			},
+			"etc": {
+				"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
+			},
+		},
+
 		MinABV: 0.0,
 		MaxABV: 15.0,
 	}

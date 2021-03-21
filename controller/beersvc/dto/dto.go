@@ -63,6 +63,10 @@ type GetPopularBeersRequest struct {
 	Limit     int64  `query:"limit"`
 }
 
+type GetAppConfigRequest struct {
+	Version *string `query:"version"`
+}
+
 type Beer struct {
 	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Reviews는 Pagination ?
 	ID             int64    `json:"id"`
@@ -117,12 +121,19 @@ type Favorite struct {
 	BeerID      int64       `json:"beer_id"`
 }
 
-type AppConfig struct {
+type AppConfigV1 struct {
 	AromaList     []string `json:"aroma_list"`
 	CountryList   []string `json:"country_list"`
 	BeerStyleList []string `json:"style_list"`
 	MinABV        float64  `json:"min_abv"`
 	MaxABV        float64  `json:"max_abv"`
+}
+type AppConfigV2 struct {
+	AromaList     []string            `json:"aroma_list"`
+	CountryList   []string            `json:"country_list"`
+	BeerStyleList map[string][]string `json:"style_list"`
+	MinABV        float64             `json:"min_abv"`
+	MaxABV        float64             `json:"max_abv"`
 }
 
 type UserBeerConfig struct {
