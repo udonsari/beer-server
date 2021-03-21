@@ -361,13 +361,9 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 
 func (cont *Controller) GetAppConfig(ctx echo.Context) error {
 	// TODO Add Semantic Versioning
-	var req dto.GetAppConfigRequest
-	if err := cont.Bind(ctx, &req); err != nil {
-		log.Printf("Controller - GetAppConfig() - Failed to bind %+v", err)
-		return err
-	}
-	log.Printf("Controller - GetAppConfig() - Param %+v", spew.Sdump(req))
-	if req.Version == nil || *req.Version == "" {
+	version := ctx.Request().Header.Get("version")
+	log.Printf("Controller - GetAppConfig() - Version %+v", spew.Sdump(version))
+	if version == "" {
 		return ctx.JSON(
 			http.StatusOK,
 			map[string]interface{}{
@@ -608,34 +604,42 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 		CountryList: []string{
 			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
 		},
-		BeerStyleList: map[string][]string{
-			"Ale": {
-				"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
+		BeerStyleList: map[string]interface{}{
+			"Ale": map[string]interface{}{
+				"Ale": []string{
+					"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
+				},
+				"IPA": []string{
+					"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
+				},
+				"Dark Beer": []string{
+					"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
+				},
+				"Wheat Beer": []string{
+					"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
+				},
 			},
-			"IPA": {
-				"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
+			"Larger": map[string]interface{}{
+				"Larger": []string{
+					"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
+				},
+				"Bock": []string{
+					"Bock",
+					"Weizen Bock",
+					"Double Bock",
+					"MaiBock",
+				},
 			},
-			"Dark Beer": {
-				"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
+			"Lambic": map[string]interface{}{
+				"Lambic": []string{
+					"Lambic",
+					"Gueuze",
+				},
 			},
-			"Wheat Beer": {
-				"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
-			},
-			"Larger": {
-				"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
-			},
-			"Bock": {
-				"Bock",
-				"Weizen Bock",
-				"Double Bock",
-				"MaiBock",
-			},
-			"Lambic": {
-				"Lambic",
-				"Gueuze",
-			},
-			"etc": {
-				"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
+			"etc": map[string]interface{}{
+				"etc": []string{
+					"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
+				},
 			},
 		},
 

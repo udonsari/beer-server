@@ -234,103 +234,111 @@
                 "France"
             ],
             "style_list": {
-                "Ale": [
-                    "Ale",
-                    "Abbey Ale",
-                    "Amber Ale",
-                    "American Pale Ale",
-                    "Brown Belgian Strong Ale",
-                    "Blonde Ale",
-                    "Brown Ale",
-                    "Saison",
-                    "Golden Ale",
-                    "Hop Ale",
-                    "Irish Ale",
-                    "Light Ale",
-                    "Old Ale",
-                    "Pale Ale",
-                    "Quadrupel Ale",
-                    "Red Ale",
-                    "Sparkling Ale",
-                    "Summer Ale",
-                    "Trappist Ale",
-                    "Tripel Ale",
-                    "White Ale",
-                    "Wheat Ale",
-                    "Wit Ale",
-                    "Barley Wine",
-                    "Dubbel Ale",
-                    "Dark Ale",
-                    "Wild Ale",
-                    "Pumpkin Ale"
-                ],
-                "Bock": [
-                    "Bock",
-                    "Weizen Bock",
-                    "Double Bock",
-                    "MaiBock"
-                ],
-                "Dark Beer": [
-                    "Dark Beer",
-                    "Porter",
-                    "Stout",
-                    "Baltic Porter",
-                    "Bourbon County Stout",
-                    "Imperial Porter",
-                    "Imperial Stout",
-                    "Irish Stout",
-                    "Sweet Stout",
-                    "Schwarz",
-                    "Milk Stout"
-                ],
-                "IPA": [
-                    "IPA",
-                    "American IPA",
-                    "Black IPA",
-                    "Belgian IPA",
-                    "Double IPA",
-                    "Hazy IPA",
-                    "Imperial IPA",
-                    "Rye IPA",
-                    "Session IPA",
-                    "Sour IPA",
-                    "Smoothie IPA",
-                    "Wheat IPA"
-                ],
-                "Lambic": [
-                    "Lambic",
-                    "Gueuze"
-                ],
-                "Larger": [
-                    "Lager",
-                    "Amber Lager",
-                    "Dark Lager",
-                    "Helles Lager",
-                    "India Pale Lager",
-                    "Pale Lager",
-                    "Rauchbier",
-                    "Kellerbier",
-                    "Marzen",
-                    "Dunkel"
-                ],
-                "Wheat Beer": [
-                    "Wheat Beer",
-                    "Belgian White",
-                    "Hefeweizen",
-                    "Witbier",
-                    "Weizen",
-                    "Dunkel Weizen",
-                    "Weisse"
-                ],
-                "etc": [
-                    "Radler",
-                    "Cider",
-                    "Gose",
-                    "Gluten Free",
-                    "Kolsch",
-                    "Low Alcohol",
-                    "Ginger Beer"
-                ]
+                "Ale": {
+                    "Ale": [
+                        "Ale",
+                        "Abbey Ale",
+                        "Amber Ale",
+                        "American Pale Ale",
+                        "Brown Belgian Strong Ale",
+                        "Blonde Ale",
+                        "Brown Ale",
+                        "Saison",
+                        "Golden Ale",
+                        "Hop Ale",
+                        "Irish Ale",
+                        "Light Ale",
+                        "Old Ale",
+                        "Pale Ale",
+                        "Quadrupel Ale",
+                        "Red Ale",
+                        "Sparkling Ale",
+                        "Summer Ale",
+                        "Trappist Ale",
+                        "Tripel Ale",
+                        "White Ale",
+                        "Wheat Ale",
+                        "Wit Ale",
+                        "Barley Wine",
+                        "Dubbel Ale",
+                        "Dark Ale",
+                        "Wild Ale",
+                        "Pumpkin Ale"
+                    ],
+                    "Dark Beer": [
+                        "Dark Beer",
+                        "Porter",
+                        "Stout",
+                        "Baltic Porter",
+                        "Bourbon County Stout",
+                        "Imperial Porter",
+                        "Imperial Stout",
+                        "Irish Stout",
+                        "Sweet Stout",
+                        "Schwarz",
+                        "Milk Stout"
+                    ],
+                    "IPA": [
+                        "IPA",
+                        "American IPA",
+                        "Black IPA",
+                        "Belgian IPA",
+                        "Double IPA",
+                        "Hazy IPA",
+                        "Imperial IPA",
+                        "Rye IPA",
+                        "Session IPA",
+                        "Sour IPA",
+                        "Smoothie IPA",
+                        "Wheat IPA"
+                    ],
+                    "Wheat Beer": [
+                        "Wheat Beer",
+                        "Belgian White",
+                        "Hefeweizen",
+                        "Witbier",
+                        "Weizen",
+                        "Dunkel Weizen",
+                        "Weisse"
+                    ]
+                },
+                "Lambic": {
+                    "Lambic": [
+                        "Lambic",
+                        "Gueuze"
+                    ]
+                },
+                "Larger": {
+                    "Bock": [
+                        "Bock",
+                        "Weizen Bock",
+                        "Double Bock",
+                        "MaiBock"
+                    ],
+                    "Larger": [
+                        "Lager",
+                        "Amber Lager",
+                        "Dark Lager",
+                        "Helles Lager",
+                        "India Pale Lager",
+                        "Pale Lager",
+                        "Rauchbier",
+                        "Kellerbier",
+                        "Marzen",
+                        "Dunkel"
+                    ]
+                },
+                "etc": {
+                    "etc": [
+                        "Radler",
+                        "Cider",
+                        "Gose",
+                        "Gluten Free",
+                        "Kolsch",
+                        "Low Alcohol",
+                        "Ginger Beer"
+                    ]
+                }
             },
             "min_abv": 0,
             "max_abv": 15
