@@ -1,5 +1,7 @@
 package beer
 
+import "time"
+
 type BeerRepo interface {
 	AddBeer(beer Beer) error
 	GetBeers(args BeerQueryArgs) ([]Beer, error)
@@ -12,6 +14,7 @@ type BeerRepo interface {
 	GetReviewByBeerIDAndUserID(beerID int64, userID int64) (*Review, error)
 	AddFavorite(favorite Favorite) error
 	GetFavorites(userID int64) ([]Favorite, error)
+	GetBeerRanks(startDate time.Time, endDate time.Time, limit int64) ([]BeerRank, error)
 	AddUserBeerConfig(userBeerConfig UserBeerConfig) error
 	GetUserBeerConfig(userID int64) (*UserBeerConfig, error)
 }

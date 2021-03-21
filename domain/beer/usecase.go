@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/UdonSari/beer-server/util"
+	"github.com/labstack/gommon/log"
 )
 
 type UseCase interface {
@@ -22,6 +23,7 @@ type UseCase interface {
 	GetFavorites(userID int64) ([]Favorite, error)
 	AddUserBeerConfig(userBeerConfig UserBeerConfig) error
 	GetUserBeerConfig(userID int64) (*UserBeerConfig, error)
+	GetPopularBeers(startDate time.Time, endDate time.Time, limit int64) ([]Beer, error)
 }
 
 type useCase struct {
@@ -184,4 +186,27 @@ func (u *useCase) AddUserBeerConfig(userBeerConfig UserBeerConfig) error {
 
 func (u *useCase) GetUserBeerConfig(userID int64) (*UserBeerConfig, error) {
 	return u.beerRepo.GetUserBeerConfig(userID)
+}
+
+func (u *useCase) GetPopularBeers(startDate time.Time, endDate time.Time, limit int64) ([]Beer, error) {
+	// TODO Choose whether to return beer or beer rank info. For now, beer
+
+	beerRanks, err := u.beerRepo.GetBeerRanks(startDate, endDate, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	var beers []Beer
+	for _, beerRank := range beerRanks {
+		beer, err := u.beerRepo.GetBeer(beerRank.BeerID)
+		if err != nil {
+			return nil, err
+		} else if beer == nil {
+			log.Warnf("Not found beer with id : %v", beerRank.BeerID)
+			continue
+		}
+		beers = append(beers, *beer)
+	}
+
+	return beers, nil
 }

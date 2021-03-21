@@ -45,10 +45,11 @@ func (DBReview) TableName() string {
 }
 
 type DBFavorite struct {
-	ID     int64
-	BeerID int64
-	Flag   bool
-	UserID int64
+	ID        int64
+	BeerID    int64
+	Flag      bool
+	UserID    int64
+	CreatedAt time.Time
 }
 
 func (DBFavorite) TableName() string {

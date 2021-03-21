@@ -3,6 +3,7 @@ package beer_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/UdonSari/beer-server/domain/beer"
 	"github.com/bxcodec/faker"
@@ -311,6 +312,11 @@ func (r *mockBeerRepo) AddFavorite(favorite beer.Favorite) error {
 func (r *mockBeerRepo) GetFavorites(userID int64) ([]beer.Favorite, error) {
 	ret := r.Called(userID)
 	return ret.Get(0).([]beer.Favorite), ret.Error(1)
+}
+
+func (r *mockBeerRepo) GetBeerRanks(startDate time.Time, endDate time.Time, limit int64) ([]beer.BeerRank, error) {
+	ret := r.Called(startDate, endDate, limit)
+	return ret.Get(0).([]beer.BeerRank), ret.Error(1)
 }
 
 func (r *mockBeerRepo) AddUserBeerConfig(userBeerConfig beer.UserBeerConfig) error {

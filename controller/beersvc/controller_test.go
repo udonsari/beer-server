@@ -8,6 +8,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc"
@@ -298,6 +299,11 @@ func (u *mockBeerUseCase) AddUserBeerConfig(userBeerConfig beer.UserBeerConfig) 
 func (u *mockBeerUseCase) GetUserBeerConfig(userID int64) (*beer.UserBeerConfig, error) {
 	ret := u.Called(userID)
 	return ret.Get(0).(*beer.UserBeerConfig), ret.Error(1)
+}
+
+func (u *mockBeerUseCase) GetPopularBeers(startDate time.Time, endDate time.Time, limit int64) ([]beer.Beer, error) {
+	ret := u.Called(startDate, endDate, limit)
+	return ret.Get(0).([]beer.Beer), ret.Error(1)
 }
 
 type mockUserUseCase struct {

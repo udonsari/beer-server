@@ -38,3 +38,8 @@ type UserBeerConfig struct {
 	Aroma  []string
 	Style  []string
 }
+
+type BeerRank struct {
+	BeerID        int64
+	FavoriteCount int64
+}

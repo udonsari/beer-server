@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/UdonSari/beer-server/controller"
 	"github.com/UdonSari/beer-server/controller/beersvc/dto"
@@ -38,6 +39,7 @@ func NewController(engine *echo.Echo, beerUseCase beer.UseCase, userUseCase user
 	engine.GET("/api/favorite", cont.GetFavorites)
 	engine.POST("/api/user-beer-config", cont.AddUserBeerConfig)
 	engine.GET("/api/user-beer-config", cont.GetUserBeerConfig)
+	engine.GET("/api/popular-beers", cont.GetPopularBeers)
 	return cont
 }
 
@@ -485,6 +487,85 @@ func (cont *Controller) GetUserBeerConfig(ctx echo.Context) error {
 		http.StatusOK,
 		map[string]interface{}{
 			"result": dtoUserBeerConfig,
+		},
+	)
+}
+
+func (cont *Controller) GetPopularBeers(ctx echo.Context) error {
+	// Cursor does not set in this api
+	log.Printf("Controller - GetPopularBeers() - Controller")
+	_ctx := ctx.(controller.CustomContext)
+	user, err := _ctx.UserMust()
+	if err != nil {
+		return err
+	}
+	log.Printf("Controller - GetPopularBeers() - User %+v", spew.Sdump(user))
+
+	var req dto.GetPopularBeersRequest
+	if err := cont.Bind(ctx, &req); err != nil {
+		log.Printf("Controller - GetPopularBeers() - Failed to bind %+v", err)
+		return err
+	}
+	log.Printf("Controller - GetPopularBeers() - Param %+v", spew.Sdump(req))
+
+	// TODO Add Timesonze Concept
+	const timeLayout = "2006-01-01 15:04:05"
+	startDate, err := time.Parse(timeLayout, req.StartDate)
+	if err != nil {
+		return err
+	}
+	endDate, err := time.Parse(timeLayout, req.EndDate)
+	if err != nil {
+		return err
+	}
+
+	beerList, err := cont.beerUseCase.GetPopularBeers(startDate, endDate, req.Limit)
+	if err != nil {
+		return err
+	}
+
+	favoriteList, err := cont.beerUseCase.GetFavorites(user.ID)
+	if err != nil {
+		return err
+	}
+	favoriteMap := make(map[int64]bool)
+	for _, favorite := range favoriteList {
+		// If none, flag would be initial false
+		favoriteMap[favorite.BeerID] = favorite.Flag
+	}
+
+	var res dto.GetBeersResponse
+	for idx, br := range beerList {
+		log.Printf("Controller - GetPopularBeers() Making dto for %+vth beer %+v", idx, spew.Sdump(br))
+		var dtoReviews []dto.Review
+		reviews, err := cont.beerUseCase.GetReviews(br.ID)
+		if err != nil {
+			return err
+		}
+		for _, review := range reviews {
+			reviewUser, err := cont.userUseCase.GetUserByID(review.UserID)
+			if err != nil {
+				return err
+			}
+			beer, err := cont.beerUseCase.GetBeer(review.BeerID)
+			if err != nil {
+				return err
+			}
+			dtoReducedBeer := cont.mapper.MapBeerToDTReducedBeer(*beer, favoriteMap[br.ID])
+			dtoReview := cont.mapper.MapReviewToDTOReview(review, reviewUser.NickName, dtoReducedBeer)
+			dtoReviews = append(dtoReviews, *dtoReview)
+		}
+
+		dtoBeer := cont.mapper.MapBeerToDTReducedBeer(br, favoriteMap[br.ID])
+		res.ReducedBeer = append(res.ReducedBeer, dtoBeer)
+	}
+
+	log.Printf("Controller - GetPopularBeers() dto beer list %+v", res.ReducedBeer)
+
+	return ctx.JSON(
+		http.StatusOK,
+		map[string]interface{}{
+			"result": res,
 		},
 	)
 }

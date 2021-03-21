@@ -57,6 +57,12 @@ type AddUserBeerConfig struct {
 	Style []string `form:"style"`
 }
 
+type GetPopularBeersRequest struct {
+	StartDate string `query:"start_date"`
+	EndDate   string `query:"end_date"`
+	Limit     int64  `query:"limit"`
+}
+
 type Beer struct {
 	// TODO Beer 리스트에 대한 아래 정보를 모두 내린다면 무겁지 않은가 ? Reviews는 Pagination ?
 	ID             int64    `json:"id"`

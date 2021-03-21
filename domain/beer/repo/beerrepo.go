@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/UdonSari/beer-server/domain/beer"
 	"github.com/UdonSari/beer-server/util"
@@ -290,6 +291,17 @@ func (r *beerRepo) AddUserBeerConfig(userBeerConfig beer.UserBeerConfig) error {
 	}
 	res := r.db.Model(&DBUserBeerConfig{}).Where("user_id = ?", dbUserBeerConfig.UserID).Updates(DBUserBeerConfig{AromaList: dbUserBeerConfig.AromaList, StyleList: dbUserBeerConfig.StyleList})
 	return res.Error
+}
+
+func (r *beerRepo) GetBeerRanks(startDate time.Time, endDate time.Time, limit int64) ([]beer.BeerRank, error) {
+	var beerRanks []beer.BeerRank
+	res := r.db.Select("beer_id, count(*) as favorite_count").Table("beer_favorite").Where("created_at >= ? AND created_at <= ?", startDate, endDate).Group("beer_id").Order("count(*) desc").Limit(limit).Find(&beerRanks)
+	log.Printf("rank data - %+v", spew.Sdump(beerRanks))
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	return beerRanks, nil
 }
 
 func (r *beerRepo) getUserBeerConfig(userID int64) (*DBUserBeerConfig, error) {
