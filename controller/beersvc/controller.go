@@ -518,18 +518,33 @@ func (cont *Controller) GetPopularBeers(ctx echo.Context) error {
 	}
 	log.Printf("Controller - GetPopularBeers() - Param %+v", spew.Sdump(req))
 
-	// TODO Add Timezone Concept
-	const timeLayout = "2006-01-01 15:04:05"
-	startDate, err := time.Parse(timeLayout, req.StartDate)
-	if err != nil {
-		return err
-	}
-	endDate, err := time.Parse(timeLayout, req.EndDate)
-	if err != nil {
-		return err
+	limit := int64(5)
+	var startDate, endDate time.Time
+
+	if req.Limit != nil {
+		limit = int64(*req.Limit)
 	}
 
-	beerList, err := cont.beerUseCase.GetPopularBeers(startDate, endDate, req.Limit)
+	// TODO Add Timezone Concept
+	if req.StartDate != nil && req.EndDate != nil {
+		const timeLayout = "2006-01-01 15:04:05"
+		startDate, err = time.Parse(timeLayout, *req.StartDate)
+		if err != nil {
+			return err
+		}
+		endDate, err = time.Parse(timeLayout, *req.EndDate)
+		if err != nil {
+			return err
+		}
+	} else {
+		// If startDate, endDate are not set then, set period as current month
+		// Maybe this can have problem in day 1. There can be no favorite for beer in day 1 so this would return no beers
+		cur := time.Now()
+		startDate = time.Date(cur.Year(), cur.Month(), 1, 0, 0, 0, 0, time.UTC)
+		endDate = cur
+	}
+
+	beerList, err := cont.beerUseCase.GetPopularBeers(startDate, endDate, limit)
 	if err != nil {
 		return err
 	}

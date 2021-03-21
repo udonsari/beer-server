@@ -58,9 +58,9 @@ type AddUserBeerConfig struct {
 }
 
 type GetPopularBeersRequest struct {
-	StartDate string `query:"start_date"`
-	EndDate   string `query:"end_date"`
-	Limit     int64  `query:"limit"`
+	StartDate *string `query:"start_date"`
+	EndDate   *string `query:"end_date"`
+	Limit     *int64  `query:"limit"`
 }
 
 type Beer struct {

@@ -136,7 +136,7 @@
 * AppConfig
     * command : `curl --location --request GET 'http://localhost:8081/api/app-config'`
         * 클라이언트는 이 API를 호출하여 맥주 Filter UI를 위한 Aroma, Country, Style List를 얻어 초기화 합니다
-        * 현재 version이라는 parameter를 보낼 경우와, 보내지 않는 경우 다른 AppConfig를 내립니다. 버전이 2가지 밖에 없으므로 version에는 임의의 값을 넣어도 상관 없으나 추후 Semantic Versioning에 따른 분기를 작업할 예정입니다
+        * 현재 version이라는 header를 보낼 경우와, 보내지 않는 경우 다른 AppConfig를 내립니다. 버전이 2가지 밖에 없으므로 version에는 임의의 값을 넣어도 상관 없으나 추후 Semantic Versioning에 따른 분기를 작업할 예정입니다
     <details>
     <summary>Response Example</summary>
     <p> V1
@@ -730,6 +730,7 @@
     * command : `curl --location --request GET 'http://localhost:8081/api/popular-beers?start_date=2000-01-01%2000:00:00&end_date=2100-01-01%2000:00:00&limit=5' --header 'Authorization: TWcoWfUC5WoyHXPdlc37kMtAZww5gNWJNQAXuQo9c5oAAAF0hoDyDg'`
         * 이 API는 start_date, end_date로 명시되는 기간에서 가장 좋아요를 많이 받은 맥주리스트를 반환합니다.
         * 날짜 포맷은 `2100-01-01 00:00:00` 와 같은 포맷이어야합니다.
+        * 만약 start_date, end_date를 포함하지 않고 API를 호출하면 기간은 현재 달로 설정됩니다.
     * Response : beer list api와 return format이 같으나, cursor 값은 의미 없습니다.
 
 
