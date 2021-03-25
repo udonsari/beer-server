@@ -361,8 +361,8 @@ func (cont *Controller) GetReview(ctx echo.Context) error {
 
 func (cont *Controller) GetAppConfig(ctx echo.Context) error {
 	// TODO Add Semantic Versioning
-	version := ctx.Request().Header.Get("version")
-	log.Printf("Controller - GetAppConfig() - Version %+v", spew.Sdump(version))
+	version := ctx.Request().Header.Get("AppVersion")
+	log.Printf("Controller - GetAppConfig() - AppVersion %+v", spew.Sdump(version))
 	if version == "" {
 		return ctx.JSON(
 			http.StatusOK,
