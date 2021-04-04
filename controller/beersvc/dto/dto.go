@@ -125,11 +125,11 @@ type AppConfigV1 struct {
 	MaxABV        float64  `json:"max_abv"`
 }
 type AppConfigV2 struct {
-	AromaList     []string               `json:"aroma_list"`
-	CountryList   []string               `json:"country_list"`
-	BeerStyleList map[string]interface{} `json:"style_list"`
-	MinABV        float64                `json:"min_abv"`
-	MaxABV        float64                `json:"max_abv"`
+	AromaList     []string      `json:"aroma_list"`
+	CountryList   []string      `json:"country_list"`
+	BeerStyleList []interface{} `json:"style_list"`
+	MinABV        float64       `json:"min_abv"`
+	MaxABV        float64       `json:"max_abv"`
 }
 
 type UserBeerConfig struct {

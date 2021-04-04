@@ -619,41 +619,73 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 		CountryList: []string{
 			"USA", "Begium", "Genmany", "Korea", "UK", "Czech", "France",
 		},
-		BeerStyleList: map[string]interface{}{
-			"Ale": map[string]interface{}{
-				"Ale": []string{
-					"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
-				},
-				"IPA": []string{
-					"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
-				},
-				"Dark Beer": []string{
-					"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
-				},
-				"Wheat Beer": []string{
-					"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
-				},
-			},
-			"Larger": map[string]interface{}{
-				"Larger": []string{
-					"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
-				},
-				"Bock": []string{
-					"Bock",
-					"Weizen Bock",
-					"Double Bock",
-					"MaiBock",
-				},
-			},
-			"Lambic": map[string]interface{}{
-				"Lambic": []string{
-					"Lambic",
-					"Gueuze",
+		BeerStyleList: []interface{}{
+			map[string]interface{}{
+				"big_name": "Ale",
+				"value": []interface{}{
+					map[string]interface{}{
+						"mid_name": "Ale",
+						"values": []string{
+							"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
+						},
+					},
+					map[string]interface{}{
+						"mid_name": "IPA",
+						"values": []string{
+							"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
+						},
+					},
+					map[string]interface{}{
+						"mid_name": "Dark Beer",
+						"values": []string{
+							"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
+						},
+					},
+					map[string]interface{}{
+						"mid_name": "Wheat Beer",
+						"values": []string{
+							"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
+						},
+					},
 				},
 			},
-			"etc": map[string]interface{}{
-				"etc": []string{
-					"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
+			map[string]interface{}{
+				"big_name": "Larger",
+				"value": []interface{}{
+					map[string]interface{}{
+						"mid_name": "Larger",
+						"values": []string{
+							"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
+						},
+					},
+					map[string]interface{}{
+						"mid_name": "Bock",
+						"values": []string{
+							"Bock", "Weizen Bock, Double Bock", "MaiBock",
+						},
+					},
+				},
+			},
+			map[string]interface{}{
+				"big_name": "Lambic",
+				"value": []interface{}{
+					map[string]interface{}{
+						"mid_name": "Lambic",
+						"values": []string{
+							"Lambic", "Gueuze",
+						},
+					},
+				},
+			},
+			map[string]interface{}{
+				"big_name": "etc",
+				"value": []interface{}{
+					map[string]interface{}{
+						"mid_name": "etc",
+						"values": []string{
+							"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
+						},
+					},
 				},
 			},
 		},
