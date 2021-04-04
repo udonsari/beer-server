@@ -236,7 +236,7 @@
             "style_list": [
                 {
                     "big_name": "Ale",
-                    "value": [
+                    "values": [
                         {
                             "mid_name": "Ale",
                             "values": [
@@ -319,7 +319,7 @@
                 },
                 {
                     "big_name": "Larger",
-                    "value": [
+                    "values": [
                         {
                             "mid_name": "Larger",
                             "values": [
@@ -347,7 +347,7 @@
                 },
                 {
                     "big_name": "Lambic",
-                    "value": [
+                    "values": [
                         {
                             "mid_name": "Lambic",
                             "values": [
@@ -359,7 +359,7 @@
                 },
                 {
                     "big_name": "etc",
-                    "value": [
+                    "values": [
                         {
                             "mid_name": "etc",
                             "values": [

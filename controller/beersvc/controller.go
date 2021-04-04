@@ -622,7 +622,7 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 		BeerStyleList: []interface{}{
 			map[string]interface{}{
 				"big_name": "Ale",
-				"value": []interface{}{
+				"values": []interface{}{
 					map[string]interface{}{
 						"mid_name": "Ale",
 						"values": []string{
@@ -651,7 +651,7 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 			},
 			map[string]interface{}{
 				"big_name": "Larger",
-				"value": []interface{}{
+				"values": []interface{}{
 					map[string]interface{}{
 						"mid_name": "Larger",
 						"values": []string{
@@ -668,7 +668,7 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 			},
 			map[string]interface{}{
 				"big_name": "Lambic",
-				"value": []interface{}{
+				"values": []interface{}{
 					map[string]interface{}{
 						"mid_name": "Lambic",
 						"values": []string{
@@ -679,7 +679,7 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 			},
 			map[string]interface{}{
 				"big_name": "etc",
-				"value": []interface{}{
+				"values": []interface{}{
 					map[string]interface{}{
 						"mid_name": "etc",
 						"values": []string{
