@@ -622,28 +622,32 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 		BeerStyleList: []interface{}{
 			map[string]interface{}{
 				"big_name": "Ale",
-				"values": []interface{}{
+				"mid_categories": []interface{}{
 					map[string]interface{}{
-						"mid_name": "Ale",
-						"values": []string{
+						"mid_name":    "Ale",
+						"description": "상면 발효 효모를 사용하여 화려하고 풍부한 향이 나는 맥주",
+						"small_categories": []string{
 							"Ale", "Abbey Ale", "Amber Ale", "American Pale Ale", "Brown Belgian Strong Ale", "Blonde Ale", "Brown Ale", "Saison", "Golden Ale", "Hop Ale", "Irish Ale", "Light Ale", "Old Ale", "Pale Ale", "Quadrupel Ale", "Red Ale", "Sparkling Ale", "Summer Ale", "Trappist Ale", "Tripel Ale", "White Ale", "Wheat Ale", "Wit Ale", "Barley Wine", "Dubbel Ale", "Dark Ale", "Wild Ale", "Pumpkin Ale",
 						},
 					},
 					map[string]interface{}{
-						"mid_name": "IPA",
-						"values": []string{
+						"mid_name":    "IPA",
+						"description": "페일 에일에 다량의 홉을 넣은, 홉의 쌉쌀한 향과 맛이 매력적인 맥주",
+						"small_categories": []string{
 							"IPA", "American IPA", "Black IPA", "Belgian IPA", "Double IPA", "Hazy IPA", "Imperial IPA", "Rye IPA", "Session IPA", "Sour IPA", "Smoothie IPA", "Wheat IPA",
 						},
 					},
 					map[string]interface{}{
-						"mid_name": "Dark Beer",
-						"values": []string{
+						"mid_name":    "Dark Beer",
+						"description": "로스팅된 맥아를 사용한 어두운 색상의 맥주로 풍부한 바디감이 특징인 맥주",
+						"small_categories": []string{
 							"Dark Beer", "Porter", "Stout", "Baltic Porter", "Bourbon County Stout", "Imperial Porter", "Imperial Stout", "Irish Stout", "Sweet Stout", "Schwarz", "Milk Stout",
 						},
 					},
 					map[string]interface{}{
-						"mid_name": "Wheat Beer",
-						"values": []string{
+						"mid_name":    "Wheat Beer",
+						"description": "밀 맥아를 높은 비율로 사용한 맥주로 부드럽고 달콤한 향이 특징인 맥주",
+						"small_categories": []string{
 							"Wheat Beer", "Belgian White", "Hefeweizen", "Witbier", "Weizen", "Dunkel Weizen", "Weisse",
 						},
 					},
@@ -651,27 +655,30 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 			},
 			map[string]interface{}{
 				"big_name": "Larger",
-				"values": []interface{}{
+				"mid_categories": []interface{}{
 					map[string]interface{}{
-						"mid_name": "Larger",
-						"values": []string{
+						"mid_name":    "Larger",
+						"description": "하면 발효 효모를 사용하여 가벼운 풍미와 시원한 청량감이 매력적인 맥주",
+						"small_categories": []string{
 							"Lager", "Amber Lager", "Dark Lager", "Helles Lager", "India Pale Lager", "Pale Lager", "Rauchbier", "Kellerbier", "Marzen", "Dunkel",
 						},
 					},
 					map[string]interface{}{
-						"mid_name": "Bock",
-						"values": []string{
-							"Bock", "Weizen Bock, Double Bock", "MaiBock",
+						"mid_name":    "Bock",
+						"description": "다양한 원료와 긴 발효기간을 거쳐 풍부한 맛과 높은 도수를 가진 맥주",
+						"small_categories": []string{
+							"Bock", "Weizen Bock", "Double Bock", "MaiBock",
 						},
 					},
 				},
 			},
 			map[string]interface{}{
 				"big_name": "Lambic",
-				"values": []interface{}{
+				"mid_categories": []interface{}{
 					map[string]interface{}{
-						"mid_name": "Lambic",
-						"values": []string{
+						"mid_name":    "Lambic",
+						"description": "상큼한 맛이 매력적인 자연 발효 맥주",
+						"small_categories": []string{
 							"Lambic", "Gueuze",
 						},
 					},
@@ -679,10 +686,11 @@ func (cont *Controller) getAppConfigV2() dto.AppConfigV2 {
 			},
 			map[string]interface{}{
 				"big_name": "etc",
-				"values": []interface{}{
+				"mid_categories": []interface{}{
 					map[string]interface{}{
-						"mid_name": "etc",
-						"values": []string{
+						"mid_name":    "etc",
+						"description": "비어있다에서 다양한 맥주를 만나보세요",
+						"small_categories": []string{
 							"Radler", "Cider", "Gose", "Gluten Free", "Kolsch", "Low Alcohol", "Ginger Beer",
 						},
 					},
