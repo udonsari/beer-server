@@ -238,7 +238,7 @@
                     "big_name": "Ale",
                     "mid_categories": [
                         {
-                            "description": "상면 발효 효모를 사용하여 화려하고 풍부한 향이 나는 맥주",
+                            "description": "상면 발효 효모를 사용하여\n화려하고 풍부한 향이 나는 맥주",
                             "mid_name": "Ale",
                             "small_categories": [
                                 "Ale",
@@ -272,7 +272,7 @@
                             ]
                         },
                         {
-                            "description": "페일 에일에 다량의 홉을 넣은, 홉의 쌉쌀한 향과 맛이 매력적인 맥주",
+                            "description": "페일 에일에 다량의 홉을 넣은,\n홉의 쌉쌀한 향과 맛이 매력적인 맥주",
                             "mid_name": "IPA",
                             "small_categories": [
                                 "IPA",
@@ -290,7 +290,7 @@
                             ]
                         },
                         {
-                            "description": "로스팅된 맥아를 사용한 어두운 색상의 맥주로 풍부한 바디감이 특징인 맥주",
+                            "description": "로스팅된 맥아를 사용한 어두운 색상의 맥주로\n풍부한 바디감이 특징인 맥주",
                             "mid_name": "Dark Beer",
                             "small_categories": [
                                 "Dark Beer",
@@ -307,7 +307,7 @@
                             ]
                         },
                         {
-                            "description": "밀 맥아를 높은 비율로 사용한 맥주로 부드럽고 달콤한 향이 특징인 맥주",
+                            "description": "밀 맥아를 높은 비율로 사용한 맥주로\n부드럽고 달콤한 향이 특징인 맥주",
                             "mid_name": "Wheat Beer",
                             "small_categories": [
                                 "Wheat Beer",
@@ -325,7 +325,7 @@
                     "big_name": "Larger",
                     "mid_categories": [
                         {
-                            "description": "하면 발효 효모를 사용하여 가벼운 풍미와 시원한 청량감이 매력적인 맥주",
+                            "description": "하면 발효 효모를 사용하여\n가벼운 풍미와 시원한 청량감이 매력적인 맥주",
                             "mid_name": "Larger",
                             "small_categories": [
                                 "Lager",
@@ -341,7 +341,7 @@
                             ]
                         },
                         {
-                            "description": "다양한 원료와 긴 발효기간을 거쳐 풍부한 맛과 높은 도수를 가진 맥주",
+                            "description": "다양한 원료와 긴 발효기간을 거쳐\n풍부한 맛과 높은 도수를 가진 맥주",
                             "mid_name": "Bock",
                             "small_categories": [
                                 "Bock",

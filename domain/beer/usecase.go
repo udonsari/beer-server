@@ -111,7 +111,7 @@ func (u *useCase) GetRelatedBeers(beerID int64) (*RelatedBeers, error) {
 		return nil, err
 	}
 
-	const maxCount = 5
+	const maxCount = 3
 
 	var relatedBeers RelatedBeers
 
@@ -206,6 +206,11 @@ func (u *useCase) GetPopularBeers(startDate time.Time, endDate time.Time, limit 
 			continue
 		}
 		beers = append(beers, *beer)
+	}
+
+	if len(beers) == 0 {
+		// If there are not any beers then, return random beers
+		return u.GetRandomBeers()
 	}
 
 	return beers, nil
