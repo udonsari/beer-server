@@ -32,14 +32,16 @@ type useCase struct {
 	port      string
 	host      string
 	serverEnv string
+	devToken  string
 }
 
-func NewUseCase(userRepo UserRepo, host string, port string, serverEnv string) UseCase {
+func NewUseCase(userRepo UserRepo, host string, port string, serverEnv string, devToken string) UseCase {
 	return &useCase{
 		userRepo:  userRepo,
 		host:      host,
 		port:      port,
 		serverEnv: serverEnv,
+		devToken:  devToken,
 	}
 }
 
@@ -81,6 +83,11 @@ func (u *useCase) GetToken(code string) (*Token, error) {
 }
 
 func (u *useCase) GetUser(accessToken string) (*User, error) {
+	// Temperal Code
+	if accessToken != "" && accessToken == u.devToken {
+		return u.GetUserByExternalID(u.devToken)
+	}
+
 	req, err := http.NewRequest("GET", KakaoUserURL, nil)
 	if err != nil {
 		return nil, err

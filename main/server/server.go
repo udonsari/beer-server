@@ -58,7 +58,7 @@ func (s *serverImpl) engine() *echo.Echo {
 	beerRepo := beerRepo.New(d.MysqlDB(true), d.BeerCacheDuration())
 	s.beerUseCase = beer.NewUseCase(beerRepo)
 	userRepo := userRepo.New(d.MysqlDB(true))
-	s.userUseCase = user.NewUseCase(userRepo, s.host, s.port, d.ServerEnv())
+	s.userUseCase = user.NewUseCase(userRepo, s.host, s.port, d.ServerEnv(), d.DevToken())
 
 	if s._engine != nil {
 		return s._engine

@@ -17,6 +17,7 @@ const (
 	envKeyHost                = "HOST"
 	envKeyPort                = "PORT"
 	envKeyServerEnv           = "SERVER_ENV"
+	envKeyDevToken            = "DEV_TOKEN"
 
 	mysqlMaxConn     = 30
 	mysqlMaxIdleConn = 5
@@ -63,6 +64,10 @@ func (d *Dependency) PortInt() int64 {
 
 func (d *Dependency) ServerEnv() string {
 	return d.getEnvOrExit(envKeyServerEnv)
+}
+
+func (d *Dependency) DevToken() string {
+	return d.getEnvOrExit(envKeyDevToken)
 }
 
 func (d *Dependency) getEnvOrExit(key string) string {
