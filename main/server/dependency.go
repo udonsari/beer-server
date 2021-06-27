@@ -67,7 +67,14 @@ func (d *Dependency) ServerEnv() string {
 }
 
 func (d *Dependency) DevToken() string {
-	return d.getEnvOrExit(envKeyDevToken)
+	val, ok := os.LookupEnv(envKeyDevToken)
+	if !ok {
+		if d.ServerEnv() == "prod" {
+			log.Fatalf("In prod env, dev token should be set")
+		}
+		val = "TEST_DEV_TOKEN"
+	}
+	return val
 }
 
 func (d *Dependency) getEnvOrExit(key string) string {
